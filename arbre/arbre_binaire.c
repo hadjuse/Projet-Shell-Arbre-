@@ -2,20 +2,33 @@
 #include <stdlib.h>
 #include "arbre_binaire.h"
 #include <string.h>
-pArbre creerArbre(int a){
+pArbre creerArbre(int a)
+{
     pArbre new= malloc(sizeof(Arbre));
-    if(new == NULL){
-        return new;
+    if(new == NULL)
+    {
+        exit(1);//Je l'ai modifié car lors de la création par convention il faut quitter le prog si le noeud vide
     }
-    *new = (Arbre) {a, NULL, NULL, 0, 0};
+    new->nombre=a;//Je l'ai simplifié un peu 
+    new->fg=NULL;//idem
+    new->fd=NULL;//idem
     return new;
 }
 
-int estVide(pArbre a){
-    return a == NULL;
+int estVide(pArbre a) //J'ai modifié tout ton bloc ici
+{
+    if(a==NULL)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
-int estFeuille(pArbre a){
+int estFeuille(pArbre a)
+{
     /*
     if(a == NULL){
         return 0;
@@ -29,7 +42,11 @@ int estFeuille(pArbre a){
     return (a ? ((!a->fg) && (!a->fd) ? 1:0) : 0);
 }
 
-int element(pArbre a){
+int element(pArbre a)//Moi j'aurai proposé un truc de ce genre:
+{
+    /*int r;
+    r=a->nombre;
+    return r;*/
     
     if (estVide(a) == 1)
     {
@@ -41,15 +58,27 @@ int element(pArbre a){
     if (a) return a->nombre;
 }
 
-int existeFilsGauche(pArbre a){
+int existeFilsGauche(pArbre a) //je suis d'accord avec toi
+{
     return (a->fg ? 1 : 0);
 }
 
-int existeFilsDroit(pArbre a){
+int existeFilsDroit(pArbre a) //je suis d'accord avec toi
+{
     return (a->fd ? 1 : 0);
 }
-pArbre ajouterFilsDroit(pArbre a, int e)
+pArbre ajouterFilsDroit(pArbre a, int e)// je dirai plutôt ça:
 {
+    /*if(a==NULL)
+    {
+        a=creerArbre(e);
+        return a;
+    }
+    else if(!existeFilsDroit(a))
+    {
+        a=creerArbre(e);
+        return a;
+    }*/
     pArbre b;
     if (estVide(a) == 1){
         return a;
@@ -63,8 +92,18 @@ pArbre ajouterFilsDroit(pArbre a, int e)
     return a;   
 }
 
-pArbre ajouterFilsGauche(pArbre a, int e)
+pArbre ajouterFilsGauche(pArbre a, int e) // je dirai plutôt ça:
 {
+     /*if(a==NULL)
+    {
+        a=creerArbre(e);
+        return a;
+    }
+    else if(!existeFilsGauche(a))
+    {
+        a=creerArbre(e);
+        return a;
+    }*/
     pArbre b;
     if (estVide(a) == 1){
         return a;
@@ -152,15 +191,33 @@ pArbre filsGauche(pArbre a)
     return (existeFilsGauche(a)) ?  a->fg : NULL;
 }
 
-int nbmFeuille(pArbre a)
+int nbmFeuille(pArbre a) // je dirai plus:
 {
+    /*if(estVide(a))
+    {
+        return 0;
+    }
+    if(estFeuille(a))
+    {
+        return 1;
+    }
+    return nbmFeuille(a->fg)+nbmFeuille(a->fd);*/
+
+
     if (a == NULL) return 0 ;
     if (estFeuille(a)) return 1;
     else return nbmFeuille(filsGauche(a)) + nbmFeuille(filsDroit(a));
 }
 
-int taille(pArbre a)
+int taille(pArbre a) // je dirai plus:
 {
+    /*if(estVide(a)||estFeuille(a))
+    {
+        return 0;
+    }
+    return 1+taille(a->fg)+taille(a->fd);*/
+
+
     if (a == NULL) return 0; else if (estFeuille(a)) return 0 ;
     else return 1 + taille(filsGauche(a)) + taille(filsDroit(a));
 }
@@ -313,7 +370,7 @@ pArbre insertionAVL(pArbre a, int e, int *h)
 
 int min(int a, int b)
 {
-    return (a<b ? a:b);
+    return (a<b ? a : b);
 }
 
 int min_of_three(int a, int b, int c)
