@@ -2,51 +2,24 @@
 #include <stdlib.h>
 #include "arbre_binaire.h"
 #include <string.h>
-pArbre creerArbre(int a)
-{
+pArbre creerArbre(int a){
     pArbre new= malloc(sizeof(Arbre));
-    if(new == NULL)
-    {
-        exit(1);//Je l'ai modifié car lors de la création par convention il faut quitter le prog si le noeud vide
+    if(new == NULL){
+        return new;
     }
-    new->nombre=a;//Je l'ai simplifié un peu 
-    new->fg=NULL;//idem
-    new->fd=NULL;//idem
+    *new = (Arbre) {a, NULL, NULL, 0, 0};
     return new;
 }
 
-int estVide(pArbre a) //J'ai modifié tout ton bloc ici
-{
-    if(a==NULL)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
+int estVide(pArbre a){
+    return a == NULL;
 }
 
-int estFeuille(pArbre a)
-{
-    /*
-    if(a == NULL){
-        return 0;
-    }
-    else if(a->fg == NULL && a->fd == NULL){
-        return 1;
-    }
-    else{
-        return 0;
-    }*/
+int estFeuille(pArbre a){
     return (a ? ((!a->fg) && (!a->fd) ? 1:0) : 0);
 }
 
-int element(pArbre a)//Moi j'aurai proposé un truc de ce genre:
-{
-    /*int r;
-    r=a->nombre;
-    return r;*/
+int element(pArbre a){
     
     if (estVide(a) == 1)
     {
@@ -58,27 +31,15 @@ int element(pArbre a)//Moi j'aurai proposé un truc de ce genre:
     if (a) return a->nombre;
 }
 
-int existeFilsGauche(pArbre a) //je suis d'accord avec toi
-{
+int existeFilsGauche(pArbre a){
     return (a->fg ? 1 : 0);
 }
 
-int existeFilsDroit(pArbre a) //je suis d'accord avec toi
-{
+int existeFilsDroit(pArbre a){
     return (a->fd ? 1 : 0);
 }
-pArbre ajouterFilsDroit(pArbre a, int e)// je dirai plutôt ça:
+pArbre ajouterFilsDroit(pArbre a, int e)
 {
-    /*if(a==NULL)
-    {
-        a=creerArbre(e);
-        return a;
-    }
-    else if(!existeFilsDroit(a))
-    {
-        a=creerArbre(e);
-        return a;
-    }*/
     pArbre b;
     if (estVide(a) == 1){
         return a;
@@ -92,18 +53,8 @@ pArbre ajouterFilsDroit(pArbre a, int e)// je dirai plutôt ça:
     return a;   
 }
 
-pArbre ajouterFilsGauche(pArbre a, int e) // je dirai plutôt ça:
+pArbre ajouterFilsGauche(pArbre a, int e)
 {
-     /*if(a==NULL)
-    {
-        a=creerArbre(e);
-        return a;
-    }
-    else if(!existeFilsGauche(a))
-    {
-        a=creerArbre(e);
-        return a;
-    }*/
     pArbre b;
     if (estVide(a) == 1){
         return a;
@@ -115,6 +66,84 @@ pArbre ajouterFilsGauche(pArbre a, int e) // je dirai plutôt ça:
         return a;
     }
     
+}
+
+int recherche(pArbre a, int e)
+{
+    if (a == NULL)
+        return 0;
+    else if (e == a->nombre)
+        return 1;
+    else if (e < a->nombre)
+        return recherche(filsGauche(a), e);
+    else
+        return recherche(filsDroit(a), e);
+}
+
+pArbre insertionABR(pArbre a, int e)
+{
+    if (a == NULL)
+        return creerArbre(e);
+    else if (e < a->nombre)
+        a->fg = insertionABR(filsGauche(a), e);
+    else if (e > a->nombre)
+        a->fd = insertionABR(filsDroit(a), e);
+    return a;
+}
+
+pArbre insertionABRIter(pArbre a, int e)
+{
+    pArbre pAbr = a;
+    
+    pArbre parc;
+    pArbre nouveau = creerArbre(e);
+    if (a == NULL) return nouveau;
+    
+    while (!estVide(pAbr))
+    {
+        parc = pAbr;
+        if (e>pAbr->nombre)
+            pAbr = pAbr->fd;
+        else if (e<pAbr->nombre)
+            pAbr = pAbr->fg;
+    }
+    if (e>parc->nombre) 
+        parc->fd = nouveau;
+    else if (e<parc->nombre)
+        parc->fg = nouveau;
+    return a;
+}
+
+pArbre suppMax(pArbre a, int *pe)
+{
+    pArbre tmp;
+    if (existeFilsDroit(a))
+        a->fd = suppMax(filsDroit(a), pe);
+    else{
+        *pe = a->nombre;
+        tmp = a;
+        a = filsGauche(a);
+        free(tmp);
+    }
+    return a;
+}
+pArbre suppressionABR(pArbre a, int e)
+{
+    pArbre tmp;
+    if (a == NULL)
+        return a;
+    else if (e > a->nombre)
+        return suppressionABR(filsDroit(a), e);
+    else if (e < a->nombre)
+        return suppressionABR(filsGauche(a), e);
+    else if (!existeFilsGauche(a)){
+        tmp = a;
+        a = filsDroit(a);
+        free(tmp);
+    }
+    else
+        a->fg = suppMax(filsGauche(a), &a->nombre);
+    return a;
 }
 
 
@@ -191,33 +220,15 @@ pArbre filsGauche(pArbre a)
     return (existeFilsGauche(a)) ?  a->fg : NULL;
 }
 
-int nbmFeuille(pArbre a) // je dirai plus:
+int nbmFeuille(pArbre a)
 {
-    /*if(estVide(a))
-    {
-        return 0;
-    }
-    if(estFeuille(a))
-    {
-        return 1;
-    }
-    return nbmFeuille(a->fg)+nbmFeuille(a->fd);*/
-
-
     if (a == NULL) return 0 ;
     if (estFeuille(a)) return 1;
     else return nbmFeuille(filsGauche(a)) + nbmFeuille(filsDroit(a));
 }
 
-int taille(pArbre a) // je dirai plus:
+int taille(pArbre a)
 {
-    /*if(estVide(a)||estFeuille(a))
-    {
-        return 0;
-    }
-    return 1+taille(a->fg)+taille(a->fd);*/
-
-
     if (a == NULL) return 0; else if (estFeuille(a)) return 0 ;
     else return 1 + taille(filsGauche(a)) + taille(filsDroit(a));
 }
@@ -370,7 +381,7 @@ pArbre insertionAVL(pArbre a, int e, int *h)
 
 int min(int a, int b)
 {
-    return (a<b ? a : b);
+    return (a<b ? a:b);
 }
 
 int min_of_three(int a, int b, int c)
