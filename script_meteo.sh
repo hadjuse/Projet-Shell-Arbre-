@@ -2,6 +2,11 @@
 #Initialisation des variables
 tout_arguments=$#
 opt=":t:p:wmhFGSAOQ"
+if [ -e $fichier_temp]; then
+    echo "Le dossier 'fichier_temp' existe déjà."
+else
+    mkdir fichier_temp
+fi
 #Initialisation des fonctions tests pour chaques arguments et options
 test_option_mode() {
     MODE=$OPTARG
@@ -18,14 +23,14 @@ test_argument() {
 }
 execution_mode_t() {
     if [ $OPTARG -eq 1 ]; then
-        cut -d ';' -f 11 meteo_filtered_data_v1.csv > fichier_temp/donnee_filtree_temperature.txt
+        cut -d ';' -f 11 meteo_filtered_data_v1.csv >fichier_temp/donnee_filtree_temperature.txt
     elif [ $OPTARG -eq 2 ]; then
-        cut -d ';' -f 11 meteo_filtered_data_v1.csv > fichier_temp/donnee_filtree_temperature.txt
-        cut -d ';' -f 2 meteo_filtered_data_v1.csv > fichier_temp/donnee_filtree_date.txt
+        cut -d ';' -f 11 meteo_filtered_data_v1.csv >fichier_temp/donnee_filtree_temperature.txt
+        cut -d ';' -f 2 meteo_filtered_data_v1.csv >fichier_temp/donnee_filtree_date.txt
     elif [ $OPTARG -eq 3 ]; then
-        cut -d ';' -f 11 meteo_filtered_data_v1.csv > fichier_temp/donnee_filtree_temperature.txt
-        cut -d ';' -f 2 meteo_filtered_data_v1.csv > fichier_temp/donnee_filtree_date.txt
-        cut -d ';' -f 1 meteo_filtered_data_v1.csv > fichier_temp/donnee_filtree_id.txt
+        cut -d ';' -f 11 meteo_filtered_data_v1.csv >fichier_temp/donnee_filtree_temperature.txt
+        cut -d ';' -f 2 meteo_filtered_data_v1.csv >fichier_temp/donnee_filtree_date.txt
+        cut -d ';' -f 1 meteo_filtered_data_v1.csv >fichier_temp/donnee_filtree_id.txt
     fi
 }
 # Traitement des options de la ligne de commande avec getops
