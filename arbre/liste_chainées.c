@@ -98,3 +98,48 @@ pListe suppDebut(pListe p1)
     return p1;
 }
 
+int partition(int A[n],int debut,int fin)
+{
+    int inf;
+    int sup;
+    int tmp;
+    inf = debut+1;
+    sup = fin;
+    while(inf<=sup)
+    {
+        while(A[sup]>A[debut])
+        {
+            sup = sup-1;
+        }
+        while(A[inf]<A[debut])
+        {
+            inf = inf+1;
+        }
+        if(inf<sup)
+        {
+            tmp = A[sup];
+            A[sup] = A[inf];
+            A[inf] = tmp;
+        }
+    }
+    tmp = A[debut];
+    A[debut] = A[sup];
+    A[sup] = tmp;
+    return sup;
+}
+
+void triRapideRec(int A[n],int debut,int fin)
+{
+    int pivot;
+    if(debut<fin)
+    {
+        pivot = partition(A,debut,fin);
+        triRapideRec(A,debut,pivot-1);
+        triRapideRec(A,pivot+1,fin);
+    }
+}
+
+void triRapide(int A[n])
+{
+    triRapideRec(A,0,n-1);
+}
