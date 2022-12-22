@@ -2,7 +2,7 @@
 #Initialisation des variables
 tout_arguments=$#
 opt=":t:p:wmhFGSAOQ"
-if [ -e $fichier_temp]; then
+if [ -d fichier_temp ]; then
     echo "Le dossier 'fichier_temp' existe déjà."
 else
     mkdir fichier_temp
