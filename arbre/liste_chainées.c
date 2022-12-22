@@ -98,48 +98,26 @@ pListe suppDebut(pListe p1)
     return p1;
 }
 
-int partition(int A[n],int debut,int fin)
+pListe triselection(pListe p1,int n)
 {
-    int inf;
-    int sup;
-    int tmp;
-    inf = debut+1;
-    sup = fin;
-    while(inf<=sup)
+    int noEtape, noCase, indiceMin;
+    pListe t;
+    for(noEtape=0;noEtape<n-1;noEtape++)
     {
-        while(A[sup]>A[debut])
+        indiceMin = noEtape;
+        for(noCase=noEtape+1;noCase<n;noCase++)
         {
-            sup = sup-1;
+            if(noCase->p1 < indiceMin->p1)
+            {
+                indiceMin = noCase;
+            }
         }
-        while(A[inf]<A[debut])
+        if(indiceMin != noEtape)
         {
-            inf = inf+1;
-        }
-        if(inf<sup)
-        {
-            tmp = A[sup];
-            A[sup] = A[inf];
-            A[inf] = tmp;
+            t=indiceMin->p1;
+            indiceMin->p1=noEtape->p1;
+            noEtape->p1=t;
         }
     }
-    tmp = A[debut];
-    A[debut] = A[sup];
-    A[sup] = tmp;
-    return sup;
-}
-
-void triRapideRec(int A[n],int debut,int fin)
-{
-    int pivot;
-    if(debut<fin)
-    {
-        pivot = partition(A,debut,fin);
-        triRapideRec(A,debut,pivot-1);
-        triRapideRec(A,pivot+1,fin);
-    }
-}
-
-void triRapide(int A[n])
-{
-    triRapideRec(A,0,n-1);
+        
 }
