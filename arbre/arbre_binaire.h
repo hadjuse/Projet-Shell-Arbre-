@@ -77,6 +77,8 @@ pArbre rotationGauche(pArbre a);
 pArbre doubleRotationDroite(pArbre a);
 pArbre doubleRotationGauche(pArbre a);
 pArbre equilibrerAVL(pArbre a);
-pArbre insertionAVL(pArbre a, int n, int *hauteur);
+pArbre insertionAVL(pArbre a, int e, int *h);
+pArbre suppMinAVL(pArbre a, int *h, int *pe);
+pArbre suppressionAVL(pArbre a,int e, int *h);
 //void MinMaxABR(pArbre a, int *min, int *max);
 #endif
