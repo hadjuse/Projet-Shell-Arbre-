@@ -1,5 +1,4 @@
 #include "arbre_binaire.h"
-# include "liste_chainées.h"
 #include <stdio.h>
 #include <stdlib.h>
 int main(){ 

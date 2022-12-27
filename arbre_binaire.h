@@ -12,10 +12,10 @@ typedef Arbre * pArbre;
 typedef struct chainon
 {
     pArbre arbre;
+    int nombre;
     struct chainon * suivant;
 }Chainon;
-
-
+typedef Chainon * pListe;
 
 typedef struct file
 {
@@ -51,6 +51,7 @@ int max(int a, int b);
 int taille(pArbre a);
 int nbmFeuille(pArbre a);
 int hauteur(pArbre a);
+
 //partie file
 Chainon* creationChainon(pArbre a);
 int verif(File* file);
@@ -58,8 +59,20 @@ int enfiler(File* f, pArbre a);
 pArbre defiler(File *f);
 void creerfile(File *f);
 
+//partie liste chainee
+typedef Chainon * pListe;
+pListe creerChainon();
+int element_liste_chainee(pListe p1);
+void traiter_liste_chainee(pListe p1);
+pListe insertFin(pListe p1);
+pListe insertDebut(pListe p1);
+pListe insertMilieu(pListe p1, int e);
+pListe suppDebut(pListe p1);
+pListe triselection(pListe p1,int n);
+
 //void affArbreGraphique(pArbre a,int info);
 //partie Arbre binaire de recherche
+
 int recherche(pArbre a, int e);
 pArbre insertionABR(pArbre a, int e);
 pArbre insertionABRIter(pArbre a, int e);
