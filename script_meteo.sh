@@ -95,60 +95,68 @@ verification_tri() {
 #while true; do
 # Traitement des options de la ligne de commande avec getopt
 while getopts ":t:p:wmhFGSAOQ-:" option; do
-    case "$option" in
-    #traitement de la temperature accompagné d'une option 1 ou 2 ou 3
-    t)
-        test_argument_mode
-        execution_mode_t
-        test_options
-        shift
-        ;;
-    p) #traitement de la pression accompagné d'une option 1 ou 2 ou 3
-        test_argument_mode
-        execution_mode_p
-        test_options
-        shift
-        ;;
-    w) #traitement de l'option vent
-        filtrage_w
-        shift
-        ;;
-    m)
-        echo "humidite"
-        shift
-        ;; #traitement de l'option humidite
-    h)
-        echo "altitude"
-        shift
-        ;; #traitement de l'option altitude
-    F)
-        echo "France"
-        shift
-        ;;
-    G)
-        echo "Guyane française"
-        shift
-        ;;
-    S)
-        echo "Saint-Pierre et Miquelon"
-        shift
-        ;;
-    A)
-        echo "Antilles"
-        shift
-        ;;
-    O)
-        echo "Océan indien"
-        shift
-        ;;
-    Q)
-        echo "Antarctique"
-        shift
-        ;;
-    *)
-        echo "option invalide"
-        ;;
-    esac
+    if [ $option = "-" ]; then
+        case $OPTARG in
+            abr) mode_tri="abr" ;;
+            tab) mode_tri="tab" ;;
+            avl) mode_tri="avl" ;;
+            help) cat help.txt;;
+        esac
+    else
+        case "$option" in
+        #traitement de la temperature accompagné d'une option 1 ou 2 ou 3
+
+        t)
+            test_argument_mode
+            execution_mode_t
+            test_options
+            ;;
+        p) #traitement de la pression accompagné d'une option 1 ou 2 ou 3
+            test_argument_mode
+            execution_mode_p
+            test_options
+            ;;
+        w) #traitement de l'option vent
+            filtrage_w
+            ;;
+        m)
+            echo "humidite"
+            ;; #traitement de l'option humidite
+        h)
+            echo "altitude"
+            ;; #traitement de l'option altitude
+        F)
+            echo "France"
+            shift
+            ;;
+        G)
+            echo "Guyane française"
+            shift
+            ;;
+        S)
+            echo "Saint-Pierre et Miquelon"
+            shift
+            ;;
+        A)
+            echo "Antilles"
+            shift
+            ;;
+        O)
+            echo "Océan indien"
+            shift
+            ;;
+        Q)
+            echo "Antarctique"
+            shift
+            ;;
+        *)
+            echo "option invalide"
+            ;;
+        --) break;;
+        esac
+    
+    fi
 done
-verification_tri
+shift $((OPTIND - 1))
+#verification_tri
 echo $mode_tri
