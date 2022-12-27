@@ -9,7 +9,7 @@ pArbre creerArbre(int a)
     {
         exit(1);//Je l'ai modifié car lors de la création par convention il faut quitter le prog si le noeud vide
     }
-    new->nombre=a;//Je l'ai simplifié un peu 
+    new->nombre=a;//Je l'ai simplifié un peu
     new->fg=NULL;//idem
     new->fd=NULL;//idem
     return new;
@@ -47,7 +47,7 @@ int element(pArbre a)//Moi j'aurai proposé un truc de ce genre:
     /*int r;
     r=a->nombre;
     return r;*/
-    
+
     if (estVide(a) == 1)
     {
         return 0;
@@ -89,7 +89,7 @@ pArbre ajouterFilsDroit(pArbre a, int e)// je dirai plutôt ça:
         a->fd = b;
         return a;
     }
-    return a;   
+    return a;
 }
 
 pArbre ajouterFilsGauche(pArbre a, int e) // je dirai plutôt ça:
@@ -114,12 +114,12 @@ pArbre ajouterFilsGauche(pArbre a, int e) // je dirai plutôt ça:
         a->fg = b;
         return a;
     }
-    
+
 }
 
 
 void parcoursPrefixe(pArbre a)
-{   
+{
     if (estVide(a) != 1)
     {
         traiter(a);
@@ -154,7 +154,7 @@ void traiter(pArbre a)
 pArbre modifierRacine(pArbre a, int e)
 {
     if (a != NULL) a->nombre = e;
-    return a;   
+    return a;
 }
 void supprimerFilsDroit(pArbre a)
 {
@@ -169,7 +169,7 @@ void supprimerFilsDroit(pArbre a)
 }
 void supprimerFilsGauche(pArbre a)
 {
-    
+
     if (a == NULL){exit(1);}
     else if (existeFilsGauche(a))
     {
@@ -235,7 +235,7 @@ Chainon* creationChainon(pArbre a)
     }
     p->arbre = a;
     p->suivant = NULL;
-    return p;   
+    return p;
 }
 int verif(File * file) {
     int res = 0;
@@ -258,7 +258,7 @@ int enfiler(File *f, pArbre a) {
         c = creationChainon(a);
         if (f->queue == NULL) //si la file est vide
         {
-            f->tete = c; //affecter la tete au 1er chainon   
+            f->tete = c; //affecter la tete au 1er chainon
             f->queue = c; //affecter la queue au 1er chainon
         } else {
             f->queue -> suivant = c; //affecter le queue au dernier chainoN
@@ -348,7 +348,7 @@ pArbre insertionAVL(pArbre a, int e, int *h)
     {
         a->fd=insertionAVL(a->fd,e,h);
     }
-    else 
+    else
     {
         *h=0;
         return a;
@@ -360,7 +360,7 @@ pArbre insertionAVL(pArbre a, int e, int *h)
         {
             *h=0;
         }
-        else 
+        else
         {
             *h=1;
         }
@@ -380,7 +380,7 @@ pArbre suppMinAVL(pArbre a, int *h, int *pe)
         free(tmp);
         return a ;
     }
-    else 
+    else
     {
         a->fg = suppMinAVL(a->fg,h,pe);
         *h=-*h;
@@ -392,7 +392,7 @@ pArbre suppMinAVL(pArbre a, int *h, int *pe)
         {
             *h = -1;
         }
-        else 
+        else
         {
             *h = 0;
         }
@@ -421,7 +421,7 @@ pArbre suppressionAVL(pArbre a,int e, int *h)
     {
         a->fd = suppMinAVL(a->fd,h,&a->nombre);
     }
-    else 
+    else
     {
         tmp = a;
         a = a->fg;
@@ -439,7 +439,7 @@ pArbre suppressionAVL(pArbre a,int e, int *h)
         {
             *h = 0;
         }
-        else 
+        else
         {
             *h = 1;
         }
@@ -517,7 +517,7 @@ pArbre equilibrerAVL(pArbre a)
         {
             return rotationGauche(a);
         }
-        else 
+        else
         {
             return doubleRotationGauche(a);
         }
@@ -528,7 +528,7 @@ pArbre equilibrerAVL(pArbre a)
         {
             return rotationDroite(a);
         }
-        else 
+        else
         {
             return doubleRotationDroite(a);
         }
@@ -538,27 +538,21 @@ pArbre equilibrerAVL(pArbre a)
 
 //partie liste_chainee
 
-pListe creerChainon()
+pListe creerChainon(int n)
 {
     pListe c = malloc(sizeof(Chainon));
     if(c==NULL)
     {
         exit(1);
     }
-    printf("Entrer la valeur: \n");
-    if(scanf("%d", &(c->nombre)) != 1)
-    {
-        exit(2);
-    }
     c->suivant=NULL;
+    c->nombre = n;
     return c;
 }
 
 int element_liste_chainee(pListe p1)
 {
-    int r;
-    r=p1->nombre;
-    return r;
+    return p1->nombre;
 }
 
 void traiter_liste_chainee(pListe p1)
@@ -566,37 +560,35 @@ void traiter_liste_chainee(pListe p1)
     printf("%d ", p1->nombre);
 }
 
-pListe insertFin(pListe p1)
+pListe insertFin(pListe liste, int n)
 {
-    pListe nouveau;
-    nouveau = creerChainon();
+    pListe nouveau = creerChainon(n), p1= liste;
     while(p1->suivant != NULL)
     {
         p1 = p1->suivant;
     }
     p1->suivant = nouveau;
-    return p1;
+    return liste;
 }
 
-pListe insertDebut(pListe p1)
+pListe insertDebut(pListe liste, int n)
 {
-    pListe nouveau;
-    nouveau = creerChainon();
+    pListe nouveau = creerChainon(n), p1= liste;
     nouveau->suivant = p1;
     p1 = nouveau;
-    return p1;
+    return liste;
 }
 
-pListe insertMilieu(pListe p1, int e)
+pListe insertMilieu(pListe liste, int e)
 {
     int i;
-    pListe nouveau;
+    pListe nouveau, p1=liste;
     pListe a;
     if(e==0 || p1==NULL)
     {
-        p1 = insertDebut(p1);
+        p1 = insertDebut(p1, e);
     }
-    else 
+    else
     {
         a=p1;
         for(i=0;i<e;i++)
@@ -605,16 +597,16 @@ pListe insertMilieu(pListe p1, int e)
             {
                 return NULL;
             }
-            else 
+            else
             {
                 a = a->suivant;
             }
         }
-        nouveau = creerChainon();
+        nouveau = creerChainon(e);
         nouveau->suivant = a->suivant;
         a->suivant = nouveau;
     }
-    return p1;
+    return liste;
 }
 
 pListe suppDebut(pListe p1)
@@ -629,11 +621,35 @@ pListe suppDebut(pListe p1)
     free(a);
     return p1;
 }
-
-pListe triselection(pListe p1,int n)
+int taille_liste_chainee(pListe p1)
 {
-    return p1;
+    int t=0;
+    while (p1 != NULL)
+    {
+        t++;
+        printf("->");
+        traiter_liste_chainee(p1);
+        p1=p1->suivant;
+        
+    }
+    return t;
 }
+
+/*
+pListe triselection(pListe liste, int n)
+{
+    int temp, taille = taille_liste_chainee(liste);
+    pListe p1;
+    for (int i = 0; i<taille-1; i++)
+    {
+        int indiceMin=i;
+        for (int j=i+1; j<taille; j++)
+        {
+            
+        }
+    }
+    return liste;
+}*/
 /*
 void MinMaxABR(pArbre a, int *min, int* max)
 {
@@ -645,7 +661,7 @@ void MinMaxABR(pArbre a, int *min, int* max)
     MinMaxABR(a->fd, &min, &max);
 }*/
 /*
-void affArbreGraphique(pArbre a,int info) 
+void affArbreGraphique(pArbre a,int info)
 {
     TArbBin * Tarb;
     int iTarb;
@@ -656,7 +672,7 @@ void affArbreGraphique(pArbre a,int info)
     int p, i, j;
     int ecart;
     puts("");
-    if(estVide(a)) 
+    if(estVide(a))
     {
         puts("Arbre vide");
         return;

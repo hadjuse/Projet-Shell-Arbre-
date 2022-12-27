@@ -64,11 +64,13 @@ typedef Chainon * pListe;
 pListe creerChainon();
 int element_liste_chainee(pListe p1);
 void traiter_liste_chainee(pListe p1);
-pListe insertFin(pListe p1);
-pListe insertDebut(pListe p1);
+pListe insertFin(pListe p1, int n);
+pListe insertDebut(pListe p1, int n);
 pListe insertMilieu(pListe p1, int e);
 pListe suppDebut(pListe p1);
 pListe triselection(pListe p1,int n);
+int taille_liste_chainee(pListe p1);
+pListe parcours_i(pListe p1);
 
 //void affArbreGraphique(pArbre a,int info);
 //partie Arbre binaire de recherche

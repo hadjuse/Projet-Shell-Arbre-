@@ -66,5 +66,11 @@ int main(){
     pAVL = insertionAVL(pAVL, 30, &pAVL->hauteur);
     pAVL = insertionAVL(pAVL, 7, &pAVL->hauteur);
     parcoursInfixe(AVL);
+    pListe liste = creerChainon(5);
+    liste = insertFin(liste,9);
+    liste = insertFin(liste,6);
+    liste = insertFin(liste, 56);
+    printf("\ntaille=%d", taille_liste_chainee(liste));
+
     return 0;
 }
