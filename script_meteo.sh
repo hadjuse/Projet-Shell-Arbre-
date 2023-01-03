@@ -4,6 +4,7 @@ tout_arguments=$*
 mode_tri="avl"
 option_geographique=""
 i=0
+nom_fichier=""
 #Initialisation des fonctions tests pour chaques arguments et options
 test_argument_mode() {
     MODE=$OPTARG
@@ -47,7 +48,7 @@ filtrage_m() {
     cut -d ';' -f 1,6,15 meteo_filtered_data_v1.csv >donnee_filtree_altitude.csv
 }
 filtrage_h() {
-    cut -d ';' -f 1,15=4,15 meteo_filtered_data_v1.csv >donnee_filtree_humidite.csv
+    cut -d ';' -f 1,4,15 meteo_filtered_data_v1.csv >donnee_filtree_humidite.csv
 }
 #execution des arguments et options
 execution_mode_t() {
@@ -103,7 +104,7 @@ while getopts ":t:p:wmhFGSAOQ-:" option; do
         h)
             filtrage h
             ;; #traitement de l'option altitude
-        f) echo "option f" ;;
+        f)  nom_fichier=$OPTARG  ;;
         F)
             option_geographique="F"
             ;;
@@ -164,5 +165,6 @@ for f in $fichier_csv; do
         ;;
     esac
 done
-
 shift $((OPTIND - 1))
+make
+./abr $nom_fichier $mode_tri
