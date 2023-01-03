@@ -105,6 +105,7 @@ while getopts ":t:p:wmhFGSAOQ-:" option; do
             filtrage h
             ;; #traitement de l'option altitude
         f)  nom_fichier=$OPTARG  ;;
+        #option geographique
         F)
             option_geographique="F"
             ;;
@@ -140,27 +141,27 @@ for f in $fichier_csv; do
     i=$(($i + 1))
     case $option_geographique in
     F)
-        cut -d ';' -f 1- "$f" | grep '1[001-976][1-7]' >donnee_filtree_metropole_$i.csv
+        cut -d ';' -f 1- "$f" | grep -E '1[001-976][1-7]' >donnee_filtree_metropole_$i.csv
         rm $f
         ;;
     G)
-        cut -d ';' -f 1- "$f" | grep '973[01-62]' >donnee_filtree_Guyane_$i.csv
+        cut -d ';' -f 1- "$f" | grep -E '973[01-62]' >donnee_filtree_Guyane_$i.csv
         rm $f
         ;;
     S)
-        cut -d ';' -f 1- "$f" | grep '97500' >donnee_filtree_Saint_Miq_$i.csv
+        cut -d ';' -f 1- "$f" | grep -E '97500' >donnee_filtree_Saint_Miq_$i.csv
         rm $f
         ;;
     A)
-        cut -d ';' -f 1- "$f" | grep '971[00-90]' >donnee_filtree_Antille_$i.csv
+        cut -d ';' -f 1- "$f" | grep -E '971[00-90]' >donnee_filtree_Antille_$i.csv
         rm $f
         ;;
     O)
-        cut -d ';' -f 1- "$f" | grep '974[30-40]' >donnee_filtree_Ocean_$i.csv
+        cut -d ';' -f 1- "$f" | grep -E '974[30-40]' >donnee_filtree_Ocean_$i.csv
         rm $f
         ;;
     Q)
-        cut -d ';' -f 1- "$f" | grep '^984' >donnee_filtree_metropole_$i.csv
+        cut -d ';' -f 1- "$f" | grep -E '984[11-15]' >donnee_filtree_antarctique_$i.csv
         rm $f
         ;;
     esac
