@@ -2,22 +2,8 @@
 #Initialisation des variables
 tout_arguments=$*
 mode_tri="avl"
-#teste pour savoir si les fichiers temporaires existent
-if [ -d fichier_temp_t ]; then
-    echo "Le dossier 'fichier_temp_t' existe déjà."
-else
-    mkdir fichier_temp_t
-fi
-if [ -d fichier_temp_p ]; then
-    echo "Le dossier 'fichier_temp_p' existe déjà."
-else
-    mkdir fichier_temp_p
-fi
-if [ -d fichier_temp_w ]; then
-    echo "Le dossier 'fichier_temp_w' existe déjà."
-else
-    mkdir fichier_temp_w
-fi
+option_geographique=""
+i=0
 #Initialisation des fonctions tests pour chaques arguments et options
 test_argument_mode() {
     MODE=$OPTARG
@@ -34,28 +20,34 @@ test_options() {
 }
 #filtrage pour l'option -t
 filtrage_1() {
-    cut -d ';' -f 11,15 meteo_filtered_data_v1.csv >fichier_temp_t/donnee_filtree_temperature_et_num.txt
+    cut -d ';' -f 1,11,15 meteo_filtered_data_v1.csv >donnee_filtree_temperature_et_num_t.csv
 }
 filtrage_2() {
-    cut -d ';' -f 11,2 meteo_filtered_data_v1.csv >fichier_temp_t/donnee_filtree_temperature_et_date.txt
+    cut -d ';' -f 1,11,2,15 meteo_filtered_data_v1.csv >donnee_filtree_temperature_et_date_t.csv
 }
 filtrage_3() {
-    cut -d ';' -f 11,1 meteo_filtered_data_v1.csv >fichier_temp_t/donnee_filtree_temperature_et_id.txt
+    cut -d ';' -f 1,11,15 meteo_filtered_data_v1.csv >donnee_filtree_temperature_et_id_t.csv
 }
 #filtrage pour l'option -p
 filtrage_1_bis() {
-    cut -d ';' -f 11,15 meteo_filtered_data_v1.csv >fichier_temp_p/donnee_filtree_temperature_et_num.txt
+    cut -d ';' -f 11,15 meteo_filtered_data_v1.csv >donnee_filtree_temperature_et_num_p.csv
 
 }
 filtrage_2_bis() {
-    cut -d ';' -f 11,2 meteo_filtered_data_v1.csv >fichier_temp_p/donnee_filtree_temperature_et_date.txt
+    cut -d ';' -f 11,2,15 meteo_filtered_data_v1.csv >donnee_filtree_temperature_et_date_p.csv
 }
 filtrage_3_bis() {
-    cut -d ';' -f 11, 1 meteo_filtered_data_v1.csv >fichier_temp_p/donnee_filtree_temperature_et_id.txt
+    cut -d ';' -f 1,11,15 meteo_filtered_data_v1.csv >donnee_filtree_temperature_et_id_p.csv
 }
 #filtrage pour l'option -w
 filtrage_w() {
-    cut -d ';' -f 1,3,4 meteo_filtered_data_v1.csv >fichier_temp_w/donnee_filtree_id_vent_moyenne.txt
+    cut -d ';' -f 1,3,4,15 meteo_filtered_data_v1.csv >donnee_filtree_id_vent_moyenne.csv
+}
+filtrage_m() {
+    cut -d ';' -f 1,6,15 meteo_filtered_data_v1.csv >donnee_filtree_altitude.csv
+}
+filtrage_h() {
+    cut -d ';' -f 1,15=4,15 meteo_filtered_data_v1.csv >donnee_filtree_humidite.csv
 }
 #execution des arguments et options
 execution_mode_t() {
@@ -77,30 +69,16 @@ execution_mode_p() {
         filtrage_3_bis
     fi
 }
-verification_tri() {
-    for mode in tout_arguments; do
-        if [ $mode == "tab" ]; then
-            mode_tri = "tab"
-            break
-        elif [ $mode == "abr" ]; then
-            mode_tri = "abr"
-            break
-        elif [ $mode == "avl" ]; then
-            mode_tri == "avl"
-            break
-        fi
-    done
-}
 
 #while true; do
 # Traitement des options de la ligne de commande avec getopt
 while getopts ":t:p:wmhFGSAOQ-:" option; do
     if [ $option = "-" ]; then
         case $OPTARG in
-            abr) mode_tri="abr" ;;
-            tab) mode_tri="tab" ;;
-            avl) mode_tri="avl" ;;
-            help) cat help.txt;;
+        abr) mode_tri="abr" ;;
+        #tab) mode_tri="tab" ;;
+        avl) mode_tri="avl" ;;
+        help) cat help.txt ;;
         esac
     else
         case "$option" in
@@ -120,43 +98,71 @@ while getopts ":t:p:wmhFGSAOQ-:" option; do
             filtrage_w
             ;;
         m)
-            echo "humidite"
+            filtrage_m
             ;; #traitement de l'option humidite
         h)
-            echo "altitude"
+            filtrage h
             ;; #traitement de l'option altitude
+        f) echo "option f" ;;
         F)
-            echo "France"
-            shift
+            option_geographique="F"
             ;;
         G)
-            echo "Guyane française"
+            option_geographique="G"
             shift
             ;;
         S)
-            echo "Saint-Pierre et Miquelon"
+            option_geographique="S"
             shift
             ;;
         A)
-            echo "Antilles"
+            option_geographique="A"
             shift
             ;;
         O)
-            echo "Océan indien"
+            option_geographique="O"
             shift
             ;;
         Q)
-            echo "Antarctique"
+            option_geographique="Q"
             shift
             ;;
         *)
             echo "option invalide"
             ;;
-        --) break;;
+        --) break ;;
         esac
-    
     fi
 done
+fichier_csv=$(ls | grep ^donnee)
+for f in $fichier_csv; do
+    i=$(($i + 1))
+    case $option_geographique in
+    F)
+        cut -d ';' -f 1- "$f" | grep '1[001-976][1-7]' >donnee_filtree_metropole_$i.csv
+        rm $f
+        ;;
+    G)
+        cut -d ';' -f 1- "$f" | grep '973[01-62]' >donnee_filtree_Guyane_$i.csv
+        rm $f
+        ;;
+    S)
+        cut -d ';' -f 1- "$f" | grep '97500' >donnee_filtree_Saint_Miq_$i.csv
+        rm $f
+        ;;
+    A)
+        cut -d ';' -f 1- "$f" | grep '971[00-90]' >donnee_filtree_Antille_$i.csv
+        rm $f
+        ;;
+    O)
+        cut -d ';' -f 1- "$f" | grep '974[30-40]' >donnee_filtree_Ocean_$i.csv
+        rm $f
+        ;;
+    Q)
+        cut -d ';' -f 1- "$f" | grep '^984' >donnee_filtree_metropole_$i.csv
+        rm $f
+        ;;
+    esac
+done
+
 shift $((OPTIND - 1))
-#verification_tri
-echo $mode_tri
