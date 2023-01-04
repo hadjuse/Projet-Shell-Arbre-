@@ -635,7 +635,7 @@ int taille_liste_chainee(pListe p1)
     return t;
 }
 
-Chainon *ajouterCroissant(pListe liste, int e) 
+pListe ajouterCroissant(pListe liste, int e) 
 {
 	nouveau=creerChainon(e);
 	pListe p1;
@@ -662,7 +662,7 @@ Chainon *ajouterCroissant(pListe liste, int e)
 			p1->suivant = nouveau;
 		}
 	}
-	return pliste;
+	return p1;
 }
 /*
 void MinMaxABR(pArbre a, int *min, int* max)
