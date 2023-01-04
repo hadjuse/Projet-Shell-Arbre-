@@ -635,21 +635,35 @@ int taille_liste_chainee(pListe p1)
     return t;
 }
 
-/*
-pListe triselection(pListe liste, int n)
+Chainon *ajouterCroissant(pListe liste, int e) 
 {
-    int temp, taille = taille_liste_chainee(liste);
-    pListe p1;
-    for (int i = 0; i<taille-1; i++)
+	nouveau=creerChainon(e);
+	pListe p1;
+	if(p1==NULL){// si la liste est vide
+		p1=nouveau;
+	}
+	else if (p1->nombre > e) 
     {
-        int indiceMin=i;
-        for (int j=i+1; j<taille; j++)
+		p1=insertDebut(liste,e);
+	}
+	else
+    {
+		while(p1->suivant!= NULL && p1->suivant->nombre < e)
+        { 
+			p1=p1->suivant;
+		}
+		if(p1->suivant==NULL)
+        { 
+			p1->suivant=nouveau;
+		}
+		else
         {
-            
-        }
-    }
-    return liste;
-}*/
+			nouveau->suivant=p1->suivant;
+			p1->suivant = nouveau;
+		}
+	}
+	return pliste;
+}
 /*
 void MinMaxABR(pArbre a, int *min, int* max)
 {
