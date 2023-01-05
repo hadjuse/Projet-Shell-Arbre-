@@ -138,13 +138,14 @@ void parcoursPostFixe(pArbre a)
     }
 }
 
-void parcoursInfixe(pArbre a)
+void parcoursInfixe(pArbre a, int *c)
 {
     if (estVide(a) !=1)
     {
-        parcoursInfixe(a->fg);
-        traiter(a);
-        parcoursInfixe(a->fd);
+        parcoursInfixe(a->fg,c);
+        printf("%d ",a->nombre);
+        *c=*c+1;
+        parcoursInfixe(a->fd,c);
     }
 }
 void traiter(pArbre a)
@@ -348,11 +349,20 @@ pArbre insertionAVL(pArbre a, int e, int *h)
     {
         a->fd=insertionAVL(a->fd,e,h);
     }
+    /*
     else
     {
-        *h=0;
-        return a;
-    }
+        if (!existeFilsDroit(a)){
+            *h=1;
+            a=ajouterFilsDroit(a,e);
+        }
+        else{
+            *h=-1;
+            pArbre nouveau = creerArbre(e);
+            nouveau->fd = a->fd;
+            a->fd=nouveau;
+        }
+    }*/
     if(*h!=0)
     {
         a->equilibre=a->equilibre+*h;
@@ -637,7 +647,8 @@ int taille_liste_chainee(pListe p1)
 
 pListe ajouterCroissant(pListe liste, int e) 
 {
-	nouveau=creerChainon(e);
+    
+	pListe nouveau=creerChainon(e);
 	pListe p1;
 	if(p1==NULL){// si la liste est vide
 		p1=nouveau;
@@ -664,6 +675,28 @@ pListe ajouterCroissant(pListe liste, int e)
 	}
 	return p1;
 }
+/*
+int parcours_i(pListe p1,int i);
+{
+    k = 0;
+    pListe pp1 = p1;
+
+    while (k<i)
+    {
+        k++;
+        pp1=pp1->suivant;
+    } 
+    return k 
+}
+pListe triselection(pListe liste, int n)
+{
+    int temp, taille = taille_liste_chainee(liste);
+    pListe
+    for (int i=0; i<taille-1; i++)
+    {
+        for (int j=)
+    }
+}*/
 /*
 void MinMaxABR(pArbre a, int *min, int* max)
 {

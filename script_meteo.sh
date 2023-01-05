@@ -22,28 +22,28 @@ test_options() {
 }
 #filtrage pour l'option -t
 filtrage_1() {
-    awk -F';' '{print $10 ";" $11 ";" $1}' $nom_fichier>donnee_filtree_temperature_et_num_t.csv
+    awk -F';' '{print $10 ";" $1 ";" $11 ";" $12 ";" $13 }' $nom_fichier>donnee_filtree_temperature_et_num_t.csv
 }
 filtrage_2() {
-    awk -F';' '{print $10 ";" $1 ";" $11 ";" $2}' $nom_fichier>donnee_filtree_temperature_et_date_t.csv
+    awk -F';' '{print $10 ";" $1 ";" $2 ";" $11}' $nom_fichier>donnee_filtree_temperature_et_date_t.csv
 }
 filtrage_3() {
-    awk -F';' '{print $10 ";" $1 ";" $11 ";" $2}' $nom_fichier>donnee_filtree_temperature_et_id_t.csv
+    awk -F';' '{print $10 ";" $1 ";" $2 ";" $11 }' $nom_fichier>donnee_filtree_temperature_et_id_t.csv
     #cut -d ';' -f 1,11,10 meteo_filtered_data_v1.csv >donnee_filtree_temperature_et_id_t.csv
 }
 #filtrage pour l'option -p
 filtrage_1_bis() {
-    awk -F';' '{print $10 ";" $7 ";" $1}' $nom_fichier>donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $10 ";" $1 ";" $3 ";" $7 }' $nom_fichier>donnee_filtree_temperature_et_num_p.csv
 }
 filtrage_2_bis() {
-    awk -F';' '{print $10 ";" $2 ";" $7}' $nom_fichier>donnee_filtree_temperature_et_date_p
+    awk -F';' '{print $10 ";" $1 ";" $2 ";" $7}' $nom_fichier>donnee_filtree_temperature_et_date_p.csv
 }
 filtrage_3_bis() {
-    awk -F';' '{print $10 ";" $1 ";" $7 ";" 2}' $nom_fichier>donnee_filtree_temperature_et_id_p.csv
+    awk -F';' '{print $10 ";" $1 ";" $2 ";" $7}' $nom_fichier>donnee_filtree_temperature_et_id_p.csv
 }
 #filtrage pour l'option -w
 filtrage_w() {
-    awk -F';' '{print $10 ";" $1 ";" $3 ";" $4 ";" $10}' $nom_fichier>donnee_filtree_id_vent_moyenne.csv
+    awk -F';' '{print $10 ";" $1 ";" $3 ";" $4 ";" $5}' $nom_fichier>donnee_filtree_id_vent_moyenne.csv
 }
 filtrage_m() {
     awk -F';' '{print $10 ";" $1 ";" $6}' $nom_fichier>donnee_filtree_temperature_et_num_p.csv
@@ -181,16 +181,16 @@ for fic in $fichier_csv; do
   split($1, coords, ",")
   if (coords[1] + 0 >= 41 && coords[1] + 0<= 51 && coords[2] + 0>= -5 && coords[2] + 0 <= 2) {
     print $0
-} }' $fic >donnee_filtree_metropole_$1.csv
-        rm $f
+} }' $fic | head -1000000>donnee_filtree_metropole_$1.csv
+        rm $fic
         ;;
     G)
         awk -F";" '{
   split($1, coords, ",")
-  if (coords[1] + 0 >= -4 && coords[1] + 0 <= 8  && coords[2]+0 >=-58 && coords[2] + 0<= -48) {
+  if (coords[1] + 0 >= 0 && coords[1] + 0 <= 6  && coords[2]+0 >=-54 && coords[2] + 0<= -50) {
     print $0
 } }' $fic >donnee_filtree_Guyane_$i.csv
-        rm $f
+        rm $fic
         ;;
     S)
         awk -F";" '{
@@ -198,15 +198,15 @@ for fic in $fichier_csv; do
   if (coords[1] + 0>= 45 && coords[1] + 0 <=50  && coords[2]+0 >= -60 && coords[2] + 0 <= -53) {
     print $0
 } }' "$fic" >donnee_filtree_Saint_Miq_$i.csv
-        rm $f
+        rm $fic
         ;;
     A)
         awk -F";" '{
   split($0, coords, ",")
-  if (coords[1] +0>= 11 && coords[1] + 0 <=16  && coords[2]+0 >= -65 && coords[2] + 0 <= -57) {
+  if (coords[1] +0>= 11 j&& coords[1] + 0 <=16  && coords[2]+0 >= -65 && coords[2] + 0 <= -57) {
     print $0
 } }' "$fic" >donnee_filtree_Antille_$i.csv
-        rm $f
+        rm $fic
         ;;
     O)
         awk -F";" '{
@@ -214,7 +214,7 @@ for fic in $fichier_csv; do
   if (coords[1] +0>= -26 && coords[1] + 0 <=-10  && coords[2]+0 >= 35 && coords[2] + 0 <= 61) {
     print $0
 } }' "$fic" >donnee_filtree_Ocean_$i.csv
-        rm $f
+        rm $fic
         ;;
     Q)
         awk -F";" '{
@@ -222,7 +222,7 @@ for fic in $fichier_csv; do
   if (coords[1] +0>= -75 && coords[1] + 0 <=-41  && coords[2]+0 >= 36 && coords[2] + 0 <= 131) {
     print $0
 } }' "$fic" >donnee_filtree_antarctique_$i.csv
-        rm $f
+        rm $fic
         ;;
     esac
 done
@@ -230,5 +230,7 @@ shift $((OPTIND - 1))
 #execution des tris
 make
 fichier_csv_a_trier=$(ls | grep ^donnee)
-echo $fichier_csv_a_trier
+for f in $fichier_csv_a_trier; do
+    ./abr $f $mode_tri
+done 
 

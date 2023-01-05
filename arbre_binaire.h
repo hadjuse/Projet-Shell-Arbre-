@@ -2,7 +2,8 @@
 #define __ARBRE__
 
 typedef struct arbre {
-    int nombre;
+    int colonne1;
+    int colonne2;
     struct arbre *fg;
     struct arbre *fd;
     int equilibre;
@@ -40,7 +41,7 @@ pArbre ajouterFilsDroit(pArbre a, int e);
 void traiter(pArbre a);
 void parcoursPrefixe(pArbre a);
 void parcoursPostFixe(pArbre a);
-void parcoursInfixe(pArbre a);
+void parcoursInfixe(pArbre a, int *c);
 void parcoursLargeurs(pArbre a);
 pArbre modifierRacine(pArbre a, int e);
 void supprimerFilsDroit(pArbre a);
@@ -70,7 +71,7 @@ pListe insertMilieu(pListe p1, int e);
 pListe suppDebut(pListe p1);
 pListe triselection(pListe p1,int n);
 int taille_liste_chainee(pListe p1);
-pListe parcours_i(pListe p1);
+int parcours_i(pListe p1);
 
 //void affArbreGraphique(pArbre a,int info);
 //partie Arbre binaire de recherche
