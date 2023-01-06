@@ -6,9 +6,9 @@
 #include <string.h>
 int main(int argc, char **argv)
 {
-    
+    int column;
     //Etape d'ouverture et de lecture du fichier mis en argument
-    if (argc != 3)
+    if (argc != 8)
     {
         fprintf(stderr, "Format : programme <nom du fichier> <mode de tri>");
         exit(EXIT_FAILURE);
@@ -26,17 +26,31 @@ int main(int argc, char **argv)
     
     const char delim[2] = ";";
     //Cas où le mode tri du script est un avl
-    if (strcmp(argv[2], "avl") == 0){
+    if (strcmp(argv[2], "avl") == 0 && strcmp(argv[3], "1") == 0){
+        column = 2;
         char *token;
         int c=0;
-        fgets(ligne, sizeof(ligne), fichier_a_trier);
-        int premiere_valeur = atoi(ligne); 
-        pArbre avl = creerArbre(premiere_valeur);
-        pArbre pAvl= avl;
+        pArbre avl;
+        pArbre pAvl;
+        if (ligne[0] != 'C')
+        {
+            fgets(ligne, sizeof(ligne), fichier_a_trier);
+            token = strtok(ligne, delim);
+            for (int i = 1; i < column; i++)
+                token = strtok(NULL, delim);
+            int premiere_valeur = atoi(ligne); 
+            avl = creerArbre(premiere_valeur);    
+        }
+        else{
+            fgets(ligne, sizeof(ligne), fichier_a_trier);
+        }
+        pAvl = avl;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier))
         {
+            
             token = strtok(ligne, delim);
-            token = strtok(NULL, delim);
+            for (int i = 1; i < column; i++)
+                token = strtok(NULL, delim);
             int val = atoi(token);
             //printf("%d \n", val);
             pAvl = insertionAVL(pAvl,val,&pAvl->hauteur);

@@ -2,8 +2,12 @@
 #define __ARBRE__
 
 typedef struct arbre {
-    int colonne1;
-    int colonne2;
+    char* cols1;
+    char* cols2;
+    char* cols3;
+    char* cols4;
+    char* cols5;
+    int nombre;
     struct arbre *fg;
     struct arbre *fd;
     int equilibre;

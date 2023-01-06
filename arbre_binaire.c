@@ -194,17 +194,6 @@ pArbre filsGauche(pArbre a)
 
 int nbmFeuille(pArbre a) // je dirai plus:
 {
-    /*if(estVide(a))
-    {
-        return 0;
-    }
-    if(estFeuille(a))
-    {
-        return 1;
-    }
-    return nbmFeuille(a->fg)+nbmFeuille(a->fd);*/
-
-
     if (a == NULL) return 0 ;
     if (estFeuille(a)) return 1;
     else return nbmFeuille(filsGauche(a)) + nbmFeuille(filsDroit(a));
@@ -212,13 +201,6 @@ int nbmFeuille(pArbre a) // je dirai plus:
 
 int taille(pArbre a) // je dirai plus:
 {
-    /*if(estVide(a)||estFeuille(a))
-    {
-        return 0;
-    }
-    return 1+taille(a->fg)+taille(a->fd);*/
-
-
     if (a == NULL) return 0; else if (estFeuille(a)) return 0 ;
     else return 1 + taille(filsGauche(a)) + taille(filsDroit(a));
 }

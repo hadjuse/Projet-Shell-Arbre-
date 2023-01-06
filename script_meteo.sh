@@ -3,9 +3,13 @@
 tout_arguments=$*
 mode_tri="avl"
 option_geographique=""
-
 i=0
 nom_fichier=""
+option_t="non"
+option_w="non"
+vent="non"
+humidite="non"
+altitude="non"
 #Initialisation des fonctions tests pour chaques arguments et options
 test_argument_mode() {
     MODE=$OPTARG
@@ -22,53 +26,54 @@ test_options() {
 }
 #filtrage pour l'option -t
 filtrage_1() {
-    awk -F';' '{print $10 ";" $1 ";" $11 ";" $12 ";" $13 }' $nom_fichier>donnee_filtree_temperature_et_num_t.csv
+    awk -F';' '{print $10 ";" $1 ";" $11 ";" $12 ";" $13 }' $nom_fichier >donnee_filtree_temperature_et_num_t.csv
 }
 filtrage_2() {
     awk -F';' '{print $10 ";" $1 ";" $2 ";" $11}' $nom_fichier>donnee_filtree_temperature_et_date_t.csv
 }
 filtrage_3() {
-    awk -F';' '{print $10 ";" $1 ";" $2 ";" $11 }' $nom_fichier>donnee_filtree_temperature_et_id_t.csv
+    awk -F':' '{print $10 ";" $1 ";" $2 ";" $11 }' $nom_fichier >donnee_filtree_temperature_et_id_t.csv
     #cut -d ';' -f 1,11,10 meteo_filtered_data_v1.csv >donnee_filtree_temperature_et_id_t.csv
 }
 #filtrage pour l'option -p
 filtrage_1_bis() {
-    awk -F';' '{print $10 ";" $1 ";" $3 ";" $7 }' $nom_fichier>donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $10 ";" $1 ";" $3 ";" $7 }' $nom_fichier >donnee_filtree_temperature_et_num_p.csv
 }
 filtrage_2_bis() {
-    awk -F';' '{print $10 ";" $1 ";" $2 ";" $7}' $nom_fichier>donnee_filtree_temperature_et_date_p.csv
+    awk -F';' '{print $10 ";" $1 ";" $2 ";" $7}' $nom_fichier >donnee_filtree_temperature_et_date_p.csv
 }
 filtrage_3_bis() {
-    awk -F';' '{print $10 ";" $1 ";" $2 ";" $7}' $nom_fichier>donnee_filtree_temperature_et_id_p.csv
+    awk -F';' '{print $10 ";" $1 ";" $2 ";" $7}' $nom_fichier >donnee_filtree_temperature_et_id_p.csv
 }
 #filtrage pour l'option -w
 filtrage_w() {
-    awk -F';' '{print $10 ";" $1 ";" $3 ";" $4 ";" $5}' $nom_fichier>donnee_filtree_id_vent_moyenne.csv
+    awk -F';' '{print $10 ";" $1 ";" $3 ";" $4 ";" $5}' $nom_fichier >donnee_filtree_id_vent_moyenne.csv
 }
 filtrage_m() {
-    awk -F';' '{print $10 ";" $1 ";" $6}' $nom_fichier>donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $10 ";" $1 ";" $6}' $nom_fichier >donnee_filtree_temperature_et_num_p.csv
 }
 filtrage_h() {
-    awk -F';' '{print $10 ";" $1 ";" $4}' $nom_fichier>donnee_filtree_humidite.csv
+    awk -F';' '{print $10 ";" $1 ";" $4}' $nom_fichier >donnee_filtree_humidite.csv
 }
 #execution des arguments et options
 execution_mode_t() {
     if [ $OPTARG -eq 1 ]; then
-        option_t=1
+        option_t="1"
+        echo $option_t
     elif [ $OPTARG -eq 2 ]; then
-        option_t=2
+        option_t="2"
     elif [ $OPTARG -eq 3 ]; then
-        option_t=3
+        option_t="3"
     fi
 }
 
 execution_mode_p() {
     if [ $OPTARG -eq 1 ]; then
-        option_w=1
+        option_w="1"
     elif [ $OPTARG -eq 2 ]; then
-        option_w=2
+        option_w="2"
     elif [ $OPTARG -eq 3 ]; then
-        option_w=3
+        option_w="3"
     fi
 }
 execution_mode_t_final() {
@@ -90,13 +95,13 @@ execution_mode_p_final() {
     fi
 }
 execution_argument_restant() {
-    if [ "$vent" == "ok" ];then
+    if [ "$vent" == "ok" ]; then
         filtrage_w
     fi
-    if [ "$humidite" == "ok" ];then
+    if [ "$humidite" == "ok" ]; then
         filtrage_m
     fi
-    if [ "$altitude" == "ok" ];then
+    if [ "$altitude" == "ok" ]; then
         filtrage_h
     fi
 }
@@ -112,14 +117,14 @@ while getopts ":t:p:wmhFGSAOQ-:f:d:" option; do
         esac
     else
         case "$option" in
-        
+
         #traitement de la temperature accompagné d'une option 1 ou 2 ou 3
         t)
             test_argument_mode
             test_options
             execution_mode_t
-        ;;
-        f) nom_fichier=$OPTARG;;
+            ;;
+        f) nom_fichier=$OPTARG ;;
         p) #traitement de la pression accompagné d'une option 1 ou 2 ou 3
             test_argument_mode
             test_options
@@ -134,7 +139,7 @@ while getopts ":t:p:wmhFGSAOQ-:f:d:" option; do
         h)
             altitude="ok"
             ;; #traitement de l'option altitude
-        
+
         #option geographique
         F)
             option_geographique="F"
@@ -161,10 +166,9 @@ while getopts ":t:p:wmhFGSAOQ-:f:d:" option; do
         esac
     fi
 done
-echo "$min" "$max"
 if [ -z "$nom_fichier" ]; then
-  echo "Le nom du fichier d'entrée doit être renseigné." >&2
-  exit 1
+    echo "Le nom du fichier d'entrée doit être renseigné." >&2
+    exit 1
 fi
 execution_mode_p_final
 execution_mode_t_final
@@ -179,9 +183,9 @@ for fic in $fichier_csv; do
         #coords[1] correspond aux latitude et coords[2] aux longitude.
         awk -F";" '{
   split($1, coords, ",")
-  if (coords[1] + 0 >= 41 && coords[1] + 0<= 51 && coords[2] + 0>= -5 && coords[2] + 0 <= 2) {
+  if (coords[1] + 0 >= 40 && coords[1] + 0<= 51 && coords[2] + 0>= -5 && coords[2] + 0 <= 8) {
     print $0
-} }' $fic | head -1000000>donnee_filtree_metropole_$1.csv
+} }' $fic>donnee_filtree_metropole_$1.csv
         rm $fic
         ;;
     G)
@@ -231,6 +235,5 @@ shift $((OPTIND - 1))
 make
 fichier_csv_a_trier=$(ls | grep ^donnee)
 for f in $fichier_csv_a_trier; do
-    ./abr $f $mode_tri
-done 
-
+    ./abr $f $mode_tri $option_t $option_w $humidite $vent $altitude
+done
