@@ -7,7 +7,7 @@
 int main(int argc, char **argv)
 {
     int column;
-    //Etape d'ouverture et de lecture du fichier mis en argument
+    // Etape d'ouverture et de lecture du fichier mis en argument
     if (argc != 8)
     {
         fprintf(stderr, "Format : programme <nom du fichier> <mode de tri>");
@@ -23,42 +23,49 @@ int main(int argc, char **argv)
         exit(1);
     }
     char ligne[1024];
-    
-    const char delim[2] = ";";
-    //Cas où le mode tri du script est un avl
-    if (strcmp(argv[2], "avl") == 0 && strcmp(argv[3], "1") == 0){
-        column = 2;
+    // Cas où le mode tri du script est un avl
+    if (strcmp(argv[2], "avl") == 0 && strcmp(argv[3], "1") == 0)
+    {
         char *token;
-        int c=0;
+        int c = 0;
         pArbre avl;
         pArbre pAvl;
         if (ligne[0] != 'C')
         {
             fgets(ligne, sizeof(ligne), fichier_a_trier);
-            token = strtok(ligne, delim);
-            for (int i = 1; i < column; i++)
-                token = strtok(NULL, delim);
-            int premiere_valeur = atoi(ligne); 
-            avl = creerArbre(premiere_valeur);    
+            token = strtok(ligne,";");//colonne 1
+            //printf("%s", ligne);
+            avl=creerArbre(atoi(token));
+            avl->cols1=token;
+            printf("%s\n", avl->cols1);
+            token = strtok(NULL, ";");//colonne2
+            avl->cols2=token;
+            token = strtok(NULL, ";");//colonne3
+            avl->cols3=token;
+            token = strtok(NULL, ";");//colonne4
+            avl->cols4=token;
+            token = strtok(NULL, ";");//colonne5
+            avl->cols5=token;
+            printf("%s %s %s %s %s\n", avl->cols1,avl->cols2,avl->cols3,avl->cols4,avl->cols5); 
+
         }
-        else{
+        else
+        {
             fgets(ligne, sizeof(ligne), fichier_a_trier);
         }
+        
         pAvl = avl;
-        while (fgets(ligne, sizeof(ligne), fichier_a_trier))
+        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
-            
-            token = strtok(ligne, delim);
-            for (int i = 1; i < column; i++)
-                token = strtok(NULL, delim);
+            token = strtok(ligne, ";");
             int val = atoi(token);
-            //printf("%d \n", val);
-            pAvl = insertionAVL(pAvl,val,&pAvl->hauteur);
+            pAvl = insertionAVL(pAvl, val, &pAvl->hauteur);
         }
-        parcoursInfixe(avl,&c);
+        parcoursInfixe(avl, &c);
         printf("\nNombre de noeuds: %d", c);
     }
+
     fclose(fichier_a_trier);
-    
+
     return 0;
 }

@@ -331,9 +331,11 @@ pArbre insertionAVL(pArbre a, int e, int *h)
     {
         a->fd=insertionAVL(a->fd,e,h);
     }
-    /*
     else
     {
+        *h=0;
+        return a;
+        /*
         if (!existeFilsDroit(a)){
             *h=1;
             a=ajouterFilsDroit(a,e);
@@ -343,8 +345,8 @@ pArbre insertionAVL(pArbre a, int e, int *h)
             pArbre nouveau = creerArbre(e);
             nouveau->fd = a->fd;
             a->fd=nouveau;
-        }
-    }*/
+        }*/
+    }
     if(*h!=0)
     {
         a->equilibre=a->equilibre+*h;
