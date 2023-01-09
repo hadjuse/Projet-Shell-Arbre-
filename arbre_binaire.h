@@ -5,6 +5,7 @@ typedef struct valeur
 {
     float moyenne;
     float temperature;
+    float somme;
 }Valeur;
 typedef Valeur *pValeur;
 typedef struct arbre

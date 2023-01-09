@@ -71,22 +71,12 @@ int existeFilsGauche(pArbre a) // je suis d'accord avec toi
     return (a->fg ? 1 : 0);
 }
 
-int existeFilsDroit(pArbre a) // je suis d'accord avec toi
+int existeFilsDroit(pArbre a) 
 {
     return (a->fd ? 1 : 0);
 }
-pArbre ajouterFilsDroit(pArbre a, int e) // je dirai plutôt ça:
+pArbre ajouterFilsDroit(pArbre a, int e) 
 {
-    /*if(a==NULL)
-    {
-        a=creerArbre(e);
-        return a;
-    }
-    else if(!existeFilsDroit(a))
-    {
-        a=creerArbre(e);
-        return a;
-    }*/
     pArbre b;
     if (estVide(a) == 1)
     {
@@ -101,18 +91,8 @@ pArbre ajouterFilsDroit(pArbre a, int e) // je dirai plutôt ça:
     return a;
 }
 
-pArbre ajouterFilsGauche(pArbre a, int e) // je dirai plutôt ça:
+pArbre ajouterFilsGauche(pArbre a, int e) 
 {
-    /*if(a==NULL)
-   {
-       a=creerArbre(e);
-       return a;
-   }
-   else if(!existeFilsGauche(a))
-   {
-       a=creerArbre(e);
-       return a;
-   }*/
     pArbre b;
     if (estVide(a) == 1)
     {
