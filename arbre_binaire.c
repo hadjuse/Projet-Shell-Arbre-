@@ -2,22 +2,28 @@
 #include <stdlib.h>
 #include "arbre_binaire.h"
 #include <string.h>
-pArbre creerArbre(int a)
+pArbre creerArbre(int a, char *cols1, char *cols2, char *cols3, char *cols4, char *cols5)
 {
-    pArbre new= malloc(sizeof(Arbre));
-    if(new == NULL)
+    pArbre new = malloc(sizeof(Arbre));
+    //new->val=malloc(sizeof(pValeur));
+    if (new == NULL)
     {
-        exit(1);//Je l'ai modifié car lors de la création par convention il faut quitter le prog si le noeud vide
+        exit(1); // Je l'ai modifié car lors de la création par convention il faut quitter le prog si le noeud vide
     }
-    new->nombre=a;//Je l'ai simplifié un peu
-    new->fg=NULL;//idem
-    new->fd=NULL;//idem
+    new->nombre = a; // Je l'ai simplifié un peu
+    new->fg = NULL;  // idem
+    new->fd = NULL;  // idem
+    strcpy(new->cols1, cols1);
+    strcpy(new->cols2, cols2);
+    strcpy(new->cols3, cols3);
+    strcpy(new->cols4, cols4);
+    strcpy(new->cols5, cols5);
     return new;
 }
 
-int estVide(pArbre a) //J'ai modifié tout ton bloc ici
+int estVide(pArbre a) // J'ai modifié tout ton bloc ici
 {
-    if(a==NULL)
+    if (a == NULL)
     {
         return 1;
     }
@@ -39,10 +45,10 @@ int estFeuille(pArbre a)
     else{
         return 0;
     }*/
-    return (a ? ((!a->fg) && (!a->fd) ? 1:0) : 0);
+    return (a ? ((!a->fg) && (!a->fd) ? 1 : 0) : 0);
 }
 
-int element(pArbre a)//Moi j'aurai proposé un truc de ce genre:
+int element(pArbre a) // Moi j'aurai proposé un truc de ce genre:
 {
     /*int r;
     r=a->nombre;
@@ -52,22 +58,24 @@ int element(pArbre a)//Moi j'aurai proposé un truc de ce genre:
     {
         return 0;
     }
-    else{
+    else
+    {
         return a->nombre;
     }
-    if (a) return a->nombre;
+    if (a)
+        return a->nombre;
 }
 
-int existeFilsGauche(pArbre a) //je suis d'accord avec toi
+int existeFilsGauche(pArbre a) // je suis d'accord avec toi
 {
     return (a->fg ? 1 : 0);
 }
 
-int existeFilsDroit(pArbre a) //je suis d'accord avec toi
+int existeFilsDroit(pArbre a) // je suis d'accord avec toi
 {
     return (a->fd ? 1 : 0);
 }
-pArbre ajouterFilsDroit(pArbre a, int e)// je dirai plutôt ça:
+pArbre ajouterFilsDroit(pArbre a, int e) // je dirai plutôt ça:
 {
     /*if(a==NULL)
     {
@@ -80,12 +88,13 @@ pArbre ajouterFilsDroit(pArbre a, int e)// je dirai plutôt ça:
         return a;
     }*/
     pArbre b;
-    if (estVide(a) == 1){
+    if (estVide(a) == 1)
+    {
         return a;
     }
     else
     {
-        b  = creerArbre(e);
+        b = creerArbre(e, a->cols1, a->cols2, a->cols3, a->cols4, a->cols5);
         a->fd = b;
         return a;
     }
@@ -94,29 +103,28 @@ pArbre ajouterFilsDroit(pArbre a, int e)// je dirai plutôt ça:
 
 pArbre ajouterFilsGauche(pArbre a, int e) // je dirai plutôt ça:
 {
-     /*if(a==NULL)
-    {
-        a=creerArbre(e);
-        return a;
-    }
-    else if(!existeFilsGauche(a))
-    {
-        a=creerArbre(e);
-        return a;
-    }*/
+    /*if(a==NULL)
+   {
+       a=creerArbre(e);
+       return a;
+   }
+   else if(!existeFilsGauche(a))
+   {
+       a=creerArbre(e);
+       return a;
+   }*/
     pArbre b;
-    if (estVide(a) == 1){
+    if (estVide(a) == 1)
+    {
         return a;
     }
     else
     {
-        b = creerArbre(e);
+        b = creerArbre(e, a->cols1, a->cols2, a->cols3, a->cols4, a->cols5);
         a->fg = b;
         return a;
     }
-
 }
-
 
 void parcoursPrefixe(pArbre a)
 {
@@ -140,12 +148,12 @@ void parcoursPostFixe(pArbre a)
 
 void parcoursInfixe(pArbre a, int *c)
 {
-    if (estVide(a) !=1)
+    if (estVide(a) != 1)
     {
-        parcoursInfixe(a->fg,c);
-        printf("%d ",a->nombre);
-        *c=*c+1;
-        parcoursInfixe(a->fd,c);
+        parcoursInfixe(a->fg, c);
+        printf("%s;%s;%s;%s;%s\n", a->cols1, a->cols2, a->cols3, a->cols4, a->cols5);
+        *c = *c + 1;
+        parcoursInfixe(a->fd, c);
     }
 }
 void traiter(pArbre a)
@@ -154,16 +162,22 @@ void traiter(pArbre a)
 }
 pArbre modifierRacine(pArbre a, int e)
 {
-    if (a != NULL) a->nombre = e;
+    if (a != NULL)
+        a->nombre = e;
     return a;
 }
 void supprimerFilsDroit(pArbre a)
 {
-    if (a == NULL){exit(1);}
+    if (a == NULL)
+    {
+        exit(1);
+    }
     else if (existeFilsDroit(a) == 1)
     {
-        if (existeFilsGauche(a->fd)) supprimerFilsGauche(a->fd);
-        if (existeFilsDroit(a->fd)) supprimerFilsDroit(a->fd);
+        if (existeFilsGauche(a->fd))
+            supprimerFilsGauche(a->fd);
+        if (existeFilsDroit(a->fd))
+            supprimerFilsDroit(a->fd);
         a->fd = NULL;
         free(a->fd);
     }
@@ -171,47 +185,61 @@ void supprimerFilsDroit(pArbre a)
 void supprimerFilsGauche(pArbre a)
 {
 
-    if (a == NULL){exit(1);}
+    if (a == NULL)
+    {
+        exit(1);
+    }
     else if (existeFilsGauche(a))
     {
-        if (existeFilsGauche(a->fg)) supprimerFilsGauche(a->fg);
-        if (existeFilsDroit(a->fg)) supprimerFilsDroit(a->fg);
+        if (existeFilsGauche(a->fg))
+            supprimerFilsGauche(a->fg);
+        if (existeFilsDroit(a->fg))
+            supprimerFilsDroit(a->fg);
         a->fg = NULL;
         free(a->fg);
     }
 }
 pArbre filsDroit(pArbre a)
 {
-    if (a == NULL) exit(1);
-    return (existeFilsDroit(a)) ?  a->fd : NULL;
+    if (a == NULL)
+        exit(1);
+    return (existeFilsDroit(a)) ? a->fd : NULL;
 }
 
 pArbre filsGauche(pArbre a)
 {
-    if (a == NULL) exit(1);
-    return (existeFilsGauche(a)) ?  a->fg : NULL;
+    if (a == NULL)
+        exit(1);
+    return (existeFilsGauche(a)) ? a->fg : NULL;
 }
 
 int nbmFeuille(pArbre a) // je dirai plus:
 {
-    if (a == NULL) return 0 ;
-    if (estFeuille(a)) return 1;
-    else return nbmFeuille(filsGauche(a)) + nbmFeuille(filsDroit(a));
+    if (a == NULL)
+        return 0;
+    if (estFeuille(a))
+        return 1;
+    else
+        return nbmFeuille(filsGauche(a)) + nbmFeuille(filsDroit(a));
 }
 
 int taille(pArbre a) // je dirai plus:
 {
-    if (a == NULL) return 0; else if (estFeuille(a)) return 0 ;
-    else return 1 + taille(filsGauche(a)) + taille(filsDroit(a));
+    if (a == NULL)
+        return 0;
+    else if (estFeuille(a))
+        return 0;
+    else
+        return 1 + taille(filsGauche(a)) + taille(filsDroit(a));
 }
 int hauteur(pArbre a)
 {
     return (a == NULL) ? -1 : 1 + max(hauteur(filsGauche(a)), hauteur(filsDroit(a)));
 }
-//partie file
-Chainon* creationChainon(pArbre a)
+// partie file
+Chainon *creationChainon(pArbre a)
 {
-    Chainon* p = malloc(sizeof(Chainon));
+    Chainon *p = malloc(sizeof(Chainon));
     if (p == NULL)
     {
         exit(1);
@@ -220,42 +248,52 @@ Chainon* creationChainon(pArbre a)
     p->suivant = NULL;
     return p;
 }
-int verif(File * file) {
+int verif(File *file)
+{
     int res = 0;
-    if (file == NULL) {
+    if (file == NULL)
+    {
         res = -1;
-    } else if ((file->tete == NULL && file->queue!= NULL) || (file->queue == NULL && file->tete!= NULL)) {
-//(file->tete==NULL)!=(file->queue==NULL)
+    }
+    else if ((file->tete == NULL && file->queue != NULL) || (file->queue == NULL && file->tete != NULL))
+    {
+        //(file->tete==NULL)!=(file->queue==NULL)
         res = -2;
-    } else if (file->queue != NULL && file->queue->suivant != NULL) {
+    }
+    else if (file->queue != NULL && file->queue->suivant != NULL)
+    {
         res = -3;
     }
     return (res);
 }
-int enfiler(File *f, pArbre a) {
-    Chainon * c;
+int enfiler(File *f, pArbre a)
+{
+    Chainon *c;
     int result = 0;
     result = verif(f);
-    if (result > -2) //test de la file si elle est corompue
+    if (result > -2) // test de la file si elle est corompue
     {
         c = creationChainon(a);
-        if (f->queue == NULL) //si la file est vide
+        if (f->queue == NULL) // si la file est vide
         {
-            f->tete = c; //affecter la tete au 1er chainon
-            f->queue = c; //affecter la queue au 1er chainon
-        } else {
-            f->queue -> suivant = c; //affecter le queue au dernier chainoN
-            f->queue = c; //decaler la queue
+            f->tete = c;  // affecter la tete au 1er chainon
+            f->queue = c; // affecter la queue au 1er chainon
+        }
+        else
+        {
+            f->queue->suivant = c; // affecter le queue au dernier chainoN
+            f->queue = c;          // decaler la queue
         }
     }
     return result;
 }
 
-pArbre defiler(File * f)
+pArbre defiler(File *f)
 {
     Chainon *p1 = f->tete;
     pArbre a = f->tete->arbre;
-    if (f->tete->suivant == NULL) f->queue = NULL;
+    if (f->tete->suivant == NULL)
+        f->queue = NULL;
     f->tete = f->tete->suivant;
     free(p1);
     return a;
@@ -269,7 +307,7 @@ void creerfile(File *f)
 void parcoursLargeurs(pArbre a)
 {
     File f;
-    if (! estVide(a))
+    if (!estVide(a))
     {
         creerfile(&f);
         enfiler(&f, a);
@@ -277,16 +315,19 @@ void parcoursLargeurs(pArbre a)
         {
             a = defiler(&f);
             traiter(a);
-            if (existeFilsGauche(a)) enfiler(&f, a->fg);
-            if (existeFilsDroit(a)) enfiler(&f, a->fd);
+            if (existeFilsGauche(a))
+                enfiler(&f, a->fg);
+            if (existeFilsDroit(a))
+                enfiler(&f, a->fd);
         }
     }
 }
 
-void parcoursmoy(pArbre a, int*c, int* somme)
+void parcoursmoy(pArbre a, int *c, int *somme)
 // l'idée de base est de pointé sur c et somme afin de modifier directement les valeurs dedans.
 {
-    if (a != NULL){
+    if (a != NULL)
+    {
         parcoursmoy(a->fg, c, somme);
         *c += 1;
         *somme += a->nombre;
@@ -294,8 +335,7 @@ void parcoursmoy(pArbre a, int*c, int* somme)
     }
 }
 
-//partie AVL
-
+// partie AVL
 
 float moyennefg(pArbre a)
 {
@@ -303,7 +343,7 @@ float moyennefg(pArbre a)
     int somme = 0;
     float moy;
     parcoursmoy(a->fg, &c, &somme);
-    moy = somme/c;
+    moy = somme / c;
     return moy;
 }
 float moyennefd(pArbre a)
@@ -312,28 +352,34 @@ float moyennefd(pArbre a)
     int somme = 0;
     float moy;
     parcoursmoy(a->fd, &c, &somme);
-    moy = somme/c;
+    moy = somme / c;
     return moy;
 }
-pArbre insertionAVL(pArbre a, int e, int *h)
+pArbre insertionAVL(pArbre a, int e, int *h, char *cols1, char *cols2, char *cols3, char *cols4, char *cols5)
 {
-    if(a==NULL)
+    if (a == NULL)
     {
-        *h=1;
-        return creerArbre(e);
+        *h = 1;
+        /*
+        strcpy(a->cols1, col1);
+        strcpy(a->cols2, col2);
+        strcpy(a->cols3, col3);
+        strcpy(a->cols4, col4);
+        strcpy(a->cols5, col5);*/
+        return creerArbre(e, cols1, cols2, cols3, cols4, cols5);
     }
-    else if(e<a->nombre)
+    else if (e < a->nombre)
     {
-        a->fg=insertionAVL(a->fg,e,h);
-        *h=-*h;
+        a->fg = insertionAVL(a->fg, e, h, cols1, cols2, cols3, cols4, cols5);
+        *h = -*h;
     }
-    else if(e>a->nombre)
+    else if (e > a->nombre)
     {
-        a->fd=insertionAVL(a->fd,e,h);
+        a->fd = insertionAVL(a->fd, e, h, cols1, cols2, cols3, cols4, cols5);
     }
     else
     {
-        *h=0;
+        *h = 0;
         return a;
         /*
         if (!existeFilsDroit(a)){
@@ -347,16 +393,16 @@ pArbre insertionAVL(pArbre a, int e, int *h)
             a->fd=nouveau;
         }*/
     }
-    if(*h!=0)
+    if (*h != 0)
     {
-        a->equilibre=a->equilibre+*h;
-        if(a->equilibre==0)
+        a->equilibre = a->equilibre + *h;
+        if (a->equilibre == 0)
         {
-            *h=0;
+            *h = 0;
         }
         else
         {
-            *h=1;
+            *h = 1;
         }
     }
     return a;
@@ -365,24 +411,24 @@ pArbre insertionAVL(pArbre a, int e, int *h)
 pArbre suppMinAVL(pArbre a, int *h, int *pe)
 {
     pArbre tmp;
-    if(a->fg == NULL)
+    if (a->fg == NULL)
     {
         *pe = a->nombre;
         *h = -1;
         tmp = a;
         a = a->fd;
         free(tmp);
-        return a ;
+        return a;
     }
     else
     {
-        a->fg = suppMinAVL(a->fg,h,pe);
-        *h=-*h;
+        a->fg = suppMinAVL(a->fg, h, pe);
+        *h = -*h;
     }
-    if(*h!=0)
+    if (*h != 0)
     {
         a->equilibre = a->equilibre + *h;
-        if(a->equilibre == 0)
+        if (a->equilibre == 0)
         {
             *h = -1;
         }
@@ -394,26 +440,26 @@ pArbre suppMinAVL(pArbre a, int *h, int *pe)
     return a;
 }
 
-pArbre suppressionAVL(pArbre a,int e, int *h)
+pArbre suppressionAVL(pArbre a, int e, int *h)
 {
     pArbre tmp;
-    if(a==NULL)
+    if (a == NULL)
     {
         *h = 1;
         return a;
     }
-    else if(e>a->nombre)
+    else if (e > a->nombre)
     {
-        a->fd = suppressionAVL(a->fd,e,h);
+        a->fd = suppressionAVL(a->fd, e, h);
     }
-    else if(e<a->nombre)
+    else if (e < a->nombre)
     {
-        a->fg = suppressionAVL(a->fg,e,h);
+        a->fg = suppressionAVL(a->fg, e, h);
         *h = -*h;
     }
-    else if(existeFilsDroit(a))
+    else if (existeFilsDroit(a))
     {
-        a->fd = suppMinAVL(a->fd,h,&a->nombre);
+        a->fd = suppMinAVL(a->fd, h, &a->nombre);
     }
     else
     {
@@ -422,14 +468,14 @@ pArbre suppressionAVL(pArbre a,int e, int *h)
         free(tmp);
         *h = -1;
     }
-    if(a==NULL)
+    if (a == NULL)
     {
-        *h=0;
+        *h = 0;
     }
-    if(*h!=0)
+    if (*h != 0)
     {
         a->equilibre = a->equilibre + *h;
-        if(a->equilibre == 0)
+        if (a->equilibre == 0)
         {
             *h = 0;
         }
@@ -443,22 +489,22 @@ pArbre suppressionAVL(pArbre a,int e, int *h)
 
 int min(int a, int b)
 {
-    return (a<b ? a : b);
+    return (a < b ? a : b);
 }
 
 int min_of_three(int a, int b, int c)
 {
-    return min(min(a,b),c);
+    return min(min(a, b), c);
 }
 
 int max(int a, int b)
 {
-    return (a<b ? b : a);
+    return (a < b ? b : a);
 }
 
 int max_of_three(int a, int b, int c)
 {
-    return max(max(a,b),c);
+    return max(max(a, b), c);
 }
 
 pArbre rotationDroite(pArbre a)
@@ -470,8 +516,8 @@ pArbre rotationDroite(pArbre a)
     pivot->fd = a;
     eq_a = a->equilibre;
     eq_p = pivot->equilibre;
-    a->equilibre = eq_a - min(eq_p,0)+1;
-    pivot->equilibre = max_of_three(eq_a+2, eq_a+eq_p+2, eq_p+1);
+    a->equilibre = eq_a - min(eq_p, 0) + 1;
+    pivot->equilibre = max_of_three(eq_a + 2, eq_a + eq_p + 2, eq_p + 1);
     a = pivot;
     return a;
 }
@@ -480,14 +526,14 @@ pArbre rotationGauche(pArbre a)
 {
     pArbre pivot;
     int eq_a, eq_p;
-    pivot=a->fd;
+    pivot = a->fd;
     a->fd = pivot->fg;
     pivot->fg = a;
     eq_a = a->equilibre;
     eq_p = pivot->equilibre;
-    a->equilibre = eq_a-max(eq_p,0)-1;
-    pivot->equilibre = min_of_three(eq_a-2, eq_a+eq_p-2, eq_p-1);
-    a=pivot;
+    a->equilibre = eq_a - max(eq_p, 0) - 1;
+    pivot->equilibre = min_of_three(eq_a - 2, eq_a + eq_p - 2, eq_p - 1);
+    a = pivot;
     return a;
 }
 
@@ -505,9 +551,9 @@ pArbre doubleRotationGauche(pArbre a)
 
 pArbre equilibrerAVL(pArbre a)
 {
-    if(a->equilibre >= 2)
+    if (a->equilibre >= 2)
     {
-        if(a->fd->equilibre >= 0)
+        if (a->fd->equilibre >= 0)
         {
             return rotationGauche(a);
         }
@@ -516,9 +562,9 @@ pArbre equilibrerAVL(pArbre a)
             return doubleRotationGauche(a);
         }
     }
-    else if(a->equilibre <= -2)
+    else if (a->equilibre <= -2)
     {
-        if(a->fg->equilibre <= 0)
+        if (a->fg->equilibre <= 0)
         {
             return rotationDroite(a);
         }
@@ -530,16 +576,16 @@ pArbre equilibrerAVL(pArbre a)
     return a;
 }
 
-//partie liste_chainee
+// partie liste_chainee
 
 pListe creerChainon(int n)
 {
     pListe c = malloc(sizeof(Chainon));
-    if(c==NULL)
+    if (c == NULL)
     {
         exit(1);
     }
-    c->suivant=NULL;
+    c->suivant = NULL;
     c->nombre = n;
     return c;
 }
@@ -556,8 +602,8 @@ void traiter_liste_chainee(pListe p1)
 
 pListe insertFin(pListe liste, int n)
 {
-    pListe nouveau = creerChainon(n), p1= liste;
-    while(p1->suivant != NULL)
+    pListe nouveau = creerChainon(n), p1 = liste;
+    while (p1->suivant != NULL)
     {
         p1 = p1->suivant;
     }
@@ -567,7 +613,7 @@ pListe insertFin(pListe liste, int n)
 
 pListe insertDebut(pListe liste, int n)
 {
-    pListe nouveau = creerChainon(n), p1= liste;
+    pListe nouveau = creerChainon(n), p1 = liste;
     nouveau->suivant = p1;
     p1 = nouveau;
     return liste;
@@ -576,18 +622,18 @@ pListe insertDebut(pListe liste, int n)
 pListe insertMilieu(pListe liste, int e)
 {
     int i;
-    pListe nouveau, p1=liste;
+    pListe nouveau, p1 = liste;
     pListe a;
-    if(e==0 || p1==NULL)
+    if (e == 0 || p1 == NULL)
     {
         p1 = insertDebut(p1, e);
     }
     else
     {
-        a=p1;
-        for(i=0;i<e;i++)
+        a = p1;
+        for (i = 0; i < e; i++)
         {
-            if(a==NULL)
+            if (a == NULL)
             {
                 return NULL;
             }
@@ -606,71 +652,70 @@ pListe insertMilieu(pListe liste, int e)
 pListe suppDebut(pListe p1)
 {
     pListe a;
-    if(p1==NULL)
+    if (p1 == NULL)
     {
         return NULL;
     }
-    a=p1;
-    p1=a->suivant;
+    a = p1;
+    p1 = a->suivant;
     free(a);
     return p1;
 }
 int taille_liste_chainee(pListe p1)
 {
-    int t=0;
+    int t = 0;
     while (p1 != NULL)
     {
         t++;
         printf("->");
         traiter_liste_chainee(p1);
-        p1=p1->suivant;
-        
+        p1 = p1->suivant;
     }
     return t;
 }
 
-pListe ajouterCroissant(pListe liste, int e) 
+pListe ajouterCroissant(pListe liste, int e)
 {
-    
-	pListe nouveau=creerChainon(e);
-	pListe p1;
-	if(p1==NULL){// si la liste est vide
-		p1=nouveau;
-	}
-	else if (p1->nombre > e) 
+
+    pListe nouveau = creerChainon(e);
+    pListe p1;
+    if (p1 == NULL)
+    { // si la liste est vide
+        p1 = nouveau;
+    }
+    else if (p1->nombre > e)
     {
-		p1=insertDebut(liste,e);
-	}
-	else
+        p1 = insertDebut(liste, e);
+    }
+    else
     {
-		while(p1->suivant!= NULL && p1->suivant->nombre < e)
-        { 
-			p1=p1->suivant;
-		}
-		if(p1->suivant==NULL)
-        { 
-			p1->suivant=nouveau;
-		}
-		else
+        while (p1->suivant != NULL && p1->suivant->nombre < e)
         {
-			nouveau->suivant=p1->suivant;
-			p1->suivant = nouveau;
-		}
-	}
-	return p1;
+            p1 = p1->suivant;
+        }
+        if (p1->suivant == NULL)
+        {
+            p1->suivant = nouveau;
+        }
+        else
+        {
+            nouveau->suivant = p1->suivant;
+            p1->suivant = nouveau;
+        }
+    }
+    return p1;
 }
 /*
 int parcours_i(pListe p1,int i);
 {
     k = 0;
     pListe pp1 = p1;
-
     while (k<i)
     {
         k++;
         pp1=pp1->suivant;
-    } 
-    return k 
+    }
+    return k
 }
 pListe triselection(pListe liste, int n)
 {
@@ -729,4 +774,3 @@ void affArbreGraphique(pArbre a,int info)
         free(Tarb);
         puts("");
 }*/
-
