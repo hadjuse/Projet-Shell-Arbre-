@@ -8,7 +8,8 @@ typedef struct valeur
 }Valeur;
 typedef Valeur *pValeur;
 typedef struct arbre
-{ 
+{
+    pValeur val;
     char cols1[MAX_LENGTH];
     char cols2[MAX_LENGTH];
     char cols3[MAX_LENGTH];

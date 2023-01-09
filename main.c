@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     {
         char *token;
         int c = 0;
-        pArbre avl;
+        pArbre avl=NULL;
         pArbre pAvl;
         fgets(ligne, sizeof(ligne), fichier_a_trier);
         if (ligne[0] == 'I')
@@ -54,15 +54,8 @@ int main(int argc, char **argv)
             avl = creerArbre(atoi(token), colonne1, colonne2, colonne3, colonne4, colonne5);
             // printf("%s %s %s %s %s\n", avl->cols1, avl->cols2, avl->cols3, avl->cols4, avl->cols5);
         }
-
-        pAvl = avl;
-        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
+        else// cas où la première lettre de la première n'est pas égale à 1
         {
-            char colonne1[MAX_LENGTH];
-            char colonne2[MAX_LENGTH];
-            char colonne3[MAX_LENGTH];
-            char colonne4[MAX_LENGTH];
-            char colonne5[MAX_LENGTH];
             token = strtok(ligne, ";"); // colonne 1
             strcpy(colonne1, token);
             token = strtok(NULL, ";"); // colonne 2
@@ -73,11 +66,28 @@ int main(int argc, char **argv)
             strcpy(colonne4, token);
             token = strtok(NULL, ";"); // colonne 5
             strcpy(colonne5, token);
+            avl = creerArbre(atoi(token), colonne1, colonne2, colonne3, colonne4, colonne5);
+
+        }
+        pAvl = avl;
+        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
+        {
+            token = strtok(ligne, ";"); // colonne 1
             int val = atoi(token);
-            pAvl = insertionAVL(avl, val, &avl->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5);
+            strcpy(colonne1, token);
+            token = strtok(NULL, ";"); // colonne 2
+            strcpy(colonne2, token);
+            token = strtok(NULL, ";"); // colonne 3
+            strcpy(colonne3, token);
+            token = strtok(NULL, ";"); // colonne 4
+            strcpy(colonne4, token);
+            token = strtok(NULL, ";"); // colonne 5
+            strcpy(colonne5, token);
+            
+            pAvl = insertionAVL(pAvl, val, &avl->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5);
             // printf("%s %s %s %s %s\n", avl->cols1,avl->cols2,avl->cols3,avl->cols4,avl->cols5);
         }
-        parcoursInfixe(avl, &c);
+        parcoursInfixe(pAvl, &c);
         printf("\nNombre de noeuds: %d", c);
     }
 

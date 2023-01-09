@@ -360,12 +360,6 @@ pArbre insertionAVL(pArbre a, int e, int *h, char *cols1, char *cols2, char *col
     if (a == NULL)
     {
         *h = 1;
-        /*
-        strcpy(a->cols1, col1);
-        strcpy(a->cols2, col2);
-        strcpy(a->cols3, col3);
-        strcpy(a->cols4, col4);
-        strcpy(a->cols5, col5);*/
         return creerArbre(e, cols1, cols2, cols3, cols4, cols5);
     }
     else if (e < a->nombre)
@@ -678,7 +672,7 @@ pListe ajouterCroissant(pListe liste, int e)
 {
 
     pListe nouveau = creerChainon(e);
-    pListe p1;
+    pListe p1=liste;
     if (p1 == NULL)
     { // si la liste est vide
         p1 = nouveau;
