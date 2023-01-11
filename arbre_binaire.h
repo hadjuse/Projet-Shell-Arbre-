@@ -1,16 +1,10 @@
 #ifndef __ARBRE__
 #define __ARBRE__
 #define MAX_LENGTH 1024
-typedef struct valeur
-{
-    float moyenne;
-    float temperature;
-    float somme;
-}Valeur;
-typedef Valeur *pValeur;
 typedef struct arbre
 {
-    pValeur val;
+    float moyenne;
+    float somme;
     char cols1[MAX_LENGTH];
     char cols2[MAX_LENGTH];
     char cols3[MAX_LENGTH];
@@ -21,6 +15,9 @@ typedef struct arbre
     struct arbre *fd;
     int equilibre;
     int hauteur;
+    int nb_noeuds;
+    float temperature_min;
+    float temperature_max;
 } Arbre;
 typedef Arbre *pArbre;
 
@@ -44,7 +41,7 @@ float moyennefg(pArbre a);
 float moyennefd(pArbre a);
 void MinMaxABR(pArbre a, int min, int max);
 // partie arbre----------------------
-pArbre creerArbre(int a, char *cols1, char *cols2, char *cols3, char *cols4, char *cols5);
+pArbre creerArbre(int a, char *cols1, char *cols2, char *cols3, char *cols4, char *cols5, float somme);
 int estVide(pArbre a);
 int estFeuille(pArbre a);
 int element(pArbre a);
@@ -55,7 +52,7 @@ pArbre ajouterFilsDroit(pArbre a, int e);
 void traiter(pArbre a);
 void parcoursPrefixe(pArbre a);
 void parcoursPostFixe(pArbre a);
-void parcoursInfixe(pArbre a, int *c);
+void parcoursInfixe(pArbre a, int *c, int nb_ligne);
 void parcoursLargeurs(pArbre a);
 pArbre modifierRacine(pArbre a, int e);
 void supprimerFilsDroit(pArbre a);
@@ -107,7 +104,7 @@ pArbre rotationGauche(pArbre a);
 pArbre doubleRotationDroite(pArbre a);
 pArbre doubleRotationGauche(pArbre a);
 pArbre equilibrerAVL(pArbre a);
-pArbre insertionAVL(pArbre a, int e, int *h, char *cols1, char *cols2, char *cols3, char *cols4, char *cols5);
+pArbre insertionAVL(pArbre a, int e, int *h, char *cols1, char *cols2, char *cols3, char *cols4, char *cols5, float somme);
 pArbre suppMinAVL(pArbre a, int *h, int *pe);
 pArbre suppressionAVL(pArbre a, int e, int *h);
 // void MinMaxABR(pArbre a, int *min, int *max);

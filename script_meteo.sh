@@ -6,7 +6,7 @@ option_geographique=""
 i=0
 nom_fichier=""
 option_t="non"
-option_w="non"
+option_p="non"
 vent="non"
 humidite="non"
 altitude="non"
@@ -29,7 +29,7 @@ filtrage_1() {
     awk -F';' '{print $1 ";" $10 ";" $11 ";" $12 ";" $13 }' meteo.csv >donnee_filtree_temperature_et_num_t.csv
 }
 filtrage_2() {
-    awk -F';' '{print $1 ";" $10 ";" $2 ";" $11}' meteo.csv>donnee_filtree_temperature_et_date_t.csv
+    awk -F';' '{print $1 ";" $10 ";" $2 ";" $11 ";" 0}' meteo.csv >donnee_filtree_temperature_et_date_t.csv
 }
 filtrage_3() {
     awk -F':' '{print $1 ";" $10 ";" $2 ";" $11 }' meteo.csv >donnee_filtree_temperature_et_id_t.csv
@@ -37,23 +37,23 @@ filtrage_3() {
 }
 #filtrage pour l'option -p
 filtrage_1_bis() {
-    awk -F';' '{print $1 ";" $10 ";" $3 ";" $7 }' meteo.csv >donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $1 ";" $10 ";" $3 ";" $7 ";" 0}' meteo.csv >donnee_filtree_temperature_et_num_p.csv
 }
 filtrage_2_bis() {
-    awk -F';' '{print $1 ";" $10 ";" $2 ";" $7}' meteo.csv >donnee_filtree_temperature_et_date_p.csv
+    awk -F';' '{print $1 ";" $10 ";" $2 ";" $7 ";" 0}' meteo.csv >donnee_filtree_temperature_et_date_p.csv
 }
 filtrage_3_bis() {
-    awk -F';' '{print ";" $1 ";" $10 ";" $2 ";" $7}' meteo.csv >donnee_filtree_temperature_et_id_p.csv
+    awk -F';' '{print $1 ";" $10 ";" $2 ";" $7 ";" 0}' meteo.csv >donnee_filtree_temperature_et_id_p.csv
 }
 #filtrage pour l'option -w
 filtrage_w() {
-    awk -F';' '{print $1 ";" $10 ";" $3 ";" $4 ";" $5}' meteo.csv >donnee_filtree_id_vent_moyenne.csv
+    awk -F';' '{print $1 ";" $10 ";" $3 ";" 0}' meteo.csv >donnee_filtree_id_vent_moyenne.csv
 }
 filtrage_m() {
-    awk -F';' '{print $1 ";" $10 ";" $6}' meteo.csv >donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $1 ";" $10 ";" $6 ";" 0}' meteo.csv >donnee_filtree_temperature_et_num_p.csv
 }
 filtrage_h() {
-    awk -F';' '{print $1 ";" $10 ";" $4}' meteo.csv >donnee_filtree_humidite.csv
+    awk -F';' '{print $1 ";" $10 ";" $4 ";" 0}' meteo.csv >donnee_filtree_humidite.csv
 }
 #execution des arguments et options
 execution_mode_t() {
@@ -69,11 +69,11 @@ execution_mode_t() {
 
 execution_mode_p() {
     if [ $OPTARG -eq 1 ]; then
-        option_w="1"
+        option_p="1"
     elif [ $OPTARG -eq 2 ]; then
-        option_w="2"
+        option_p="2"
     elif [ $OPTARG -eq 3 ]; then
-        option_w="3"
+        option_p="3"
     fi
 }
 execution_mode_t_final() {
@@ -86,11 +86,11 @@ execution_mode_t_final() {
     fi
 }
 execution_mode_p_final() {
-    if [ "$option_w" == '1' ]; then
+    if [ "$option_p" == '1' ]; then
         filtrage_1_bis
-    elif [ "$option_w" == '2' ]; then
+    elif [ "$option_p" == '2' ]; then
         filtrage_2_bis
-    elif [ "$option_w" == '3' ]; then
+    elif [ "$option_p" == '3' ]; then
         filtrage_3_bis
     fi
 }
@@ -171,9 +171,9 @@ if [ -z "$nom_fichier" ]; then
     exit 1
 fi
 #remplace les cellules vides par des 0, 2 filtrages sont nécéssaires pour avoir toute les cellules vides à 0
-sed 's/;;/;0;/g; s/;$/;0/g' $nom_fichier > meteo_temp.csv
-sed 's/;;/;0;/g; s/;$/;0/g' meteo_temp.csv > meteo.csv
-rm meteo_temp.csv 
+sed 's/;;/;0;/g; s/;$/;0/g' $nom_fichier >meteo_temp.csv
+sed 's/;;/;0;/g; s/;$/;0/g' meteo_temp.csv >meteo.csv
+rm meteo_temp.csv
 execution_mode_p_final
 execution_mode_t_final
 execution_argument_restant
@@ -189,7 +189,7 @@ for fic in $fichier_csv; do
   split($2, coords, ",")
   if (coords[1] + 0 >= 40 && coords[1] + 0<= 51 && coords[2] + 0>= -5 && coords[2] + 0 <= 8) {
     print $0
-} }' $fic>donnee_filtree_metropole_$1.csv
+} }' $fic >donnee_filtree_metropole_$1.csv
         rm $fic
         ;;
     G)
@@ -239,5 +239,5 @@ shift $((OPTIND - 1))
 make
 fichier_csv_a_trier=$(ls | grep ^donnee)
 for f in $fichier_csv_a_trier; do
-    ./abr $f $mode_tri $option_t $option_w $humidite $vent $altitude
+    ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude
 done

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "arbre_binaire.h"
 #include <string.h>
-pArbre creerArbre(int a, char *cols1, char *cols2, char *cols3, char *cols4, char *cols5)
+pArbre creerArbre(int a, char *cols1, char *cols2, char *cols3, char *cols4, char *cols5, float somme)
 {
     pArbre new = malloc(sizeof(Arbre));
     //new->val=malloc(sizeof(pValeur));
@@ -18,6 +18,10 @@ pArbre creerArbre(int a, char *cols1, char *cols2, char *cols3, char *cols4, cha
     strcpy(new->cols3, cols3);
     strcpy(new->cols4, cols4);
     strcpy(new->cols5, cols5);
+    new->somme=somme;
+    new->nb_noeuds=1;
+    new->temperature_max=somme;
+    new->temperature_min=somme;
     return new;
 }
 
@@ -84,7 +88,8 @@ pArbre ajouterFilsDroit(pArbre a, int e)
     }
     else
     {
-        b = creerArbre(e, a->cols1, a->cols2, a->cols3, a->cols4, a->cols5);
+        float somme=0;
+        b = creerArbre(e, a->cols1, a->cols2, a->cols3, a->cols4, a->cols5, somme);
         a->fd = b;
         return a;
     }
@@ -100,8 +105,9 @@ pArbre ajouterFilsGauche(pArbre a, int e)
     }
     else
     {
-        b = creerArbre(e, a->cols1, a->cols2, a->cols3, a->cols4, a->cols5);
-        a->fg = b;
+        float somme=0;
+        b = creerArbre(e, a->cols1, a->cols2, a->cols3, a->cols4, a->cols5, somme);
+        a->fd = b;
         return a;
     }
 }
@@ -125,15 +131,14 @@ void parcoursPostFixe(pArbre a)
         traiter(a);
     }
 }
-
-void parcoursInfixe(pArbre a, int *c)
+void parcoursInfixe(pArbre a, int *c,int nb_ligne)
 {
     if (estVide(a) != 1)
     {
-        parcoursInfixe(a->fg, c);
-        printf("%s;%s;%s;%s;%s\n", a->cols1, a->cols2, a->cols3, a->cols4, a->cols5);
+        parcoursInfixe(a->fg, c, nb_ligne);
+        printf("%s;%s;%s;%s;%s;%f;%f;%f\n", a->cols1, a->cols2, a->cols3, a->cols4, a->cols5, a->somme/a->nb_noeuds, a->temperature_max, a->temperature_min);
         *c = *c + 1;
-        parcoursInfixe(a->fd, c);
+        parcoursInfixe(a->fd, c, nb_ligne);
     }
 }
 void traiter(pArbre a)
@@ -335,37 +340,30 @@ float moyennefd(pArbre a)
     moy = somme / c;
     return moy;
 }
-pArbre insertionAVL(pArbre a, int e, int *h, char *cols1, char *cols2, char *cols3, char *cols4, char *cols5)
+pArbre insertionAVL(pArbre a, int e, int *h, char *cols1, char *cols2, char *cols3, char *cols4, char *cols5, float somme)
 {
     if (a == NULL)
     {
         *h = 1;
-        return creerArbre(e, cols1, cols2, cols3, cols4, cols5);
+        return creerArbre(e, cols1, cols2, cols3, cols4, cols5, somme);
     }
     else if (e < a->nombre)
     {
-        a->fg = insertionAVL(a->fg, e, h, cols1, cols2, cols3, cols4, cols5);
+        a->fg = insertionAVL(a->fg, e, h, cols1, cols2, cols3, cols4, cols5, somme);
         *h = -*h;
     }
     else if (e > a->nombre)
     {
-        a->fd = insertionAVL(a->fd, e, h, cols1, cols2, cols3, cols4, cols5);
+        a->fd = insertionAVL(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, somme);
     }
     else
     {
         *h = 0;
+        a->somme += somme;
+        a->nb_noeuds++;
+        if (a->temperature_max>somme) a->temperature_max=somme;
+        if (a->temperature_min<somme) a->temperature_min=somme;
         return a;
-        /*
-        if (!existeFilsDroit(a)){
-            *h=1;
-            a=ajouterFilsDroit(a,e);
-        }
-        else{
-            *h=-1;
-            pArbre nouveau = creerArbre(e);
-            nouveau->fd = a->fd;
-            a->fd=nouveau;
-        }*/
     }
     if (*h != 0)
     {
