@@ -33,10 +33,9 @@ int main(int argc, char **argv)
     }
     char ligne[MAX_LENGTH];
     // Cas où le mode tri du script est un avl
-    if (strcmp(argv[2], "avl") == 0 && strcmp(argv[3], "1") == 0)
+    if (strcmp(argv[2], "avl") == 0 && strcmp(argv[3], "1") == 0)//cas où l'option/argument est -t1
     {
-        printf("%s\n\n", argv[1]);
-        char token[1024];
+        printf("Nom du fichier à traiter:%s\n\n", argv[1]);
         int c = 0;
         pArbre avl = NULL;
         pArbre pAvl;
@@ -46,60 +45,66 @@ int main(int argc, char **argv)
 
             fgets(ligne, sizeof(ligne), fichier_a_trier); // saut de ligne
             nb_ligne++;
-            strcpy(token, strtok(ligne, ";"));
-            colonne1 = atoi(token);
-            //printf("%d;", colonne1);
-            strcpy(token, strtok(ligne, ";"));
-            strcpy(colonne2, token);
-            strcpy(token, strtok(ligne, ";"));
-            colonne3 = atof(token);
-            strcpy(token, strtok(ligne, ";"));
-            colonne4 = atof(token);
-            strcpy(token, strtok(ligne, ";"));
-            colonne5 = atof(token);
+            fscanf(fichier_a_trier,"%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
             avl = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
-            // printf("%d %s %f %f %f\n", avl->cols1, avl->cols2, avl->cols3, avl->cols4, avl->cols5);
+            printf("%d", colonne1);
+            printf("%d %s %f %f %f\n", avl->cols1, avl->cols2, avl->cols3, avl->cols4, avl->cols5);
         }
 
         else // cas où la première lettre de la première n'est pas égale à 1
         {
             fgets(ligne, sizeof(ligne), fichier_a_trier); // saut de ligne
             nb_ligne++;
-            strcpy(token, strtok(ligne, ";"));
-            colonne1 = atoi(token);
-            printf("%d;", colonne1);
-            strcpy(token, strtok(ligne, ";"));
-            strcpy(colonne2, token);
-            strcpy(token, strtok(ligne, ";"));
-            colonne3 = atof(token);
-            strcpy(token, strtok(ligne, ";"));
-            colonne4 = atof(token);
-            strcpy(token, strtok(ligne, ";"));
-            colonne5 = atof(token);
+            fscanf(fichier_a_trier,"%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
             avl = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
         }
-
+        
         pAvl = avl;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
-            strcpy(token, strtok(ligne, ";"));
-            colonne1 = atoi(token);
-            strcpy(token, strtok(ligne, ";"));
-            strcpy(colonne2, token);
-            strcpy(token, strtok(ligne, ";"));
-            colonne3 = atof(token);
-            strcpy(token, strtok(ligne, ";"));
-            colonne4 = atof(token);
-            strcpy(token, strtok(ligne, ";"));
-            colonne5 = atof(token);
+            fscanf(fichier_a_trier,"%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
+            pAvl = insertionAVL(pAvl, colonne1, &avl->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
+        }
+        parcoursInfixe(pAvl, &c, nb_ligne);
+        printf("\nNombre de noeuds: %d\n", c);
+    }
+    else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[4], "1") == 0)//cas où l'option/argument est -p1
+    {
+        printf("Nom du fichier à traiter:%s\n\n", argv[1]);
+        int c = 0;
+        pArbre avl = NULL;
+        pArbre pAvl;
+        fgets(ligne, sizeof(ligne), fichier_a_trier);
+        if (ligne[0] == 'I')
+        {
+            fgets(ligne, sizeof(ligne), fichier_a_trier); // saut de ligne
+            nb_ligne++;
+            fscanf(fichier_a_trier,"%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
+            avl = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
+            printf("%d", colonne1);
+            printf("%d %s %f %f %f\n", avl->cols1, avl->cols2, avl->cols3, avl->cols4, avl->cols5);
+        }
+
+        else // cas où la première lettre de la première n'est pas égale à 1
+        {
+            fgets(ligne, sizeof(ligne), fichier_a_trier); // saut de ligne
+            nb_ligne++;
+            fscanf(fichier_a_trier,"%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
+            avl = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
+        }
+        
+        pAvl = avl;
+        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
+        {
+            nb_ligne++;
+            fscanf(fichier_a_trier,"%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
             pAvl = insertionAVL(pAvl, colonne1, &avl->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
         }
         parcoursInfixe(pAvl, &c, nb_ligne);
         printf("\nNombre de noeuds: %d\n", c);
     }
     fclose(fichier_a_trier);
-
     //---------------------------------------------------------------------------------------------------------------------
     return 0;
 }

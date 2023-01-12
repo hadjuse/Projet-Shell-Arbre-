@@ -26,34 +26,34 @@ test_options() {
 }
 #filtrage pour l'option -t
 filtrage_1() {
-    awk -F';' '{print $1 ";" $10 ";" $11 ";" $12 ";" $13 }' meteo.csv >donnee_filtree_temperature_et_num_t.csv
+    awk -F';' '{print $1 " " $10 " " $11 " " $12 " " $13 }' meteo.csv >donnee_filtree_temperature_et_num_t.csv
 }
 filtrage_2() {
-    awk -F';' '{print $1 ";" $10 ";" $2 ";" $11 ";" 0}' meteo.csv >donnee_filtree_temperature_et_date_t.csv
+    awk -F';' '{print $1 " " $10 " " mktime($2) " " $11 " " 0}' meteo.csv >donnee_filtree_temperature_et_date_t.csv
 }
 filtrage_3() {
-    awk -F':' '{print $1 ";" $10 ";" $2 ";" $11 }' meteo.csv >donnee_filtree_temperature_et_id_t.csv
+    awk -F';' '{print $1 " " $10 " " $2 " " $11 }' meteo.csv >donnee_filtree_temperature_et_id_t.csv
     #cut -d ';' -f 1,11,10 meteo_filtered_data_v1.csv >donnee_filtree_temperature_et_id_t.csv
 }
 #filtrage pour l'option -p
 filtrage_1_bis() {
-    awk -F';' '{print $1 ";" $10 ";" $3 ";" $7 ";" 0}' meteo.csv >donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $1 " " $10 " " $3 " " $7 " " 0}' meteo.csv >donnee_filtree_temperature_et_num_p.csv
 }
 filtrage_2_bis() {
-    awk -F';' '{print $1 ";" $10 ";" $2 ";" $7 ";" 0}' meteo.csv >donnee_filtree_temperature_et_date_p.csv
+    awk -F';' '{print $1 " " $10 " " $2 " " $7 " " 0}' meteo.csv >donnee_filtree_temperature_et_date_p.csv
 }
 filtrage_3_bis() {
-    awk -F';' '{print $1 ";" $10 ";" $2 ";" $7 ";" 0}' meteo.csv >donnee_filtree_temperature_et_id_p.csv
+    awk -F';' '{print $1 " " $10 " " $2 " " $7 " " 0}' meteo.csv >donnee_filtree_temperature_et_id_p.csv
 }
 #filtrage pour l'option -w
 filtrage_w() {
-    awk -F';' '{print $1 ";" $10 ";" $3 ";" 0}' meteo.csv >donnee_filtree_id_vent_moyenne.csv
+    awk -F';' '{print $1 " " $10 " " $3 " " 0}' meteo.csv >donnee_filtree_id_vent_moyenne.csv
 }
 filtrage_m() {
-    awk -F';' '{print $1 ";" $10 ";" $6 ";" 0}' meteo.csv >donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $1 " " $10 " " $6 " " 0}' meteo.csv >donnee_filtree_temperature_et_num_p.csv
 }
 filtrage_h() {
-    awk -F';' '{print $1 ";" $10 ";" $4 ";" 0}' meteo.csv >donnee_filtree_humidite.csv
+    awk -F';' '{print $1 " " $10 " " $4 " " 0}' meteo.csv >donnee_filtree_humidite.csv
 }
 #execution des arguments et options
 execution_mode_t() {
