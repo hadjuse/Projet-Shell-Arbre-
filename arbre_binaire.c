@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "arbre_binaire.h"
 #include <string.h>
-pArbre creerArbre(int a, char *cols1, char *cols2, char *cols3, char *cols4, char *cols5, float somme)
+pArbre creerArbre(int a, int cols1, char *cols2, float cols3, float cols4, float cols5, float somme)
 {
     pArbre new = malloc(sizeof(Arbre));
     //new->val=malloc(sizeof(pValeur));
@@ -13,11 +13,11 @@ pArbre creerArbre(int a, char *cols1, char *cols2, char *cols3, char *cols4, cha
     new->nombre = a; // Je l'ai simplifié un peu
     new->fg = NULL;  // idem
     new->fd = NULL;  // idem
-    strcpy(new->cols1, cols1);
+    new->cols1=cols1;
     strcpy(new->cols2, cols2);
-    strcpy(new->cols3, cols3);
-    strcpy(new->cols4, cols4);
-    strcpy(new->cols5, cols5);
+    new->cols3=cols3;
+    new->cols4=cols4;
+    new->cols5=cols5;
     new->somme=somme;
     new->nb_noeuds=1;
     new->temperature_max=somme;
@@ -136,7 +136,7 @@ void parcoursInfixe(pArbre a, int *c,int nb_ligne)
     if (estVide(a) != 1)
     {
         parcoursInfixe(a->fg, c, nb_ligne);
-        printf("%s;%s;%s;%s;%s;%f;%f;%f\n", a->cols1, a->cols2, a->cols3, a->cols4, a->cols5, a->somme/a->nb_noeuds, a->temperature_max, a->temperature_min);
+        printf("%d;%s;%f;%f;%f;%f;%f;%f\n", a->cols1, a->cols2, a->cols3, a->cols4, a->cols5, a->somme/a->nb_noeuds, a->temperature_max, a->temperature_min);
         *c = *c + 1;
         parcoursInfixe(a->fd, c, nb_ligne);
     }
@@ -340,7 +340,7 @@ float moyennefd(pArbre a)
     moy = somme / c;
     return moy;
 }
-pArbre insertionAVL(pArbre a, int e, int *h, char *cols1, char *cols2, char *cols3, char *cols4, char *cols5, float somme)
+pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3, float cols4, float cols5, float somme)
 {
     if (a == NULL)
     {
@@ -361,8 +361,8 @@ pArbre insertionAVL(pArbre a, int e, int *h, char *cols1, char *cols2, char *col
         *h = 0;
         a->somme += somme;
         a->nb_noeuds++;
-        if (a->temperature_max>somme) a->temperature_max=somme;
-        if (a->temperature_min<somme) a->temperature_min=somme;
+        //if (a->temperature_max>somme) a->temperature_max=somme;
+        //if (a->temperature_min<somme) a->temperature_min=somme;
         return a;
     }
     if (*h != 0)
@@ -677,72 +677,3 @@ pListe ajouterCroissant(pListe liste, int e)
     }
     return p1;
 }
-/*
-int parcours_i(pListe p1,int i);
-{
-    k = 0;
-    pListe pp1 = p1;
-    while (k<i)
-    {
-        k++;
-        pp1=pp1->suivant;
-    }
-    return k
-}
-pListe triselection(pListe liste, int n)
-{
-    int temp, taille = taille_liste_chainee(liste);
-    pListe
-    for (int i=0; i<taille-1; i++)
-    {
-        for (int j=)
-    }
-}*/
-/*
-void MinMaxABR(pArbre a, int *min, int* max)
-{
-    if (*min> a->nombre)
-        *min = a->nombre;
-    else if (*max < a->nombre)
-        *max = a->nombre;
-    MinMaxABR(a->fg, &min, &max);
-    MinMaxABR(a->fd, &min, &max);
-}*/
-/*
-void affArbreGraphique(pArbre a,int info)
-{
-    TArbBin * Tarb;
-    int iTarb;
-    int tailleAff = 7;// noeud=" xx,xx "
-    int largeur;  // largeur d'affichage maximum
-    int h;
-    int nbNoeuds;
-    int p, i, j;
-    int ecart;
-    puts("");
-    if(estVide(a))
-    {
-        puts("Arbre vide");
-        return;
-    }
-    h = hauteur(a);
-    largeur = tailleAff * ((int) pow(2, h)); // taille int* nbFeuillesMax;
-    Tarb = ABVersTab(a, info);
-    iTarb = 0;
-    for(p = 0, nbNoeuds = 1; p <= h; p++, nbNoeuds *= 2)
-     {  // p = profondeur, nbNoeuds par niveau
-        ecart = (largeur / (nbNoeuds * 2));
-        for(j = 1; j <= nbNoeuds; j++)
-         {
-            for(i = 0; i < ecart -3; i++)   putchar(' '); // -3 car 3 caracteres avant milieu
-            if(Tarb[iTarb].elmt == 0)   printf("..... ");
-            else printf(" %2d ", Tarb[iTarb].elmt);
-            iTarb++;
-            if(j < nbNoeuds && p < h) // entre 2 noeuds sauf au dernier niveau
-                for(i = 0; i < ecart -4; i++) putchar(' '); // -4 car 4 caracteres apres milieu
-         }
-        puts("");
-        }
-        free(Tarb);
-        puts("");
-}*/

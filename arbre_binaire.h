@@ -5,11 +5,11 @@ typedef struct arbre
 {
     float moyenne;
     float somme;
-    char cols1[MAX_LENGTH];
+    int cols1;
     char cols2[MAX_LENGTH];
-    char cols3[MAX_LENGTH];
-    char cols4[MAX_LENGTH];
-    char cols5[MAX_LENGTH];
+    float cols3;
+    float cols4;
+    float cols5;
     int nombre;
     struct arbre *fg;
     struct arbre *fd;
@@ -41,7 +41,7 @@ float moyennefg(pArbre a);
 float moyennefd(pArbre a);
 void MinMaxABR(pArbre a, int min, int max);
 // partie arbre----------------------
-pArbre creerArbre(int a, char *cols1, char *cols2, char *cols3, char *cols4, char *cols5, float somme);
+pArbre creerArbre(int a, int cols1, char *cols2, float cols3, float cols4, float cols5, float somme);
 int estVide(pArbre a);
 int estFeuille(pArbre a);
 int element(pArbre a);
@@ -104,7 +104,7 @@ pArbre rotationGauche(pArbre a);
 pArbre doubleRotationDroite(pArbre a);
 pArbre doubleRotationGauche(pArbre a);
 pArbre equilibrerAVL(pArbre a);
-pArbre insertionAVL(pArbre a, int e, int *h, char *cols1, char *cols2, char *cols3, char *cols4, char *cols5, float somme);
+pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3, float cols4, float cols5, float somme);
 pArbre suppMinAVL(pArbre a, int *h, int *pe);
 pArbre suppressionAVL(pArbre a, int e, int *h);
 // void MinMaxABR(pArbre a, int *min, int *max);
