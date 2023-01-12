@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "arbre_binaire.h"
 #include <string.h>
+
+#include "arbre_binaire.h"
+
 pArbre creerArbre(int a, int cols1, char *cols2, float cols3, float cols4, float cols5, float somme)
 {
     pArbre new = malloc(sizeof(Arbre));

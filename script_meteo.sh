@@ -1,5 +1,6 @@
 #!/bin/bash
 #Initialisation des variables
+chmod +rwx * #on s'assure que l'utilisateur peut executer lire et modier notre programme
 tout_arguments=$*
 mode_tri="avl"
 option_geographique=""
@@ -29,11 +30,10 @@ filtrage_1() {
     awk -F';' '{print $1 " " $10 " " $11 " " $12 " " $13 }' meteo.csv >donnee_filtree_temperature_et_num_t.csv
 }
 filtrage_2() {
-    awk -F';' '{print $1 " " $10 " " mktime($2) " " $11 " " 0}' meteo.csv >donnee_filtree_temperature_et_date_t.csv
+    awk -F';' '{print $1 " " $10 " " $2 " " $11 " " 0}' meteo.csv >donnee_filtree_temperature_et_date_t.csv
 }
 filtrage_3() {
     awk -F';' '{print $1 " " $10 " " $2 " " $11 }' meteo.csv >donnee_filtree_temperature_et_id_t.csv
-    #cut -d ';' -f 1,11,10 meteo_filtered_data_v1.csv >donnee_filtree_temperature_et_id_t.csv
 }
 #filtrage pour l'option -p
 filtrage_1_bis() {
@@ -47,19 +47,20 @@ filtrage_3_bis() {
 }
 #filtrage pour l'option -w
 filtrage_w() {
-    awk -F';' '{print $1 " " $10 " " $3 " " 0}' meteo.csv >donnee_filtree_id_vent_moyenne.csv
+    awk -F';' '{print $1 " " $10 " " $3 " " }' meteo.csv >donnee_filtree_id_vent_moyenne.csv
 }
+#filtrage pour l'option -m
 filtrage_m() {
-    awk -F';' '{print $1 " " $10 " " $6 " " 0}' meteo.csv >donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $1 " " $10 " " $6 " " }' meteo.csv >donnee_filtree_temperature_et_num_p.csv
 }
+#filtrage pour l'option -h
 filtrage_h() {
-    awk -F';' '{print $1 " " $10 " " $4 " " 0}' meteo.csv >donnee_filtree_humidite.csv
+    awk -F';' '{print $1 " " $10 " " $4 " " }' meteo.csv >donnee_filtree_humidite.csv
 }
 #execution des arguments et options
 execution_mode_t() {
     if [ $OPTARG -eq 1 ]; then
         option_t="1"
-        echo $option_t
     elif [ $OPTARG -eq 2 ]; then
         option_t="2"
     elif [ $OPTARG -eq 3 ]; then
@@ -105,7 +106,7 @@ execution_argument_restant() {
         filtrage_h
     fi
 }
-#while true; do
+
 # Traitement des options de la ligne de commande avec getopt
 while getopts ":t:p:wmhFGSAOQ-:f:d:" option; do
     if [ $option = "-" ]; then
@@ -239,5 +240,8 @@ shift $((OPTIND - 1))
 make
 fichier_csv_a_trier=$(ls | grep ^donnee)
 for f in $fichier_csv_a_trier; do
+    echo $f $mode_tri $option_t $option_p $humidite $vent $altitude "\n"
+    
     ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude
 done
+#partie gnuplot
