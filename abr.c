@@ -14,39 +14,25 @@ int recherche(pArbre a, int e)
         return recherche(filsDroit(a), e);
 }
 
-pArbre insertionABR(pArbre a, int e)
+pArbre insertionABR(pArbre a, int e, int cols1, char *cols2, float cols3, float cols4, float cols5, float somme)
 {
     if (a == NULL)
-        return creerArbre(e);
+        return creerArbre(e, cols1, cols2, cols3, cols4, cols4, somme);
     else if (e < a->nombre)
-        a->fg = insertionABR(filsGauche(a), e);
+        a->fg = insertionABR(filsGauche(a), e, cols1, cols2, cols3, cols4, cols5, somme);
     else if (e > a->nombre)
-        a->fd = insertionABR(filsDroit(a), e);
+        a->fd = insertionABR(filsDroit(a), e,cols1, cols2, cols3, cols4, cols5, somme);
+    else{
+        a->somme += somme;
+        a->nb_noeuds++;
+        if (a->temperature_max<somme) a->temperature_max=somme;
+        if (a->temperature_min>somme) a->temperature_min=somme;
+        return a;
+    }
     return a;
+    
 }
 
-pArbre insertionABRIter(pArbre a, int e)
-{
-    pArbre pAbr = a;
-    
-    pArbre parc;
-    pArbre nouveau = creerArbre(e);
-    if (a == NULL) return nouveau;
-    
-    while (!estVide(pAbr))
-    {
-        parc = pAbr;
-        if (e>pAbr->nombre)
-            pAbr = pAbr->fd;
-        else if (e<pAbr->nombre)
-            pAbr = pAbr->fg;
-    }
-    if (e>parc->nombre) 
-        parc->fd = nouveau;
-    else if (e<parc->nombre)
-        parc->fg = nouveau;
-    return a;
-}
 
 pArbre suppMax(pArbre a, int *pe)
 {

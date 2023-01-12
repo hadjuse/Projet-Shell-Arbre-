@@ -88,8 +88,7 @@ int parcours_i(pListe p1);
 // partie Arbre binaire de recherche
 
 int recherche(pArbre a, int e);
-pArbre insertionABR(pArbre a, int e);
-pArbre insertionABRIter(pArbre a, int e);
+pArbre insertionABR(pArbre a, int e, int cols1, char *cols2, float cols3, float cols4, float cols5, float somme);
 pArbre insertionABRIter2(pArbre a, int e);
 pArbre suppMax(pArbre a, int *e);
 pArbre suppressionABR(pArbre a, int e);

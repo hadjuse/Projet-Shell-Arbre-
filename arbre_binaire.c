@@ -361,13 +361,14 @@ pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3
         *h = 0;
         a->somme += somme;
         a->nb_noeuds++;
-        //if (a->temperature_max>somme) a->temperature_max=somme;
-        //if (a->temperature_min<somme) a->temperature_min=somme;
+        if (a->temperature_max<somme) a->temperature_max=somme;
+        if (a->temperature_min>somme) a->temperature_min=somme;
         return a;
     }
     if (*h != 0)
     {
         a->equilibre = a->equilibre + *h;
+        a=equilibrerAVL(a);
         if (a->equilibre == 0)
         {
             *h = 0;
