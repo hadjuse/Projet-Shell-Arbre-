@@ -48,10 +48,7 @@ int main(int argc, char **argv)
             nb_ligne++;
             fscanf(fichier_a_trier, "%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
             avl = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
-            printf("%d", colonne1);
-            printf("%d %s %f %f %f\n", avl->cols1, avl->cols2, avl->cols3, avl->cols4, avl->cols5);
         }
-
         else // cas où la première lettre de la première n'est pas égale à 1
         {
             fgets(ligne, sizeof(ligne), fichier_a_trier); // saut de ligne

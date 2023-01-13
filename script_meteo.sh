@@ -172,8 +172,8 @@ if [ -z "$nom_fichier" ]; then
     exit 1
 fi
 #remplace les cellules vides par des 0, 2 filtrages sont nécéssaires pour avoir toute les cellules vides à 0
-sed 's/;;/;0;/g; s/;$/;0/g' $nom_fichier >meteo_temp.csv
-sed 's/;;/;0;/g; s/;$/;0/g' meteo_temp.csv >meteo.csv
+sed 's/;;/;0;/g; s/;$/;0/g' $nom_fichier| tr ':T' '--' >meteo_temp.csv
+sed 's/;;/;0;/g; s/;$/;0/g' meteo_temp.csv  >meteo.csv
 rm meteo_temp.csv
 execution_mode_p_final
 execution_mode_t_final
@@ -186,7 +186,7 @@ for fic in $fichier_csv; do
     F) #la commande awk va selectionner la première colonne qui correspond aux coordonées et sépare en 2 à l'aide
         #d'une virgule en latitude puis longitude et stocke les valeurs de la colonne dans une variable coords à l'aide de l'option split.
         #coords[1] correspond aux latitude et coords[2] aux longitude.
-        awk -F";" '{
+        awk -F" " '{
   split($2, coords, ",")
   if (coords[1] + 0 >= 40 && coords[1] + 0<= 51 && coords[2] + 0>= -5 && coords[2] + 0 <= 8) {
     print $0
@@ -194,7 +194,7 @@ for fic in $fichier_csv; do
         rm $fic
         ;;
     G)
-        awk -F";" '{
+        awk -F" " '{
   split($2, coords, ",")
   if (coords[1] + 0 >= 0 && coords[1] + 0 <= 6  && coords[2]+0 >=-54 && coords[2] + 0<= -50) {
     print $0
@@ -202,7 +202,7 @@ for fic in $fichier_csv; do
         rm $fic
         ;;
     S)
-        awk -F";" '{
+        awk -F" " '{
   split($2, coords, ",")
   if (coords[1] + 0>= 45 && coords[1] + 0 <=50  && coords[2]+0 >= -60 && coords[2] + 0 <= -53) {
     print $0
@@ -210,7 +210,7 @@ for fic in $fichier_csv; do
         rm $fic
         ;;
     A)
-        awk -F";" '{
+        awk -F" " '{
   split($2, coords, ",")
   if (coords[1] +0>= 11 j&& coords[1] + 0 <=16  && coords[2]+0 >= -65 && coords[2] + 0 <= -57) {
     print $0
@@ -218,7 +218,7 @@ for fic in $fichier_csv; do
         rm $fic
         ;;
     O)
-        awk -F";" '{
+        awk -F" " '{
   split($2, coords, ",")
   if (coords[1] +0>= -26 && coords[1] + 0 <=-10  && coords[2]+0 >= 35 && coords[2] + 0 <= 61) {
     print $0
@@ -226,7 +226,7 @@ for fic in $fichier_csv; do
         rm $fic
         ;;
     Q)
-        awk -F";" '{
+        awk -F" " '{
   split($2, coords, ",")
   if (coords[1] +0>= -75 && coords[1] + 0 <=-41  && coords[2]+0 >= 36 && coords[2] + 0 <= 131) {
     print $0
@@ -240,8 +240,6 @@ shift $((OPTIND - 1))
 make
 fichier_csv_a_trier=$(ls | grep ^donnee)
 for f in $fichier_csv_a_trier; do
-    echo $f $mode_tri $option_t $option_p $humidite $vent $altitude "\n"
-    
     ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude
 done
 #partie gnuplot
