@@ -10,7 +10,6 @@ typedef struct arbre
     float cols3;
     float cols4;
     float cols5;
-    char date[MAX_LENGTH];
     int nombre;
     struct arbre *fg;
     struct arbre *fd;

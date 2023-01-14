@@ -48,6 +48,8 @@ int main(int argc, char **argv)
             nb_ligne++;
             fscanf(fichier_a_trier, "%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
             avl = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
+            printf("%d", colonne1);
+            printf("%d %s %f %f %f\n", avl->cols1, avl->cols2, avl->cols3, avl->cols4, avl->cols5);
         }
         else // cas où la première lettre de la première n'est pas égale à 1
         {
@@ -78,24 +80,7 @@ int main(int argc, char **argv)
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[4], "1") == 0) // cas où l'option/argument est -p1
     {
         int c = 0;
-        pArbre avl = NULL;
-        pArbre pAvl;
-        fgets(ligne, sizeof(ligne), fichier_a_trier);
-        if (ligne[0] == 'I')
-        {
-            fgets(ligne, sizeof(ligne), fichier_a_trier); // saut de ligne
-            nb_ligne++;
-            fscanf(fichier_a_trier, "%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
-            avl = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
-        }
-        else // cas où la première lettre de la première n'est pas égale à 1
-        {
-            fgets(ligne, sizeof(ligne), fichier_a_trier); // saut de ligne
-            nb_ligne++;
-            fscanf(fichier_a_trier, "%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
-            avl = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
-        }
-        pAvl = avl;
+        pArbre pAvl=NULL;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
@@ -132,31 +117,15 @@ int main(int argc, char **argv)
     if (strcmp(argv[2], "abr") == 0 && strcmp(argv[3], "1") == 0) // cas -t1 abr
     {
         int c = 0;
-        pArbre abr = NULL;
+        pArbre pAbr = NULL;
         fgets(ligne, sizeof(ligne), fichier_a_trier);
-        if (ligne[0] == 'I')
-        {
-
-            fgets(ligne, sizeof(ligne), fichier_a_trier); // saut de ligne
-            nb_ligne++;
-            fscanf(fichier_a_trier, "%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
-            abr = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
-        }
-        else // cas où la première lettre de la première n'est pas égale à 1
-        {
-            fgets(ligne, sizeof(ligne), fichier_a_trier); // saut de ligne
-            nb_ligne++;
-            fscanf(fichier_a_trier, "%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
-            abr = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
-        }
-        pArbre pAbr = abr;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
             fscanf(fichier_a_trier, "%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
             pAbr = insertionABR(pAbr, colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
         }
-        parcoursInfixe(abr, &c, nb_ligne);
+        parcoursInfixe(pAbr, &c, nb_ligne);
         printf("\nNombre de noeuds: %d\n", c);
     }
     else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[3], "2") == 0)
@@ -171,23 +140,7 @@ int main(int argc, char **argv)
     {
         pArbre abr = NULL;
         int c = 0;
-        fgets(ligne, sizeof(ligne), fichier_a_trier);
-        if (ligne[0] == 'I')
-        {
-            
-            fgets(ligne, sizeof(ligne), fichier_a_trier); // saut de ligne
-            nb_ligne++;
-            fscanf(fichier_a_trier, "%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
-            abr = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
-        }
-        else // cas où la première lettre de la première n'est pas égale à 1
-        {
-            fgets(ligne, sizeof(ligne), fichier_a_trier); // saut de ligne
-            nb_ligne++;
-            fscanf(fichier_a_trier, "%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
-            abr = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
-        }
-        pArbre pAbr = abr;
+        pArbre pAbr = NULL;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
