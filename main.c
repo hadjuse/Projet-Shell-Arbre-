@@ -38,33 +38,12 @@ int main(int argc, char **argv)
     if (strcmp(argv[2], "avl") == 0 && strcmp(argv[3], "1") == 0) // cas où l'option/argument est -t1
     {
         int c = 0;
-        pArbre avl = NULL;
-        pArbre pAvl;
-        fgets(ligne, sizeof(ligne), fichier_a_trier);
-        if (ligne[0] == 'I')
-        {
-
-            fgets(ligne, sizeof(ligne), fichier_a_trier); // saut de ligne
-            nb_ligne++;
-            fscanf(fichier_a_trier, "%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
-            avl = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
-            printf("%d", colonne1);
-            printf("%d %s %f %f %f\n", avl->cols1, avl->cols2, avl->cols3, avl->cols4, avl->cols5);
-        }
-        else // cas où la première lettre de la première n'est pas égale à 1
-        {
-            fgets(ligne, sizeof(ligne), fichier_a_trier); // saut de ligne
-            nb_ligne++;
-            fscanf(fichier_a_trier, "%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
-            avl = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
-        }
-
-        pAvl = avl;
+        pArbre pAvl = NULL;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
             fscanf(fichier_a_trier, "%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
-            pAvl = insertionAVL(pAvl, colonne1, &avl->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
+            pAvl = insertionAVL(pAvl, colonne1, &pAvl->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
         }
         parcoursInfixe(pAvl, &c, nb_ligne);
         printf("\nNombre de noeuds: %d\n", c);
