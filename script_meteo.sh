@@ -9,7 +9,7 @@ option_p="non"
 vent="non"
 humidite="non"
 altitude="non"
-date=""
+filtre_date="non"
 #Initialisation des fonctions tests pour chaques arguments et options
 test_argument_mode() {
     MODE=$OPTARG
@@ -26,35 +26,36 @@ test_options() {
 }
 #filtrage pour l'option -t
 filtrage_1() {
-    awk -F';' '{print $1 " " $10 " " $11 " " $2 " " $13 }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_temperature_et_num_t.csv
+    awk -F';' '{print $1 " " $10 " " $11 " " $2 " " 0 }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_num_t.csv
+
 }
 filtrage_2() {
-    awk -F';' '{print $1 " " $10 " " $11 " " $2 " " 0}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_temperature_et_date_t.csv
+    awk -F';' '{print $1 " " $10 " " $11 " " $2 " " 0}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_date_t.csv
 }
 filtrage_3() {
-    awk -F';' '{print $1 " " $10 " " $11 " " $2 }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_temperature_et_id_t.csv
+    awk -F';' '{print $1 " " $10 " " $11 " " $2 }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_id_t.csv
 }
 #filtrage pour l'option -p
 filtrage_1_bis() {
-    awk -F';' '{print $1 " " $10 " " $3 " " $7 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $1 " " $10 " " $3 " " $7 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_num_p.csv
 }
 filtrage_2_bis() {
-    awk -F';' '{print $1 " " $10 " " $2 " " $7 " "}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_temperature_et_date_p.csv
+    awk -F';' '{print $1 " " $10 " " $7 " " $2 }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_date_p.csv
 }
 filtrage_3_bis() {
-    awk -F';' '{print $1 " " $10 " " $2 " " $7 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_temperature_et_id_p.csv
+    awk -F';' '{print $1 " " $10 " " $2 " " $7 }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_id_p.csv
 }
 #filtrage pour l'option -w
 filtrage_w() {
-    awk -F';' '{print $1 " " $10 " " $3 " " }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_id_vent_moyenne.csv
+    awk -F';' '{print $1 " " $10 " " $3 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_id_vent_moyenne.csv
 }
 #filtrage pour l'option -m
 filtrage_m() {
-    awk -F';' '{print $1 " " $10 " " $6 " " }'meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $1 " " $10 " " $6 " " $2}'meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_num_p.csv
 }
 #filtrage pour l'option -h
 filtrage_h() {
-    awk -F';' '{print $1 " " $10 " " $4 " " }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_humidite.csv
+    awk -F';' '{print $1 " " $10 " " $4 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_humidite.csv
 }
 #execution des arguments et options
 execution_mode_t() {
@@ -118,15 +119,9 @@ while getopts ":t:p:wmhFGSAOQ-:f:d:" option; do
     else
         case "$option" in
         d)
-            date="$OPTARG"
-            if [ -n $date ]; then
-                oldIFS=$IFS
-                IFS=' '
-                read -r option1 option2 <<<$dates #on separe en 2 les dates min et max mise en argument
-                min_date=option1
-                max_date=option2
-                IFS=oldIFS
-            fi
+            filtre_date="ok"
+            min_date="${OPTARG}" 
+            max_date="${!OPTIND}" 
             ;;
         #traitement de la temperature accompagné d'une option 1 ou 2 ou 3
         t)
@@ -183,6 +178,15 @@ fi
 execution_mode_p_final
 execution_mode_t_final
 execution_argument_restant
+
+if [ $filtre_date == "ok" ]; then
+    fichier_csv1=$(ls | grep ^donnee)
+    for f in $fichier_csv1; do
+        awk -v min="$min_date" -v max="$max_date" '$4 >= min && $4 <= max' $f >donnee_filtree_t2.csv
+        rm $f
+    done
+fi
+
 #filtrage par zone
 fichier_csv=$(ls | grep ^donnee)
 for fic in $fichier_csv; do
@@ -241,17 +245,10 @@ for fic in $fichier_csv; do
     esac
 done
 shift $((OPTIND - 1))
-if [ -n $date ]; then
-    oldIFS=$IFS
-    IFS=' '
-    read -r option1 option2 <<<$dates #on separe en 2 les dates min et max mise en argument
-    min_date=option1
-    max_date=option2
-    IFS=oldIFS
-fi
+
 #execution des tris
 make
-echo "$min_date" "$max_date" "$date"
+
 fichier_csv_a_trier=$(ls | grep ^donnee)
 #for f in $fichier_csv_a_trier; do
 #    ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude
