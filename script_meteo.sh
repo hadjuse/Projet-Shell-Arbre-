@@ -9,6 +9,7 @@ option_p="non"
 vent="non"
 humidite="non"
 altitude="non"
+date=""
 #Initialisation des fonctions tests pour chaques arguments et options
 test_argument_mode() {
     MODE=$OPTARG
@@ -35,21 +36,21 @@ filtrage_3() {
 }
 #filtrage pour l'option -p
 filtrage_1_bis() {
-    awk -F';' '{print $1 " " $10 " " $3 " " $7 " " $2}' meteo.csv| tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $1 " " $10 " " $3 " " $7 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_temperature_et_num_p.csv
 }
 filtrage_2_bis() {
-    awk -F';' '{print $1 " " $10 " " $2 " " $7 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g'| tr ':T' '--' >donnee_filtree_temperature_et_date_p.csv
+    awk -F';' '{print $1 " " $10 " " $2 " " $7 " "}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_temperature_et_date_p.csv
 }
 filtrage_3_bis() {
     awk -F';' '{print $1 " " $10 " " $2 " " $7 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_temperature_et_id_p.csv
 }
 #filtrage pour l'option -w
 filtrage_w() {
-    awk -F';' '{print $1 " " $10 " " $3 " " }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--'>donnee_filtree_id_vent_moyenne.csv
+    awk -F';' '{print $1 " " $10 " " $3 " " }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_id_vent_moyenne.csv
 }
 #filtrage pour l'option -m
 filtrage_m() {
-    awk -F';' '{print $1 " " $10 " " $6 " " }'meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--'>donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $1 " " $10 " " $6 " " }'meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' | tr ':T' '--' >donnee_filtree_temperature_et_num_p.csv
 }
 #filtrage pour l'option -h
 filtrage_h() {
@@ -116,7 +117,17 @@ while getopts ":t:p:wmhFGSAOQ-:f:d:" option; do
         esac
     else
         case "$option" in
-
+        d)
+            date="$OPTARG"
+            if [ -n $date ]; then
+                oldIFS=$IFS
+                IFS=' '
+                read -r option1 option2 <<<$dates #on separe en 2 les dates min et max mise en argument
+                min_date=option1
+                max_date=option2
+                IFS=oldIFS
+            fi
+            ;;
         #traitement de la temperature accompagné d'une option 1 ou 2 ou 3
         t)
             test_argument_mode
@@ -230,10 +241,19 @@ for fic in $fichier_csv; do
     esac
 done
 shift $((OPTIND - 1))
+if [ -n $date ]; then
+    oldIFS=$IFS
+    IFS=' '
+    read -r option1 option2 <<<$dates #on separe en 2 les dates min et max mise en argument
+    min_date=option1
+    max_date=option2
+    IFS=oldIFS
+fi
 #execution des tris
 make
+echo "$min_date" "$max_date" "$date"
 fichier_csv_a_trier=$(ls | grep ^donnee)
-for f in $fichier_csv_a_trier; do
-    ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude
-done
+#for f in $fichier_csv_a_trier; do
+#    ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude
+#done
 #partie gnuplot
