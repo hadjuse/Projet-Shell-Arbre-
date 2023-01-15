@@ -4,26 +4,34 @@
 
 #include "arbre_binaire.h"
 
-pArbre creerArbre(int a, int cols1, char *cols2, float cols3, float cols4, float cols5, float somme)
+pArbre creerArbre(int a, int cols1, char *cols2, float cols3, char *cols4, float cols5, float somme, char *mode)
 {
     pArbre new = malloc(sizeof(Arbre));
-    //new->val=malloc(sizeof(pValeur));
+    // new->val=malloc(sizeof(pValeur));
     if (new == NULL)
-    {
-        exit(1); // Je l'ai modifié car lors de la création par convention il faut quitter le prog si le noeud vide
-    }
+        exit(1);
     new->nombre = a; // Je l'ai simplifié un peu
     new->fg = NULL;  // idem
     new->fd = NULL;  // idem
-    new->cols1=cols1;
-    strcpy(new->cols2, cols2);
-    new->cols3=cols3;
-    new->cols4=cols4;
-    new->cols5=cols5;
-    new->somme=somme;
-    new->nb_noeuds=1;
-    new->temperature_max=somme;
-    new->temperature_min=somme;
+    if (strcmp(mode, "1") == 0)
+    {
+        new->cols1 = cols1;        // numéro de station
+        strcpy(new->cols2, cols2); // coordonées
+        new->cols3 = cols3;        // temperature ou pression
+        strcpy(new->cols4, cols4); // date
+        new->cols5 = cols5;        // la colonne en trop
+        new->somme = somme;
+        new->nb_noeuds = 1;
+        new->temperature_max = somme;
+        new->temperature_min = somme;
+    }
+    else if (strcmp(mode, "2") == 0)
+    {
+        new->cols1 = cols1;        // numéro de station
+        strcpy(new->cols2, cols2); // coordonées
+        strcpy(new->cols4, cols4); // date
+        new->somme = somme;        // temperature
+    }
     return new;
 }
 
@@ -77,11 +85,11 @@ int existeFilsGauche(pArbre a) // je suis d'accord avec toi
     return (a->fg ? 1 : 0);
 }
 
-int existeFilsDroit(pArbre a) 
+int existeFilsDroit(pArbre a)
 {
     return (a->fd ? 1 : 0);
 }
-pArbre ajouterFilsDroit(pArbre a, int e) 
+pArbre ajouterFilsDroit(pArbre a, int e)
 {
     pArbre b;
     if (estVide(a) == 1)
@@ -90,15 +98,16 @@ pArbre ajouterFilsDroit(pArbre a, int e)
     }
     else
     {
-        float somme=0;
-        b = creerArbre(e, a->cols1, a->cols2, a->cols3, a->cols4, a->cols5, somme);
+        float somme = 0;
+        char mode[1024] = "azefgazf";
+        b = creerArbre(e, a->cols1, a->cols2, a->cols3, a->cols4, a->cols5, somme, mode);
         a->fd = b;
         return a;
     }
     return a;
 }
 
-pArbre ajouterFilsGauche(pArbre a, int e) 
+pArbre ajouterFilsGauche(pArbre a, int e)
 {
     pArbre b;
     if (estVide(a) == 1)
@@ -107,8 +116,9 @@ pArbre ajouterFilsGauche(pArbre a, int e)
     }
     else
     {
-        float somme=0;
-        b = creerArbre(e, a->cols1, a->cols2, a->cols3, a->cols4, a->cols5, somme);
+        float somme = 0;
+        char mode[1024] = "azefgazf";
+        b = creerArbre(e, a->cols1, a->cols2, a->cols3, a->cols4, a->cols5, somme, mode);
         a->fd = b;
         return a;
     }
@@ -133,14 +143,24 @@ void parcoursPostFixe(pArbre a)
         traiter(a);
     }
 }
-void parcoursInfixe(pArbre a, int *c,int nb_ligne)
+void parcoursInfixe_t1(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier)
 {
     if (estVide(a) != 1)
     {
-        parcoursInfixe(a->fg, c, nb_ligne);
-        printf("%d;%s;%f;%f;%f;%f;%f;%f\n", a->cols1, a->cols2, a->cols3, a->cols4, a->cols5, a->somme/a->nb_noeuds, a->temperature_max, a->temperature_min);
-        *c = *c + 1;
-        parcoursInfixe(a->fd, c, nb_ligne);
+        if (strcmp(mode, "1") == 0) // t1
+        {
+            parcoursInfixe_t1(a->fg, c, nb_ligne, mode, fichier);
+            fprintf(fichier,"%d;%f;%f;%f;%s\n", a->cols1, a->somme / a->nb_noeuds, a->temperature_max, a->temperature_min, a->cols4);
+            *c = *c + 1;
+            parcoursInfixe_t1(a->fd, c, nb_ligne, mode, fichier);
+        }
+        else if (strcmp(mode, "2") == 0) // t2
+        {
+            parcoursInfixe_t1(a->fg, c, nb_ligne, mode, fichier);
+            fprintf(fichier,"%d;%f;%s\n", a->cols1,a->somme / a->nb_noeuds, a->cols4);
+            *c = *c + 1;
+            parcoursInfixe_t1(a->fd, c, nb_ligne, mode, fichier);
+        }
     }
 }
 void traiter(pArbre a)
@@ -342,44 +362,83 @@ float moyennefd(pArbre a)
     moy = somme / c;
     return moy;
 }
-pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3, float cols4, float cols5, float somme)
+pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3, char *cols4, float cols5, float somme, char *mode)
 {
-    if (a == NULL)
+    if (strcmp(mode, "1") == 0) // le mode vaut t1/p1
     {
-        *h = 1;
-        return creerArbre(e, cols1, cols2, cols3, cols4, cols5, somme);
-    }
-    else if (e < a->nombre)
-    {
-        a->fg = insertionAVL(a->fg, e, h, cols1, cols2, cols3, cols4, cols5, somme);
-        *h = -*h;
-    }
-    else if (e > a->nombre)
-    {
-        a->fd = insertionAVL(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, somme);
-    }
-    else
-    {
-        *h = 0;
-        a->somme += somme;
-        a->nb_noeuds++;
-        if (a->temperature_max<somme) a->temperature_max=somme;
-        if (a->temperature_min>somme) a->temperature_min=somme;
-        return a;
-    }
-    if (*h != 0)
-    {
-        a->equilibre = a->equilibre + *h;
-        a=equilibrerAVL(a);
-        if (a->equilibre == 0)
+        if (a == NULL)
         {
-            *h = 0;
+            *h = 1;
+            return creerArbre(e, cols1, cols2, cols3, cols4, cols5, somme, mode);
+        }
+        else if (e < a->nombre)
+        {
+            a->fg = insertionAVL(a->fg, e, h, cols1, cols2, cols3, cols4, cols5, somme, mode);
+            *h = -*h;
+        }
+        else if (e > a->nombre)
+        {
+            a->fd = insertionAVL(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, somme, mode);
         }
         else
         {
-            *h = 1;
+            *h = 0;
+            a->somme += somme;
+            a->nb_noeuds++;
+
+            if (a->temperature_max < somme)
+                a->temperature_max = somme;
+            if (a->temperature_min > somme)
+                a->temperature_min = somme;
+            return a;
+        }
+        if (*h != 0)
+        {
+            a->equilibre = a->equilibre + *h;
+            a = equilibrerAVL(a);
+            if (a->equilibre == 0)
+            {
+                *h = 0;
+            }
+            else
+            {
+                *h = 1;
+            }
         }
     }
+    else if (strcmp(mode, "2") == 0) // mode vaut p2/p2 les dates sont déja dans l'ordre
+    {
+        if (a == NULL)
+        {
+            *h = 1;
+            return creerArbre(e, cols1, cols2, cols3, cols4, cols5, somme, mode);
+        }
+        else if (strcmp(cols4, a->cols4) > 0)
+        {
+            a->fd = insertionAVL(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, somme, mode);
+        }
+        else
+        {
+            *h = 0;
+            a->somme += somme;
+            a->nb_noeuds++;
+            return a;
+        }
+        if (*h != 0)
+        {
+            a->equilibre = a->equilibre + *h;
+            a = equilibrerAVL(a);
+            if (a->equilibre == 0)
+            {
+                *h = 0;
+            }
+            else
+            {
+                *h = 1;
+            }
+        }
+    }
+    // || strcmp(cols4, a->cols4) < 0
     return a;
 }
 
@@ -653,7 +712,7 @@ pListe ajouterCroissant(pListe liste, int e)
 {
 
     pListe nouveau = creerChainon(e);
-    pListe p1=liste;
+    pListe p1 = liste;
     if (p1 == NULL)
     { // si la liste est vide
         p1 = nouveau;

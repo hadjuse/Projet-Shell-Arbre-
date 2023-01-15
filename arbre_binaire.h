@@ -8,16 +8,23 @@ typedef struct arbre
     int cols1;
     char cols2[MAX_LENGTH];
     float cols3;
-    float cols4;
+    char cols4[MAX_LENGTH];
     float cols5;
+
+    float temperature_min;
+    float temperature_max;
+    float temperature_moyen;
+    float pression_moyen;
+    float vitesse_moyen;
+
     int nombre;
     struct arbre *fg;
     struct arbre *fd;
+
     int equilibre;
     int hauteur;
     int nb_noeuds;
-    float temperature_min;
-    float temperature_max;
+
 } Arbre;
 typedef Arbre *pArbre;
 
@@ -41,7 +48,7 @@ float moyennefg(pArbre a);
 float moyennefd(pArbre a);
 void MinMaxABR(pArbre a, int min, int max);
 // partie arbre----------------------
-pArbre creerArbre(int a, int cols1, char *cols2, float cols3, float cols4, float cols5, float somme);
+pArbre creerArbre(int a, int cols1, char *cols2, float cols3, char *cols4, float cols5, float somme, char* mode);
 int estVide(pArbre a);
 int estFeuille(pArbre a);
 int element(pArbre a);
@@ -52,7 +59,7 @@ pArbre ajouterFilsDroit(pArbre a, int e);
 void traiter(pArbre a);
 void parcoursPrefixe(pArbre a);
 void parcoursPostFixe(pArbre a);
-void parcoursInfixe(pArbre a, int *c, int nb_ligne);
+void parcoursInfixe_t1(pArbre a, int *c, int nb_ligne, char *mode, FILE* fichier);
 void parcoursLargeurs(pArbre a);
 pArbre modifierRacine(pArbre a, int e);
 void supprimerFilsDroit(pArbre a);
@@ -88,7 +95,7 @@ int parcours_i(pListe p1);
 // partie Arbre binaire de recherche
 
 int recherche(pArbre a, int e);
-pArbre insertionABR(pArbre a, int e, int cols1, char *cols2, float cols3, float cols4, float cols5, float somme);
+pArbre insertionABR(pArbre a, int e, int cols1, char *cols2, float cols3, char *cols4, float cols5, float somme, char *mode);
 pArbre insertionABRIter2(pArbre a, int e);
 pArbre suppMax(pArbre a, int *e);
 pArbre suppressionABR(pArbre a, int e);
@@ -103,7 +110,7 @@ pArbre rotationGauche(pArbre a);
 pArbre doubleRotationDroite(pArbre a);
 pArbre doubleRotationGauche(pArbre a);
 pArbre equilibrerAVL(pArbre a);
-pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3, float cols4, float cols5, float somme);
+pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3, char *cols4, float cols5, float somme, char *mode);
 pArbre suppMinAVL(pArbre a, int *h, int *pe);
 pArbre suppressionAVL(pArbre a, int e, int *h);
 // void MinMaxABR(pArbre a, int *min, int *max);

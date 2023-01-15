@@ -30,14 +30,14 @@ filtrage_1() {
 
 }
 filtrage_2() {
-    awk -F';' '{print $1 " " $10 " " $11 " " $2 " " 0}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_date_t.csv
+    awk -F';' '{print $1 " " $10 " " $7 " " $2 " " 0}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_date_t.csv
 }
 filtrage_3() {
     awk -F';' '{print $1 " " $10 " " $11 " " $2 }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_id_t.csv
 }
 #filtrage pour l'option -p
 filtrage_1_bis() {
-    awk -F';' '{print $1 " " $10 " " $3 " " $7 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $1 " " $10 " " $3 " " $2 " " $7}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_num_p.csv
 }
 filtrage_2_bis() {
     awk -F';' '{print $1 " " $10 " " $7 " " $2 }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_date_p.csv
@@ -180,9 +180,11 @@ execution_mode_t_final
 execution_argument_restant
 
 if [ $filtre_date == "ok" ]; then
+    i=0
     fichier_csv1=$(ls | grep ^donnee)
     for f in $fichier_csv1; do
-        awk -v min="$min_date" -v max="$max_date" '$4 >= min && $4 <= max' $f >donnee_filtree_t2.csv
+        i=$(($i + 1))
+        awk -v min="$min_date" -v max="$max_date" '$4 >= min && $4 <= max' $f >donnee_filtree_date_$i.csv
         rm $f
     done
 fi
@@ -199,7 +201,7 @@ for fic in $fichier_csv; do
   split($2, coords, ",")
   if (coords[1] + 0 >= 40 && coords[1] + 0<= 51 && coords[2] + 0>= -5 && coords[2] + 0 <= 8) {
     print $0
-} }' $fic >"$fic"_metropole.csv
+} }' $fic >"$fic"_metropole_$i.csv
         rm $fic
         ;;
     G)
@@ -250,7 +252,11 @@ shift $((OPTIND - 1))
 make
 
 fichier_csv_a_trier=$(ls | grep ^donnee)
-#for f in $fichier_csv_a_trier; do
-#    ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude
-#done
+j=0
+for f in $fichier_csv_a_trier; do
+    j=$(($j + 1))
+    fichier_sortie=donnee_trie_$i.csv
+    ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie
+    rm $f
+done
 #partie gnuplot
