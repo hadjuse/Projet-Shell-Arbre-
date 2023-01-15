@@ -121,6 +121,7 @@ while getopts ":t:p:wmhFGSAOQ-:f:d:" option; do
             filtre_date="ok"
             min_date="${OPTARG}"
             max_date="${!OPTIND}"
+            shift
             ;;
         #traitement de la temperature accompagné d'une option 1 ou 2 ou 3
         t)
@@ -180,7 +181,6 @@ execution_argument_restant
 
 #filtrage par zone
 fichier_csv=$(ls | grep ^donnee)
-echo $fichier_csv
 i=0
 for fic in $fichier_csv; do
     i=$(($i + 1))
