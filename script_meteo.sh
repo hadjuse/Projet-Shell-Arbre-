@@ -2,7 +2,6 @@
 #Initialisation des variables
 mode_tri="avl"
 option_geographique=""
-i=0
 nom_fichier=""
 option_t="non"
 option_p="non"
@@ -120,8 +119,8 @@ while getopts ":t:p:wmhFGSAOQ-:f:d:" option; do
         case "$option" in
         d)
             filtre_date="ok"
-            min_date="${OPTARG}" 
-            max_date="${!OPTIND}" 
+            min_date="${OPTARG}"
+            max_date="${!OPTIND}"
             ;;
         #traitement de la temperature accompagné d'une option 1 ou 2 ou 3
         t)
@@ -179,18 +178,10 @@ execution_mode_p_final
 execution_mode_t_final
 execution_argument_restant
 
-if [ $filtre_date == "ok" ]; then
-    i=0
-    fichier_csv1=$(ls | grep ^donnee)
-    for f in $fichier_csv1; do
-        i=$(($i + 1))
-        awk -v min="$min_date" -v max="$max_date" '$4 >= min && $4 <= max' $f >donnee_filtree_date_$i.csv
-        rm $f
-    done
-fi
-
 #filtrage par zone
 fichier_csv=$(ls | grep ^donnee)
+echo $fichier_csv
+i=0
 for fic in $fichier_csv; do
     i=$(($i + 1))
     case $option_geographique in
@@ -201,7 +192,7 @@ for fic in $fichier_csv; do
   split($2, coords, ",")
   if (coords[1] + 0 >= 40 && coords[1] + 0<= 51 && coords[2] + 0>= -5 && coords[2] + 0 <= 8) {
     print $0
-} }' $fic >"$fic"_metropole_$i.csv
+} }' $fic >donnee_filtree_metropole_$i.csv
         rm $fic
         ;;
     G)
@@ -213,6 +204,7 @@ for fic in $fichier_csv; do
         rm $fic
         ;;
     S)
+        echo "azegr"
         awk -F" " '{
   split($2, coords, ",")
   if (coords[1] + 0>= 45 && coords[1] + 0 <=50  && coords[2]+0 >= -60 && coords[2] + 0 <= -53) {
@@ -247,7 +239,15 @@ for fic in $fichier_csv; do
     esac
 done
 shift $((OPTIND - 1))
-
+if [ $filtre_date == "ok" ]; then
+    i=0
+    fichier_csv1=$(ls | grep ^donnee)
+    for f in $fichier_csv1; do
+        i=$(($i + 1))
+        awk -v min="$min_date" -v max="$max_date" '$4 >= min && $4 <= max' $f >donnee_filtree_date_$i.csv
+        rm $f
+    done
+fi
 #execution des tris
 make
 
@@ -255,8 +255,8 @@ fichier_csv_a_trier=$(ls | grep ^donnee)
 j=0
 for f in $fichier_csv_a_trier; do
     j=$(($j + 1))
-    fichier_sortie=donnee_trie_$i.csv
+    fichier_sortie=donnee_trie_$j.csv
     ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie
-    rm $f
 done
+rm donnee_filtree*
 #partie gnuplot

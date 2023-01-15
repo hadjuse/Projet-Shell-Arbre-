@@ -31,6 +31,7 @@ pArbre creerArbre(int a, int cols1, char *cols2, float cols3, char *cols4, float
         strcpy(new->cols2, cols2); // coordonées
         strcpy(new->cols4, cols4); // date
         new->somme = somme;        // temperature
+        new->nb_noeuds = 1;
     }
     return new;
 }
@@ -150,14 +151,14 @@ void parcoursInfixe_t1(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier
         if (strcmp(mode, "1") == 0) // t1
         {
             parcoursInfixe_t1(a->fg, c, nb_ligne, mode, fichier);
-            fprintf(fichier,"%d;%f;%f;%f;%s\n", a->cols1, a->somme / a->nb_noeuds, a->temperature_max, a->temperature_min, a->cols4);
+            fprintf(fichier, "%d;%f;%f;%f;%s\n", a->cols1, a->somme / a->nb_noeuds, a->temperature_max, a->temperature_min, a->cols4);
             *c = *c + 1;
             parcoursInfixe_t1(a->fd, c, nb_ligne, mode, fichier);
         }
         else if (strcmp(mode, "2") == 0) // t2
         {
             parcoursInfixe_t1(a->fg, c, nb_ligne, mode, fichier);
-            fprintf(fichier,"%d;%f;%s\n", a->cols1,a->somme / a->nb_noeuds, a->cols4);
+            fprintf(fichier, "%d;%f;%s\n", a->cols1, a->somme / a->nb_noeuds, a->cols4);
             *c = *c + 1;
             parcoursInfixe_t1(a->fd, c, nb_ligne, mode, fichier);
         }
@@ -406,7 +407,7 @@ pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3
             }
         }
     }
-    else if (strcmp(mode, "2") == 0) // mode vaut p2/p2 les dates sont déja dans l'ordre
+    else if (strcmp(mode, "2") == 0) // mode vaut p2/p2 les dates sont déja dans l'ordre je supprime la comparaison negative afin d'économiser des lignes
     {
         if (a == NULL)
         {
@@ -414,9 +415,7 @@ pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3
             return creerArbre(e, cols1, cols2, cols3, cols4, cols5, somme, mode);
         }
         else if (strcmp(cols4, a->cols4) > 0)
-        {
             a->fd = insertionAVL(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, somme, mode);
-        }
         else
         {
             *h = 0;
