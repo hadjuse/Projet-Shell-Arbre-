@@ -25,7 +25,7 @@ test_options() {
 }
 #filtrage pour l'option -t
 filtrage_1() {
-    awk -F';' '{print $1 " " $10 " " $11 " " $2 " " 0 }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_num_t.csv
+    awk -F';' '{print $1 " " $10 " " $11 " " $2 " " $12 " " $13}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_num_t.csv
 
 }
 filtrage_2() {

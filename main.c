@@ -6,7 +6,7 @@
 #include "arbre_binaire.h"
 
 #define MAX_LENGTH 1024
-
+// Ne pas oubliez de gérez les cas temperature_min temperature_max
 // Dans ce fichier C sont répertoriés tout les cas possible pour les options et arguments afin de gérer le tri
 // Les codes sont quasi identiques les différences dépondrons du cas à traiter et du mode de tri utiliser
 int main(int argc, char **argv)
@@ -16,6 +16,7 @@ int main(int argc, char **argv)
     float colonne3;
     char colonne4[MAX_LENGTH];//date
     float colonne5;
+    float colonne6;
     int nb_ligne = 0;
     //  Etape d'ouverture et de lecture du fichier mis en argument
     if (argc != 9)
@@ -40,7 +41,7 @@ int main(int argc, char **argv)
     {
         int c = 0;
         fgets(ligne, sizeof(ligne), fichier_a_trier);
-        fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
+        fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5, );
         pArbre avl = creerArbre(colonne1,colonne1,colonne2, colonne3, colonne4,colonne5, colonne3, argv[3]);
         pArbre pAvl = avl;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
