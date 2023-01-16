@@ -22,8 +22,8 @@ pArbre creerArbre(int a, int cols1, char *cols2, float cols3, char *cols4, float
         new->cols5 = cols5;        // la colonne en trop
         new->somme = somme;
         new->nb_noeuds = 1;
-        new->temperature_max = somme;
-        new->temperature_min = somme;
+        new->temperature_max = cols3;
+        new->temperature_min = cols3;
     }
     else if (strcmp(mode, "2") == 0)
     {
@@ -387,10 +387,10 @@ pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3
             a->somme += somme;
             a->nb_noeuds++;
 
-            if (a->temperature_max < somme)
+            if (somme > a->cols3)
                 a->temperature_max = somme;
-            if (a->temperature_min > somme)
-                a->temperature_min = somme;
+            if (somme < a->cols3)
+                a->temperature_min = cols3;
             return a;
         }
         if (*h != 0)
