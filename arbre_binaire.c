@@ -4,38 +4,65 @@
 
 #include "arbre_binaire.h"
 
-pArbre creerArbre(int a, int cols1, char *cols2, float cols3, char *cols4, float cols5, float somme, char *mode)
+pArbre creerArbre(int a, int cols1, char *cols2, float cols3, char *cols4, float cols5, float cols6, float somme, char *mode)
 {
     pArbre new = malloc(sizeof(Arbre));
-    // new->val=malloc(sizeof(pValeur));
     if (new == NULL)
         exit(1);
-    new->nombre = a; // Je l'ai simplifié un peu
-    new->fg = NULL;  // idem
-    new->fd = NULL;  // idem
+    new->nombre = a;
+    new->fg = NULL;
+    new->fd = NULL;
     if (strcmp(mode, "1") == 0)
     {
         new->cols1 = cols1;        // numéro de station
         strcpy(new->cols2, cols2); // coordonées
         new->cols3 = cols3;        // temperature ou pression
         strcpy(new->cols4, cols4); // date
-        new->cols5 = cols5;        // la colonne en trop
+        new->cols5 = cols5;        // temperature min à traiter
+        new->cols6 = cols6;        // temperatur max à traiter
         new->somme = somme;
         new->nb_noeuds = 1;
-        new->temperature_max = cols3;
-        new->temperature_min = cols3;
+        new->temperature_max = cols6;
+        new->temperature_min = cols5;
     }
     else if (strcmp(mode, "2") == 0)
     {
         new->cols1 = cols1;        // numéro de station
         strcpy(new->cols2, cols2); // coordonées
         strcpy(new->cols4, cols4); // date
-        new->somme = somme;        // temperature
+        new->somme = somme;        // temperature/pression
         new->nb_noeuds = 1;
     }
     return new;
 }
-
+pArbre creerArbre_t3(int a, int cols1, char *cols2, float cols3, char *cols4, float cols5, float cols6, float somme, char *mode)
+{
+    pArbre new = malloc(sizeof(Arbre));
+    if (new == NULL)
+        exit(1);
+    new->nombre = a;
+    new->fg = NULL;
+    new->fd = NULL;
+    if (strcmp(mode, "1") == 0)
+    {
+        new->cols1 = cols1;        // numéro de station
+        strcpy(new->cols2, cols2); // coordonées
+        new->cols3 = cols3;        // temperature ou pression
+        strcpy(new->cols4, cols4); // date
+        new->somme=somme;
+        new->nb_noeuds = 1;
+    }
+    else if (strcmp(mode, "2") == 0)
+    {
+        new->cols1 = cols1;        // numéro de station
+        strcpy(new->cols2, cols2); // coordonées
+        strcpy(new->cols4, cols4); // date
+        new->cols3=cols3;
+        new->somme = somme;        // temperature/pression
+        new->nb_noeuds = 1;
+    }
+    return new;
+}
 int estVide(pArbre a) // J'ai modifié tout ton bloc ici
 {
     if (a == NULL)
@@ -101,7 +128,8 @@ pArbre ajouterFilsDroit(pArbre a, int e)
     {
         float somme = 0;
         char mode[1024] = "azefgazf";
-        b = creerArbre(e, a->cols1, a->cols2, a->cols3, a->cols4, a->cols5, somme, mode);
+        float cols6 = 0.0000;
+        b = creerArbre(e, a->cols1, a->cols2, a->cols3, a->cols4, a->cols5, cols6, somme, mode);
         a->fd = b;
         return a;
     }
@@ -119,7 +147,8 @@ pArbre ajouterFilsGauche(pArbre a, int e)
     {
         float somme = 0;
         char mode[1024] = "azefgazf";
-        b = creerArbre(e, a->cols1, a->cols2, a->cols3, a->cols4, a->cols5, somme, mode);
+        float cols6 = 0.0000;
+        b = creerArbre(e, a->cols1, a->cols2, a->cols3, a->cols4, a->cols5, cols6, somme, mode);
         a->fd = b;
         return a;
     }
@@ -151,16 +180,36 @@ void parcoursInfixe_t1(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier
         if (strcmp(mode, "1") == 0) // t1
         {
             parcoursInfixe_t1(a->fg, c, nb_ligne, mode, fichier);
-            fprintf(fichier, "%d;%f;%f;%f;%s\n", a->cols1, a->somme / a->nb_noeuds, a->temperature_max, a->temperature_min, a->cols4);
+            fprintf(fichier, "%d %f %f %f %s\n", a->cols1, a->somme / a->nb_noeuds, a->temperature_max, a->temperature_min, a->cols4);
             *c = *c + 1;
             parcoursInfixe_t1(a->fd, c, nb_ligne, mode, fichier);
         }
         else if (strcmp(mode, "2") == 0) // t2
         {
             parcoursInfixe_t1(a->fg, c, nb_ligne, mode, fichier);
-            fprintf(fichier, "%d;%f;%s\n", a->cols1, a->somme / a->nb_noeuds, a->cols4);
+            fprintf(fichier, "%d %f %s\n", a->cols1, a->somme / nb_ligne, a->cols4);
             *c = *c + 1;
             parcoursInfixe_t1(a->fd, c, nb_ligne, mode, fichier);
+        }
+    }
+}
+void parcoursInfixe_t3(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier)
+{
+    if (estVide(a) != 1)
+    {
+        if (strcmp(mode, "1") == 0) 
+        {
+            parcoursInfixe_t3(a->fg, c, nb_ligne, mode, fichier);
+            fprintf(fichier, "%d %f %s\n", a->cols1, a->somme, a->cols4);
+            *c = *c + 1;
+            parcoursInfixe_t3(a->fd, c, nb_ligne, mode, fichier);
+        }
+        else if (strcmp(mode, "2") == 0)
+        {
+            parcoursInfixe_t3(a->fg, c, nb_ligne, mode, fichier);
+            fprintf(fichier, "%d %s %f %s\n", a->cols1, a->cols2, a->somme, a->cols4);
+            *c = *c + 1;
+            parcoursInfixe_t3(a->fd, c, nb_ligne, mode, fichier);
         }
     }
 }
@@ -363,23 +412,23 @@ float moyennefd(pArbre a)
     moy = somme / c;
     return moy;
 }
-pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3, char *cols4, float cols5, float somme, char *mode)
+pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3, char *cols4, float cols5, float cols6, float somme, char *mode)
 {
     if (strcmp(mode, "1") == 0) // le mode vaut t1/p1
     {
         if (a == NULL)
         {
             *h = 1;
-            return creerArbre(e, cols1, cols2, cols3, cols4, cols5, somme, mode);
+            return creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
         }
         else if (e < a->nombre)
         {
-            a->fg = insertionAVL(a->fg, e, h, cols1, cols2, cols3, cols4, cols5, somme, mode);
+            a->fg = insertionAVL(a->fg, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
             *h = -*h;
         }
         else if (e > a->nombre)
         {
-            a->fd = insertionAVL(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, somme, mode);
+            a->fd = insertionAVL(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
         }
         else
         {
@@ -387,10 +436,10 @@ pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3
             a->somme += somme;
             a->nb_noeuds++;
 
-            if (somme > a->cols3)
-                a->temperature_max = somme;
-            if (somme < a->cols3)
-                a->temperature_min = cols3;
+            if (cols6 > a->cols6)
+                a->temperature_max = cols6;
+            if (cols6 < a->cols5)
+                a->temperature_min = cols5;
             return a;
         }
         if (*h != 0)
@@ -407,15 +456,15 @@ pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3
             }
         }
     }
-    else if (strcmp(mode, "2") == 0) // mode vaut p2/p2 les dates sont déja dans l'ordre je supprime la comparaison negative afin d'économiser des lignes
+    else if (strcmp(mode, "2") == 0) // mode vaut t2/p2 les dates sont déja dans l'ordre je supprime la comparaison negative afin d'économiser des lignes
     {
         if (a == NULL)
         {
             *h = 1;
-            return creerArbre(e, cols1, cols2, cols3, cols4, cols5, somme, mode);
+            return creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
         }
         else if (strcmp(cols4, a->cols4) > 0)
-            a->fd = insertionAVL(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, somme, mode);
+            a->fd = insertionAVL(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
         else
         {
             *h = 0;
@@ -440,7 +489,73 @@ pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3
     // || strcmp(cols4, a->cols4) < 0
     return a;
 }
-
+pArbre insertionAVL_t3(pArbre a, int e, int *h, int cols1, char *cols2, float cols3, char *cols4, float cols5, float cols6, float somme, char *mode)
+{
+    if (strcmp(mode, "1") == 0) // le mode vaut t1/p1
+    {
+        if (a == NULL)
+        {
+            *h = 1;
+            return creerArbre_t3(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+        }
+        else if (e < a->nombre)
+        {
+            a->fg = insertionAVL_t3(a->fg, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+            *h = -*h;
+        }
+        else if (e > a->nombre)
+        {
+            a->fd = insertionAVL_t3(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+        }
+        else
+        {
+            *h = 0;
+            return a;
+        }
+        if (*h != 0)
+        {
+            a->equilibre = a->equilibre + *h;
+            a = equilibrerAVL(a);
+            if (a->equilibre == 0)
+            {
+                *h = 0;
+            }
+            else
+            {
+                *h = 1;
+            }
+        }
+    }
+    else if (strcmp(mode, "2") == 0) // mode vaut t2/p2 les dates sont déja dans l'ordre je supprime la comparaison negative afin d'économiser des lignes
+    {
+        if (a == NULL)
+        {
+            *h = 1;
+            return creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+        }
+        else if (strcmp(cols4, a->cols4) > 0)
+            a->fd = insertionAVL_t3(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+        else
+        {
+            *h = 0;
+            return a;
+        }
+        if (*h != 0)
+        {
+            a->equilibre = a->equilibre + *h;
+            a = equilibrerAVL(a);
+            if (a->equilibre == 0)
+            {
+                *h = 0;
+            }
+            else
+            {
+                *h = 1;
+            }
+        }
+    }
+    return a;
+}
 pArbre suppMinAVL(pArbre a, int *h, int *pe)
 {
     pArbre tmp;

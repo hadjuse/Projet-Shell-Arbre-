@@ -6,17 +6,22 @@
 #include "arbre_binaire.h"
 
 #define MAX_LENGTH 1024
-// Ne pas oubliez de gérez les cas temperature_min temperature_max
 // Dans ce fichier C sont répertoriés tout les cas possible pour les options et arguments afin de gérer le tri
 // Les codes sont quasi identiques les différences dépondrons du cas à traiter et du mode de tri utiliser
+/*En fonction de chaque cas et des différents arguments et options à traiter les étape sont toujours les mêmes:
+
+    Pour les AVL et LES ABR on crée un premier noeud, avec la fonction creerArbre, grâce à la première ligne du fichier filtre.
+    Puis pour les autres ligne on fait une insertion ABR/AVL. et après on fonction de l'odre croissant ou décroissant, on appelle
+    soit la fonction parcoursINfixeCroissant ou décroissant pour mettre les données triés dans les fichiers triées.
+*/
 int main(int argc, char **argv)
 {
     int colonne1;
-    char colonne2[MAX_LENGTH]; //coordonnée
-    float colonne3;
-    char colonne4[MAX_LENGTH];//date
-    float colonne5;
-    float colonne6;
+    char colonne2[MAX_LENGTH]; // coordonnée
+    float colonne3;            // temperature / pression par station
+    char colonne4[MAX_LENGTH]; // date
+    float colonne5;            // temp_min
+    float colonne6;            // temp_max
     int nb_ligne = 0;
     //  Etape d'ouverture et de lecture du fichier mis en argument
     if (argc != 9)
@@ -25,9 +30,11 @@ int main(int argc, char **argv)
         exit(EXIT_FAILURE);
     }
     FILE *fichier_a_trier = NULL;
-    FILE *fichier_sortie=NULL;
+    FILE *fichier_sortie = NULL;
+    FILE *fichier_sortie_temp = NULL; // EXCLUSIVEMENT pour l'option -t3 où il va falloir trié 2 fois
     fichier_a_trier = fopen(argv[1], "r");
-    fichier_sortie = fopen(argv[8], "w+");
+    fichier_sortie_temp = fopen("donnee_trie_temp.csv", "w");
+    fichier_sortie = fopen(argv[8], "w");
     if (fichier_a_trier == NULL)
     {
         printf("Ouverture du fichier impossible\n");
@@ -41,54 +48,81 @@ int main(int argc, char **argv)
     {
         int c = 0;
         fgets(ligne, sizeof(ligne), fichier_a_trier);
-        fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5, );
-        pArbre avl = creerArbre(colonne1,colonne1,colonne2, colonne3, colonne4,colonne5, colonne3, argv[3]);
+        fscanf(fichier_a_trier, "%d %s %f %s %f %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5, &colonne6);
+        pArbre avl = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[3]);
         pArbre pAvl = avl;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
-            fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
-            pAvl = insertionAVL(pAvl, colonne1, &pAvl->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3, argv[3]);
+            fscanf(fichier_a_trier, "%d %s %f %s %f %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5, &colonne6);
+            pAvl = insertionAVL(pAvl, colonne1, &pAvl->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[3]);
         }
         parcoursInfixe_t1(pAvl, &c, nb_ligne, argv[3], fichier_sortie);
-        //printf("\nNombre de noeuds: %d\n", c);
     }
-    
+
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[3], "2") == 0) // cas option -t2
     {
         int c = 0;
         fgets(ligne, sizeof(ligne), fichier_a_trier);
         fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
-        pArbre avl_2 = creerArbre(colonne1,colonne1,colonne2, colonne3, colonne4,colonne5, colonne3, argv[3]);
+        pArbre avl_2 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[3]);
         pArbre pAvl_2 = avl_2;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
             fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
-            //printf("%s--%s\n", colonne4, pAvl_2->cols4);
-            pAvl_2 = insertionAVL(pAvl_2, colonne1, &pAvl_2->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3, argv[3]);
+            pAvl_2 = insertionAVL(pAvl_2, colonne1, &pAvl_2->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[3]);
         }
         parcoursInfixe_t1(pAvl_2, &c, nb_ligne, argv[3], fichier_sortie);
-        printf("\nNombre de noeuds: %d\n", c);
     }
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[3], "3") == 0) // option -t3
     {
-        printf("option -t3\n");
+        int c = 0;
+        fgets(ligne, sizeof(ligne), fichier_a_trier);
+        //trie par ordre chronologique
+        fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+        pArbre avl_3 = creerArbre_t3(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "2");
+        
+        pArbre pAvl_3 =avl_3;
+        
+        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
+        {
+            nb_ligne++;
+            fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+            //printf("%f\n", colonne3);
+            pAvl_3 = insertionAVL_t3(pAvl_3, colonne1, &pAvl_3->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "2");
+        }
+        parcoursInfixe_t3(pAvl_3, &c, nb_ligne, "2", fichier_sortie_temp);
+        //----------------------------
+        FILE *temp2=fopen("donnee_trie_temp.csv", "r");
+        //trie par identifiant
+        c = 0;
+        fgets(ligne, sizeof(ligne), temp2);
+        fscanf(temp2, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+        pArbre avl_4 = creerArbre_t3(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "1");
+        pArbre pAvl_4 = avl_4;
+        while (fgets(ligne, sizeof(ligne), temp2) != NULL)
+        {
+            nb_ligne++;
+            fscanf(temp2, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+            pAvl_4 = insertionAVL_t3(pAvl_4, colonne1, &pAvl_4->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "1");
+        }
+        parcoursInfixe_t3(pAvl_4, &c, nb_ligne, "1", fichier_sortie);
+        fclose(temp2);
     }
     /*
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[4], "1") == 0) // cas où l'option/argument est -p1
     {
         int c = 0;
-        pArbre pAvl=NULL;
+        pArbre pAvl = NULL;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
-            fscanf(fichier_a_trier, "%d %s %f %f %f", &colonne1, colonne2, &colonne3, &colonne4, &colonne5);
-            pAvl = insertionAVL(pAvl, colonne1, &pAvl->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3);
+            fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
+            pAvl = insertionAVL(pAvl, colonne1, &pAvl->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[4]);
         }
-        parcoursInfixe(pAvl, &c, nb_ligne);
-        printf("\nNombre de noeuds: %d\n", c);
-    }*/
+        parcoursInfixe_t1(pAvl, &c, nb_ligne, argv[3], fichier_sortie);
+    }
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[4], "2") == 0) // cas -p2
     {
         printf("option p2\n");
@@ -112,7 +146,6 @@ int main(int argc, char **argv)
     //---------------------------------------------------------------------------------------------------------------------
 
     // cas où le tri est un abr
-    
     if (strcmp(argv[2], "abr") == 0 && strcmp(argv[3], "1") == 0) // cas -t1 abr
     {
         int c = 0;
@@ -135,7 +168,7 @@ int main(int argc, char **argv)
     {
         printf("abr t3");
     }
-    else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[4], "1")==0)
+    else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[4], "1") == 0)
     {
         pArbre abr = NULL;
         int c = 0;
@@ -206,8 +239,10 @@ int main(int argc, char **argv)
     else if (strcmp(argv[2], "tab") == 0 && strcmp(argv[7], "ok") == 0) // altitude
     {
         printf("vent tab");
-    }
+    }*/
     //---------------------------------------------------------------------------------------------------------------------
     fclose(fichier_a_trier);
+    fclose(fichier_sortie_temp);
+    fclose(fichier_sortie);
     return 0;
 }
