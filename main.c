@@ -29,6 +29,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "Format : programme <nom du fichier> <mode de tri>");
         exit(EXIT_FAILURE);
     }
+
     FILE *fichier_a_trier = NULL;
     FILE *fichier_sortie = NULL;
     FILE *fichier_sortie_temp = NULL; // EXCLUSIVEMENT pour l'option -t3 où il va falloir trié 2 fois
@@ -89,7 +90,6 @@ int main(int argc, char **argv)
         {
             nb_ligne++;
             fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
-            //printf("%f\n", colonne3);
             pAvl_3 = insertionAVL_t3(pAvl_3, colonne1, &pAvl_3->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "2");
         }
         parcoursInfixe_t3(pAvl_3, &c, nb_ligne, "2", fichier_sortie_temp);
@@ -110,39 +110,86 @@ int main(int argc, char **argv)
         parcoursInfixe_t3(pAvl_4, &c, nb_ligne, "1", fichier_sortie);
         fclose(temp2);
     }
-    /*
+    
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[4], "1") == 0) // cas où l'option/argument est -p1
     {
         int c = 0;
-        pArbre pAvl = NULL;
+        fgets(ligne, sizeof(ligne), fichier_a_trier);
+        fscanf(fichier_a_trier, "%d %s %f %s %f %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5, &colonne6);
+        pArbre avl_5 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[3]);
+        pArbre pAvl_5 = avl_5;
+        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
+        {
+            nb_ligne++;
+            fscanf(fichier_a_trier, "%d %s %f %s %f %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5, &colonne6);
+            pAvl_5 = insertionAVL(pAvl_5, colonne1, &pAvl_5->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[4]);
+        }
+        parcoursInfixe_t1(pAvl_5, &c, nb_ligne, argv[4], fichier_sortie);
+    }
+    // Je rappelle c'est vraiment des copiés coller de l'option t1
+    else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[4], "2") == 0) // cas -p2
+    {
+        int c = 0;
+        fgets(ligne, sizeof(ligne), fichier_a_trier);
+        fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
+        pArbre avl_6 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[4]);
+        pArbre pAvl_6 = avl_6;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
             fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
-            pAvl = insertionAVL(pAvl, colonne1, &pAvl->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[4]);
+            pAvl_6 = insertionAVL(pAvl_6, colonne1, &pAvl_6->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[4]);
         }
-        parcoursInfixe_t1(pAvl, &c, nb_ligne, argv[3], fichier_sortie);
-    }
-    else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[4], "2") == 0) // cas -p2
-    {
-        printf("option p2\n");
+        parcoursInfixe_t1(pAvl_6, &c, nb_ligne, argv[4], fichier_sortie);
     }
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[4], "3") == 0) // cas -p3
     {
-        printf("option p3\n");
+        int c = 0;
+        fgets(ligne, sizeof(ligne), fichier_a_trier);
+        //trie par ordre chronologique
+        fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+        pArbre avl_7 = creerArbre_t3(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "2");
+        
+        pArbre pAvl_7 =avl_7;
+        
+        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
+        {
+            nb_ligne++;
+            fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+            pAvl_7 = insertionAVL_t3(pAvl_7, colonne1, &pAvl_7->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "2");
+        }
+        parcoursInfixe_t3(pAvl_7, &c, nb_ligne, "2", fichier_sortie_temp);
+        //----------------------------
+        FILE *temp2=fopen("donnee_trie_temp.csv", "r");
+        //trie par identifiant
+        c = 0;
+        fgets(ligne, sizeof(ligne), temp2);
+        fscanf(temp2, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+        pArbre avl_8 = creerArbre_t3(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "1");
+        pArbre pAvl_8 = avl_8;
+        while (fgets(ligne, sizeof(ligne), temp2) != NULL)
+        {
+            nb_ligne++;
+            fscanf(temp2, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+            pAvl_8 = insertionAVL_t3(pAvl_8, colonne1, &pAvl_8->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "1");
+        }
+        parcoursInfixe_t3(pAvl_8, &c, nb_ligne, "1", fichier_sortie);
+        fclose(temp2);
     }
-    else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[5], "ok") == 0) // humidite
+    
+    else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[5], "ok_h") == 0) // humidite
     {
         printf("option humidite");
     }
-    else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[6], "ok") == 0) // vent
+    else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[6], "ok_v") == 0) // vent
     {
         printf("vent");
     }
-    else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[7], "ok") == 0) // altitude
+    else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[7], "ok_a") == 0) // altitude
     {
         printf("altitude");
     }
+    /*
     //---------------------------------------------------------------------------------------------------------------------
 
     // cas où le tri est un abr

@@ -36,7 +36,7 @@ filtrage_3() {
 }
 #filtrage pour l'option -p
 filtrage_1_bis() {
-    awk -F';' '{if ($3 !="" && $7 !=""){print $1 " " $10 " " $3 " " $2 " " $7}}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{if ($3 !="" && $7 !=""){print $1 " " $10 " " $7 " " $2 " " $7 " " $3}}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_num_p.csv
 }
 filtrage_2_bis() {
     awk -F';' '{print $1 " " $10 " " $7 " " $2 }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_date_p.csv
@@ -136,13 +136,13 @@ while getopts ":t:p:wmhFGSAOQ-:f:d:" option; do
             execution_mode_p
             ;;
         w) #traitement de l'option vent
-            vent="ok"
+            vent="v"
             ;;
         m)
-            humidite="ok"
+            humidite="h"
             ;; #traitement de l'option humidite
         h)
-            altitude="ok"
+            altitude="a"
             ;; #traitement de l'option altitude
 
         #option geographique

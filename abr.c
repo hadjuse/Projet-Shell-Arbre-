@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "arbre_binaire.h"
-
+/*
 int recherche(pArbre a, int e)
 {
     if (a == NULL)
@@ -65,4 +65,4 @@ pArbre suppressionABR(pArbre a, int e)
     else
         a->fg = suppMax(filsGauche(a), &a->nombre);
     return a;
-}
+}*/

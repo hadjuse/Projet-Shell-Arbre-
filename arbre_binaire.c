@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "arbre_binaire.h"
-
+// faire une insertion avl p1 à part
 pArbre creerArbre(int a, int cols1, char *cols2, float cols3, char *cols4, float cols5, float cols6, float somme, char *mode)
 {
     pArbre new = malloc(sizeof(Arbre));
@@ -77,35 +77,14 @@ int estVide(pArbre a) // J'ai modifié tout ton bloc ici
 
 int estFeuille(pArbre a)
 {
-    /*
-    if(a == NULL){
-        return 0;
-    }
-    else if(a->fg == NULL && a->fd == NULL){
-        return 1;
-    }
-    else{
-        return 0;
-    }*/
     return (a ? ((!a->fg) && (!a->fd) ? 1 : 0) : 0);
 }
 
 int element(pArbre a) // Moi j'aurai proposé un truc de ce genre:
 {
-    /*int r;
+    int r;
     r=a->nombre;
-    return r;*/
-
-    if (estVide(a) == 1)
-    {
-        return 0;
-    }
-    else
-    {
-        return a->nombre;
-    }
-    if (a)
-        return a->nombre;
+    return r;
 }
 
 int existeFilsGauche(pArbre a) // je suis d'accord avec toi
