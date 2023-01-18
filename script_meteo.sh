@@ -25,7 +25,7 @@ test_options() {
 }
 #filtrage pour l'option -t
 filtrage_1() {
-    awk -F';' '{if ($12 !="" && $13 !=""){print $1 " " $10 " " $11 " " $2 " " $12 " " $13}}' meteo.csv | tail -n+2  >donnee_filtree_temperature_et_num_t.csv
+    awk -F';' '{print $1 " " $10 " " $11 " " $2}' meteo.csv | tail -n+2  >donnee_filtree_temperature_et_num_t.csv
 
 }
 filtrage_2() {
@@ -36,7 +36,7 @@ filtrage_3() {
 }
 #filtrage pour l'option -p
 filtrage_1_bis() {
-    awk -F';' '{if ($3 !="" && $7 !=""){print $1 " " $10 " " $7 " " $2 " " $7 " " $3}}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $1 " " $10 " " $7 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_num_p.csv
 }
 filtrage_2_bis() {
     awk -F';' '{print $1 " " $10 " " $7 " " $2 }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_date_p.csv
@@ -258,6 +258,6 @@ for f in $fichier_csv_a_trier; do
     fichier_sortie=donnee_trie_$j.csv
     ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie
 done
-rm donnee_filtree*
+#rm donnee_filtree*
 rm donnee_trie_temp.csv
 #partie gnuplot

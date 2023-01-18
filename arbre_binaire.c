@@ -19,11 +19,11 @@ pArbre creerArbre(int a, int cols1, char *cols2, float cols3, char *cols4, float
         new->cols3 = cols3;        // temperature ou pression
         strcpy(new->cols4, cols4); // date
         new->cols5 = cols5;        // temperature min à traiter
-        new->cols6 = cols6;        // temperatur max à traiter
+        new->cols6 = cols6;        // temperature max à traiter
         new->somme = somme;
         new->nb_noeuds = 1;
-        new->temperature_max = cols6;
-        new->temperature_min = cols5;
+        new->temperature_max = cols3;
+        new->temperature_min = cols3;
     }
     else if (strcmp(mode, "2") == 0)
     {
@@ -49,7 +49,7 @@ pArbre creerArbre_t3(int a, int cols1, char *cols2, float cols3, char *cols4, fl
         strcpy(new->cols2, cols2); // coordonées
         new->cols3 = cols3;        // temperature ou pression
         strcpy(new->cols4, cols4); // date
-        new->somme=somme;
+        new->somme = somme;
         new->nb_noeuds = 1;
     }
     else if (strcmp(mode, "2") == 0)
@@ -57,8 +57,8 @@ pArbre creerArbre_t3(int a, int cols1, char *cols2, float cols3, char *cols4, fl
         new->cols1 = cols1;        // numéro de station
         strcpy(new->cols2, cols2); // coordonées
         strcpy(new->cols4, cols4); // date
-        new->cols3=cols3;
-        new->somme = somme;        // temperature/pression
+        new->cols3 = cols3;
+        new->somme = somme; // temperature/pression
         new->nb_noeuds = 1;
     }
     return new;
@@ -83,7 +83,7 @@ int estFeuille(pArbre a)
 int element(pArbre a) // Moi j'aurai proposé un truc de ce genre:
 {
     int r;
-    r=a->nombre;
+    r = a->nombre;
     return r;
 }
 
@@ -166,7 +166,7 @@ void parcoursInfixe_t1(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier
         else if (strcmp(mode, "2") == 0) // t2
         {
             parcoursInfixe_t1(a->fg, c, nb_ligne, mode, fichier);
-            fprintf(fichier, "%d %f %s\n", a->cols1, a->somme / nb_ligne, a->cols4);
+            fprintf(fichier, "%d %f %s\n", a->cols1, a->somme / a->nb_noeuds, a->cols4);
             *c = *c + 1;
             parcoursInfixe_t1(a->fd, c, nb_ligne, mode, fichier);
         }
@@ -176,7 +176,7 @@ void parcoursInfixe_t3(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier
 {
     if (estVide(a) != 1)
     {
-        if (strcmp(mode, "1") == 0) 
+        if (strcmp(mode, "1") == 0)
         {
             parcoursInfixe_t3(a->fg, c, nb_ligne, mode, fichier);
             fprintf(fichier, "%d %f %s\n", a->cols1, a->somme, a->cols4);
@@ -414,11 +414,10 @@ pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3
             *h = 0;
             a->somme += somme;
             a->nb_noeuds++;
-
-            if (cols6 > a->cols6)
-                a->temperature_max = cols6;
-            if (cols6 < a->cols5)
-                a->temperature_min = cols5;
+            if (somme > a->cols3)
+                a->temperature_max = somme;
+            if (somme < a->cols3)
+                a->temperature_min = somme;
             return a;
         }
         if (*h != 0)

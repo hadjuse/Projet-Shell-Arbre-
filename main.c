@@ -49,16 +49,17 @@ int main(int argc, char **argv)
     {
         int c = 0;
         fgets(ligne, sizeof(ligne), fichier_a_trier);
-        fscanf(fichier_a_trier, "%d %s %f %s %f %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5, &colonne6);
+        fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
         pArbre avl = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[3]);
         pArbre pAvl = avl;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
-            fscanf(fichier_a_trier, "%d %s %f %s %f %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5, &colonne6);
+            fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
             pAvl = insertionAVL(pAvl, colonne1, &pAvl->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[3]);
         }
         parcoursInfixe_t1(pAvl, &c, nb_ligne, argv[3], fichier_sortie);
+        printf("nombre de noeud %d \n", c);
     }
 
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[3], "2") == 0) // cas option -t2
@@ -125,6 +126,8 @@ int main(int argc, char **argv)
             pAvl_5 = insertionAVL(pAvl_5, colonne1, &pAvl_5->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[4]);
         }
         parcoursInfixe_t1(pAvl_5, &c, nb_ligne, argv[4], fichier_sortie);
+        printf("nombre de noeud %d \n", c);
+
     }
     // Je rappelle c'est vraiment des copiés coller de l'option t1
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[4], "2") == 0) // cas -p2
