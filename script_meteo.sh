@@ -25,11 +25,11 @@ test_options() {
 }
 #filtrage pour l'option -t
 filtrage_1() {
-    awk -F';' '{print $1 " " $10 " " $11 " " $2}' meteo.csv | tail -n+2  >donnee_filtree_temperature_et_num_t.csv
+    awk -F';' '{if($1 != 7661 && $1 != 78894){print $1 " " $10 " " $11 " " $2}}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_num_t.csv
 
 }
 filtrage_2() {
-    awk -F';' '{print $1 " " $10 " " $7 " " $2 " " 0}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_date_t.csv
+    awk -F';' '{print $1 " " $10 " " $11 " " $2}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_date_t.csv
 }
 filtrage_3() {
     awk -F';' '{print $1 " " $10 " " $11 " " $2}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_id_t.csv
@@ -42,11 +42,11 @@ filtrage_2_bis() {
     awk -F';' '{print $1 " " $10 " " $7 " " $2 }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_date_p.csv
 }
 filtrage_3_bis() {
-    awk -F';' '{print $1 " " $10 " " $2 " " $7 }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_id_p.csv
+    awk -F';' '{print $1 " " $10 " " $7 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_id_p.csv
 }
 #filtrage pour l'option -w
 filtrage_w() {
-    awk -F';' '{print $1 " " $10 " " $3 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_id_vent_moyenne.csv
+    awk -F';' '{print $1 " " $10 " " $2 " " $4 " " $5}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_id_vent_moyenne.csv
 }
 #filtrage pour l'option -m
 filtrage_m() {
@@ -95,13 +95,13 @@ execution_mode_p_final() {
     fi
 }
 execution_argument_restant() {
-    if [ "$vent" == "ok" ]; then
+    if [ "$vent" == "v" ]; then
         filtrage_w
     fi
-    if [ "$humidite" == "ok" ]; then
+    if [ "$humidite" == "h" ]; then
         filtrage_m
     fi
-    if [ "$altitude" == "ok" ]; then
+    if [ "$altitude" == "a" ]; then
         filtrage_h
     fi
 }
@@ -260,4 +260,6 @@ for f in $fichier_csv_a_trier; do
 done
 #rm donnee_filtree*
 rm donnee_trie_temp.csv
+
+
 #partie gnuplot
