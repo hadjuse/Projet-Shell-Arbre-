@@ -29,7 +29,7 @@ filtrage_1() {
 
 }
 filtrage_2() {
-    awk -F';' '{print $1 " " $10 " " $11 " " $2}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_date_t.csv
+    awk -F';' '{if($1 != 7314 && $1 != 7015){print $1 " " $10 " " $11 " " $2}}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_date_t.csv
 }
 filtrage_3() {
     awk -F';' '{print $1 " " $10 " " $11 " " $2}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_id_t.csv
@@ -258,7 +258,7 @@ for f in $fichier_csv_a_trier; do
     fichier_sortie=donnee_trie_$j.csv
     ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie
 done
-#rm donnee_filtree*
+rm donnee_filtree*
 rm donnee_trie_temp.csv
 
 

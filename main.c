@@ -181,7 +181,6 @@ int main(int argc, char **argv)
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[6], "v") == 0) // vent
     {
         int c = 0;
-        printf("yes");
         fgets(ligne, sizeof(ligne), fichier_a_trier);
         fscanf(fichier_a_trier, "%d %s %s %f %f", &colonne1, colonne2, colonne4, &colonne5, &colonne6);
         pArbre avl_9 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[6]);

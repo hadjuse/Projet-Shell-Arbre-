@@ -12,6 +12,7 @@ pArbre creerArbre(int a, int cols1, char *cols2, float cols3, char *cols4, float
     new->nombre = a;
     new->fg = NULL;
     new->fd = NULL;
+    new->equilibre=0;
     if (strcmp(mode, "1") == 0)
     {
         new->cols1 = cols1;        // numéro de station
@@ -421,6 +422,7 @@ pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3
         else
         {
             *h = 0;
+            
             a->somme += somme;
             a->nb_noeuds++;
             if (somme > a->cols3)
@@ -455,12 +457,14 @@ pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3
         else
         {
             *h = 0;
-            a->somme += somme;
             a->nb_noeuds++;
+            a->somme += somme;
+            if (!existeFilsDroit(a)) a->fd = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
             return a;
         }
         if (*h != 0)
         {
+            
             a->equilibre = a->equilibre + *h;
             a = equilibrerAVL(a);
             if (a->equilibre == 0)
@@ -555,7 +559,7 @@ pArbre insertionAVL_t3(pArbre a, int e, int *h, int cols1, char *cols2, float co
         if (a == NULL)
         {
             *h = 1;
-            return creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+            return creerArbre_t3(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
         }
         else if (strcmp(cols4, a->cols4) > 0)
             a->fd = insertionAVL_t3(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
@@ -648,6 +652,7 @@ pArbre suppressionAVL(pArbre a, int e, int *h)
     if (*h != 0)
     {
         a->equilibre = a->equilibre + *h;
+        a=equilibrerAVL(a);
         if (a->equilibre == 0)
         {
             *h = 0;
