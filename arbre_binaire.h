@@ -58,11 +58,17 @@ int existeFilsDroit(pArbre a);
 pArbre ajouterFilsGauche(pArbre a, int e);
 pArbre ajouterFilsDroit(pArbre a, int e);
 void traiter(pArbre a);
+
+// parcours--------------------------------------------------------------------
 void parcoursPrefixe(pArbre a);
 void parcoursPostFixe(pArbre a);
 void parcoursInfixe_t1(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier);
 void parcoursInfixe_t3(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier);
+void parcoursInfixe_decroissant(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier);
+void parcoursInfixe_t3_decroissant(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier);
 void parcoursLargeurs(pArbre a);
+// ---------------------------------------------------------------------------
+
 pArbre modifierRacine(pArbre a, int e);
 void supprimerFilsDroit(pArbre a);
 void supprimerFilsGauche(pArbre a);

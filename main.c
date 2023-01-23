@@ -195,11 +195,22 @@ int main(int argc, char **argv)
     }
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[5], "h") == 0) // humidite
     {
-        printf("vent");
+        printf("humidite");
     }
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[7], "a") == 0) // altitude
     {
-        printf("altitude");
+        int c = 0;
+        fgets(ligne, sizeof(ligne), fichier_a_trier);
+        fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+        pArbre avl_9 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[7]);
+        pArbre pAvl_9 = avl_9;
+        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
+        {
+            nb_ligne++;
+            fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+            pAvl_9 = insertionAVL(pAvl_9, colonne3, &pAvl_9->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[7]);
+        }
+        parcoursInfixe_decroissant(pAvl_9, &c, nb_ligne, argv[7], fichier_sortie);
     }
     /*
     //---------------------------------------------------------------------------------------------------------------------
