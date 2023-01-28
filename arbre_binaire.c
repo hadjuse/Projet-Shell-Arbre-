@@ -39,15 +39,15 @@ pArbre creerArbre(int a, int cols1, char *cols2, float cols3, char *cols4, float
         new->cols1 = cols1;
         new->nb_noeuds = 1;
         strcpy(new->cols2, cols2); // coordonées
-        new->cols5 = cols5; // temperature min à traiter/direction moyenne ou autre
-        new->cols6 = cols6; // temperature max à traiter/orientation moyenne ou autre
+        new->cols5 = cols5;        // temperature min à traiter/direction moyenne ou autre
+        new->cols6 = cols6;        // temperature max à traiter/orientation moyenne ou autre
     }
-    else if (strcmp(mode, "a") == 0) //altitude
+    else if (strcmp(mode, "a") == 0) // altitude
     {
         new->cols1 = cols1;
         new->nb_noeuds = 1;
         strcpy(new->cols2, cols2); // coordonées
-        new->cols3=cols3;
+        new->cols3 = cols3;
     }
     return new;
 }
@@ -597,7 +597,19 @@ pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3
         else
         {
             *h = 0;
-            //ne pas oubliez d'ajouter les doublons
+            /*
+            if (a->fd != NULL)
+            {
+                pArbre doublon = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+                doublon->fd = a->fd;
+                a->fg = doublon;
+            }
+            else
+            {
+                pArbre doublon = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+                doublon->fg = a->fg;
+                a->fd = doublon;
+            }*/
             return a;
         }
         if (*h != 0)

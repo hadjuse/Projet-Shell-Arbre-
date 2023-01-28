@@ -46,7 +46,7 @@ filtrage_3_bis() {
 }
 #filtrage pour l'option -w
 filtrage_w() {
-    awk -F';' '{print $1 " " $10 " " $2 " " $4 " " $5}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_id_vent_moyenne.csv
+    awk -F';' '{print $1 " " $10 " " $4 " " $2 " " $5}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_id_vent_moyenne.csv
 }
 #filtrage pour l'option -m
 filtrage_m() {
@@ -257,8 +257,8 @@ for f in $fichier_csv_a_trier; do
     j=$(($j + 1))
     fichier_sortie=donnee_trie_$j.csv
     ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie
+    rm $f
 done
-#rm donnee_filtree*
 rm donnee_trie_temp.csv
 
 #partie gnuplot
