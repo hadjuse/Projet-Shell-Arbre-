@@ -251,14 +251,24 @@ fi
 #execution des tris
 make
 
-fichier_csv_a_trier=$(ls | grep ^donnee)
+fichier_csv_a_trier=$(ls | grep ^donnee_filtree)
 j=0
 for f in $fichier_csv_a_trier; do
     j=$(($j + 1))
     fichier_sortie=donnee_trie_$j.csv
     ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie
+    if [ "$option_t" != "non" ]; then
+        option_t="non"
+    elif [ "$option_p" != "non" ]; then
+        option_p="non"
+    elif [ "$humidite" != "non" ]; then
+        humidite="non"          
+    elif [ "$vent" == "v" ]; then
+        vent="non"
+    elif [ "$altitude" == "a" ]; then
+        altitude="non"
+    fi
+    rm donnee_trie_temp.csv
     rm $f
 done
-rm donnee_trie_temp.csv
-
 #partie gnuplot

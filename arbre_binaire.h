@@ -62,7 +62,7 @@ void traiter(pArbre a);
 // parcours--------------------------------------------------------------------
 void parcoursPrefixe(pArbre a);
 void parcoursPostFixe(pArbre a);
-void parcoursInfixe_t1(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier);
+void parcoursInfixe_croissant(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier);
 void parcoursInfixe_t3(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier);
 void parcoursInfixe_decroissant(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier);
 void parcoursInfixe_t3_decroissant(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier);

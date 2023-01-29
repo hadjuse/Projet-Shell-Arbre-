@@ -6,11 +6,11 @@
 #include "arbre_binaire.h"
 
 #define MAX_LENGTH 1024
-// Dans ce fichier C sont répertoriés tout les cas possible pour les options et arguments afin de gérer le tri
+// Dans ce fichier C sont répertoriés tout les cas possible pour les options et arguments afin de gérer le tri et les traitements de valeurs
 // Les codes sont quasi identiques les différences dépondrons du cas à traiter et du mode de tri utiliser
 /*En fonction de chaque cas et des différents arguments et options à traiter les étape sont toujours les mêmes:
 
-    Pour les AVL et LES ABR on crée un premier noeud, avec la fonction creerArbre, grâce à la première ligne du fichier filtré mis en argument.
+    Pour les AVL et LES ABR on créee un premier noeud, avec la fonction creerArbre, grâce à la première ligne du fichier filtré mis en argument.
     Puis pour les autres ligne on fait une insertion ABR/AVL. et après on fonction de l'odre croissant ou décroissant, on appelle
     soit la fonction parcoursINfixeCroissant/Decroissant pour mettre les données triés dans les fichiers triées.
 */
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
             fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
             pAvl = insertionAVL(pAvl, colonne1, &pAvl->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[3]);
         }
-        parcoursInfixe_t1(pAvl, &c, nb_ligne, argv[3], fichier_sortie);
+        parcoursInfixe_croissant(pAvl, &c, nb_ligne, argv[3], fichier_sortie);
     }
 
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[3], "2") == 0) // cas option -t2
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
             fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
             pAvl_2 = insertionAVL(pAvl_2, colonne1, &pAvl_2->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[3]);
         }
-        parcoursInfixe_t1(pAvl_2, &c, nb_ligne, argv[3], fichier_sortie);
+        parcoursInfixe_croissant(pAvl_2, &c, nb_ligne, argv[3], fichier_sortie);
     }
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[3], "3") == 0) // option -t3
     {
@@ -124,7 +124,7 @@ int main(int argc, char **argv)
             fscanf(fichier_a_trier, "%d %s %f %s %f %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5, &colonne6);
             pAvl_5 = insertionAVL(pAvl_5, colonne1, &pAvl_5->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[4]);
         }
-        parcoursInfixe_t1(pAvl_5, &c, nb_ligne, argv[4], fichier_sortie);
+        parcoursInfixe_croissant(pAvl_5, &c, nb_ligne, argv[4], fichier_sortie);
         printf("nombre de noeud %d \n", c);
     }
     // Je rappelle c'est vraiment des copiés coller de l'option t1
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
             fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
             pAvl_6 = insertionAVL(pAvl_6, colonne1, &pAvl_6->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[4]);
         }
-        parcoursInfixe_t1(pAvl_6, &c, nb_ligne, argv[4], fichier_sortie);
+        parcoursInfixe_croissant(pAvl_6, &c, nb_ligne, argv[4], fichier_sortie);
     }
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[4], "3") == 0) // cas -p3
     {
@@ -177,52 +177,54 @@ int main(int argc, char **argv)
         parcoursInfixe_t3(pAvl_8, &c, nb_ligne, "1", fichier_sortie);
         fclose(temp2);
     }
-
-    else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[6], "v") == 0) // vent
-    {
-        int c = 0;
-        fgets(ligne, sizeof(ligne), fichier_a_trier);
-        fscanf(fichier_a_trier, "%d %s %s %f %f", &colonne1, colonne2, colonne4, &colonne5, &colonne6);
-        pArbre avl_9 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[6]);
-        pArbre pAvl_9 = avl_9;
-        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
-        {
-            nb_ligne++;
-            fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
-            pAvl_9 = insertionAVL(pAvl_9, colonne1, &pAvl_9->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[6]);
-        }
-        parcoursInfixe_t1(pAvl_9, &c, nb_ligne, argv[6], fichier_sortie);
-        
-    }
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[5], "h") == 0) // humidite
     {
         int c = 0;
         fgets(ligne, sizeof(ligne), fichier_a_trier);
         fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
-        pArbre avl_9 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[5]);
-        pArbre pAvl_9 = avl_9;
+        pArbre avl_10 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[5]);
+        pArbre pAvl_10 = avl_10;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
             fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
-            pAvl_9 = insertionAVL(pAvl_9, colonne3, &pAvl_9->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[5]);
+            pAvl_10 = insertionAVL(pAvl_10, colonne3, &pAvl_10->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[5]);
         }
-        parcoursInfixe_decroissant(pAvl_9, &c, nb_ligne, argv[5], fichier_sortie);
+        parcoursInfixe_decroissant(pAvl_10, &c, nb_ligne, argv[5], fichier_sortie);
+        strcpy(argv[5], "non");
+    }
+    else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[6], "v") == 0) // vent
+    {
+        int c = 0;
+        fgets(ligne, sizeof(ligne), fichier_a_trier);
+        fscanf(fichier_a_trier, "%d %s %s %f %f", &colonne1, colonne2, colonne4, &colonne5, &colonne6);
+        pArbre avl_11 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[6]);
+        pArbre pAvl_11 = avl_11;
+        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
+        {
+            nb_ligne++;
+            fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+            pAvl_11 = insertionAVL(pAvl_11, colonne1, &pAvl_11->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[6]);
+        }
+        parcoursInfixe_croissant(pAvl_11, &c, nb_ligne, argv[6], fichier_sortie);
+        strcpy(argv[6], "non"); 
     }
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[7], "a") == 0) // altitude
     {
         int c = 0;
         fgets(ligne, sizeof(ligne), fichier_a_trier);
         fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
-        pArbre avl_9 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[7]);
-        pArbre pAvl_9 = avl_9;
+        pArbre avl_12 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[7]);
+        pArbre pAvl_12 = avl_12;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
             fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
-            pAvl_9 = insertionAVL(pAvl_9, colonne3, &pAvl_9->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[7]);
+            pAvl_12 = insertionAVL(pAvl_12, colonne3, &pAvl_12->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[7]);
         }
-        parcoursInfixe_decroissant(pAvl_9, &c, nb_ligne, argv[7], fichier_sortie);
+        parcoursInfixe_decroissant(pAvl_12, &c, nb_ligne, argv[7], fichier_sortie);
+        strcpy(argv[7], "non"); 
+        
     }
     /*
     //---------------------------------------------------------------------------------------------------------------------
@@ -239,7 +241,7 @@ int main(int argc, char **argv)
             fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
             pAbr = insertionABR(pAbr, colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3, argv[3]);
         }
-        parcoursInfixe_t1(pAbr, &c, nb_ligne, argv[3], fichier_sortie);
+        parcoursInfixe_croissant(pAbr, &c, nb_ligne, argv[3], fichier_sortie);
         printf("\nNombre de noeuds: %d\n", c);
     }
     else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[3], "2") == 0)
@@ -261,7 +263,7 @@ int main(int argc, char **argv)
             fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
             pAbr = insertionABR(pAbr, colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3, argv[4]);
         }
-        parcoursInfixe_t1(abr, &c, nb_ligne, argv[3], fichier_sortie);
+        parcoursInfixe_croissant(abr, &c, nb_ligne, argv[3], fichier_sortie);
         printf("\nNombre de noeuds: %d\n", c);
     }
     else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[4], "2") == 0)
