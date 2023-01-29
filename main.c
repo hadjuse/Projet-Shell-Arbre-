@@ -192,6 +192,7 @@ int main(int argc, char **argv)
             pAvl_9 = insertionAVL(pAvl_9, colonne1, &pAvl_9->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[6]);
         }
         parcoursInfixe_t1(pAvl_9, &c, nb_ligne, argv[6], fichier_sortie);
+        
     }
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[5], "h") == 0) // humidite
     {

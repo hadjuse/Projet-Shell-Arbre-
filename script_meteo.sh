@@ -165,6 +165,7 @@ while getopts ":t:p:wmhFGSAOQ-:f:d:" option; do
             ;;
         *)
             echo "option invalide"
+            exit 1
             ;;
         --) break ;;
         esac
