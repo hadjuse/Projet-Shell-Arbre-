@@ -26,7 +26,6 @@ test_options() {
 #filtrage pour l'option -t
 filtrage_1() {
     awk -F';' '{if($1 != 7661 && $1 != 78894){print $1 " " $10 " " $11 " " $2}}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_num_t.csv
-
 }
 filtrage_2() {
     awk -F';' '{if($1 != 7314 && $1 != 7015){print $1 " " $10 " " $11 " " $2}}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_date_t.csv
@@ -36,25 +35,25 @@ filtrage_3() {
 }
 #filtrage pour l'option -p
 filtrage_1_bis() {
-    awk -F';' '{print $1 " " $10 " " $7 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $1 " " $10 " " $7 " " $2}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_num_p.csv
 }
 filtrage_2_bis() {
-    awk -F';' '{print $1 " " $10 " " $7 " " $2 }' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_date_p.csv
+    awk -F';' '{print $1 " " $10 " " $7 " " $2 }' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_date_p.csv
 }
 filtrage_3_bis() {
-    awk -F';' '{print $1 " " $10 " " $7 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_temperature_et_id_p.csv
+    awk -F';' '{print $1 " " $10 " " $7 " " $2}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_id_p.csv
 }
 #filtrage pour l'option -w
 filtrage_w() {
-    awk -F';' '{print $1 " " $10 " " $4 " " $2 " " $5}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_id_vent_moyenne.csv
+    awk -F';' '{print $1 " " $10 " " $4 " " $2 " " $5}' meteo.csv | tail -n+2 >donnee_filtree_id_vent_moyenne.csv
 }
 #filtrage pour l'option -m
 filtrage_m() {
-    awk -F';' '{print $1 " " $10 " " $6 " " $2}'meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_humidite.csv
+    awk -F';' '{print $1 " " $10 " " $6 " " $2}' meteo.csv | tail -n+2 >donnee_filtree_humidite.csv
 }
 #filtrage pour l'option -h
 filtrage_h() {
-    awk -F';' '{print $1 " " $10 " " $14 " " $2}' meteo.csv | tail -n+2 | sed 's/;;/;0;/g; s/;$/;0/g' >donnee_filtree_altitude.csv
+    awk -F';' '{print $1 " " $10 " " $14 " " $2}' meteo.csv | tail -n+2 >donnee_filtree_altitude.csv
 }
 #execution des arguments et options
 execution_mode_t() {
