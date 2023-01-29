@@ -104,7 +104,20 @@ execution_argument_restant() {
         filtrage_h
     fi
 }
-
+#la fonction ci-dessous sert à gérer si il y a plusieurs arguments à gérer lors du tris afin de ne pas avoir des incohérences dans les tris
+gestion_trie() {
+    if [ "$option_t" != "non" ]; then
+        option_t="non"
+    elif [ "$option_p" != "non" ]; then
+        option_p="non"
+    elif [ "$humidite" != "non" ]; then
+        humidite="non"
+    elif [ "$vent" == "v" ]; then
+        vent="non"
+    elif [ "$altitude" == "a" ]; then
+        altitude="non"
+    fi
+}
 # Traitement des options de la ligne de commande avec getopt
 while getopts ":t:p:wmhFGSAOQ-:f:d:" option; do
     if [ $option = "-" ]; then
@@ -257,18 +270,8 @@ for f in $fichier_csv_a_trier; do
     j=$(($j + 1))
     fichier_sortie=donnee_trie_$j.csv
     ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie
-    if [ "$option_t" != "non" ]; then
-        option_t="non"
-    elif [ "$option_p" != "non" ]; then
-        option_p="non"
-    elif [ "$humidite" != "non" ]; then
-        humidite="non"          
-    elif [ "$vent" == "v" ]; then
-        vent="non"
-    elif [ "$altitude" == "a" ]; then
-        altitude="non"
-    fi
-    rm donnee_trie_temp.csv
+    gestion_trie
     rm $f
 done
+rm donnee_trie_temp.csv
 #partie gnuplot

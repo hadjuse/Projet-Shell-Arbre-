@@ -274,7 +274,6 @@ void parcoursInfixe_t3(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier
         }
         parcoursInfixe_t3(a->fd, c, nb_ligne, mode, fichier);
     }
-    strcpy(mode, "non");
 }
 
 void traiter(pArbre a)
