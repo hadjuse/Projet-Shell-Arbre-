@@ -191,7 +191,6 @@ int main(int argc, char **argv)
             pAvl_10 = insertionAVL(pAvl_10, colonne3, &pAvl_10->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[5]);
         }
         parcoursInfixe_decroissant(pAvl_10, &c, nb_ligne, argv[5], fichier_sortie);
-        strcpy(argv[5], "non");
     }
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[6], "v") == 0) // vent
     {
@@ -223,70 +222,130 @@ int main(int argc, char **argv)
             pAvl_12 = insertionAVL(pAvl_12, colonne3, &pAvl_12->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[7]);
         }
         parcoursInfixe_decroissant(pAvl_12, &c, nb_ligne, argv[7], fichier_sortie);
-        strcpy(argv[7], "non"); 
-        
     }
-    /*
+    
     //---------------------------------------------------------------------------------------------------------------------
-
     // cas où le tri est un abr
     if (strcmp(argv[2], "abr") == 0 && strcmp(argv[3], "1") == 0) // cas -t1 abr
     {
         int c = 0;
-        pArbre pAbr = NULL;
         fgets(ligne, sizeof(ligne), fichier_a_trier);
+        fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+        pArbre abr_1 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[3]);
+        pArbre pabr_1 = abr_1;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
             fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
-            pAbr = insertionABR(pAbr, colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3, argv[3]);
+            pabr_1 = insertionABR(pabr_1, colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[3]);
         }
-        parcoursInfixe_croissant(pAbr, &c, nb_ligne, argv[3], fichier_sortie);
-        printf("\nNombre de noeuds: %d\n", c);
+        parcoursInfixe_croissant(pabr_1, &c, nb_ligne, argv[3], fichier_sortie);
     }
     else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[3], "2") == 0)
     {
-        printf("abr t2");
-    }
-    else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[3], "3") == 0)
-    {
-        printf("abr t3");
-    }
-    else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[4], "1") == 0)
-    {
-        pArbre abr = NULL;
         int c = 0;
-        pArbre pAbr = NULL;
+        fgets(ligne, sizeof(ligne), fichier_a_trier);
+        fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+        pArbre abr_2 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[3]);
+        pArbre pabr_2 = abr_2;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
             fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
-            pAbr = insertionABR(pAbr, colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne3, argv[4]);
+            pabr_2 = insertionABR(pabr_2, colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[3]);
         }
-        parcoursInfixe_croissant(abr, &c, nb_ligne, argv[3], fichier_sortie);
-        printf("\nNombre de noeuds: %d\n", c);
+        parcoursInfixe_croissant(pabr_2, &c, nb_ligne, argv[3], fichier_sortie);
     }
+    /*
+    else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[3], "3") == 0)
+    {
+        printf("abr t3");
+    }*/
+    else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[4], "1") == 0)
+    {
+        int c = 0;
+        fgets(ligne, sizeof(ligne), fichier_a_trier);
+        fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
+        pArbre abr_1 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[4]);
+        pArbre pabr_1 = abr_1;
+        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
+        {
+            nb_ligne++;
+            fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
+            pabr_1 = insertionABR(pabr_1, colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[4]);
+        }
+        parcoursInfixe_croissant(pabr_1, &c, nb_ligne, argv[4], fichier_sortie);
+    }
+    
     else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[4], "2") == 0)
     {
-        printf("abr p2");
+        int c = 0;
+        fgets(ligne, sizeof(ligne), fichier_a_trier);
+        fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
+        pArbre abr_2 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[4]);
+        pArbre pabr_2 = abr_2;
+        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
+        {
+            nb_ligne++;
+            fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
+            pabr_2 = insertionABR(pabr_2, colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[4]);
+        }
+        parcoursInfixe_croissant(pabr_2, &c, nb_ligne, argv[4], fichier_sortie);
     }
+    /*
     else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[4], "3") == 0)
     {
         printf("abr p3");
-    }
-    else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[5], "ok") == 0) // humidite
+    }*/
+    else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[5], "h") == 0) // humidite
     {
-        printf("option humidite");
+        int c = 0;
+        fgets(ligne, sizeof(ligne), fichier_a_trier);
+        fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
+        pArbre abr_4 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[5]);
+        pArbre pabr_4 = abr_4;
+        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
+        {
+            nb_ligne++;
+            fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+            pabr_4 = insertionABR(pabr_4, colonne3, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[5]);
+        }
+        parcoursInfixe_decroissant(pabr_4, &c, nb_ligne, argv[5], fichier_sortie);
     }
-    else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[6], "ok") == 0) // vent
+    
+    else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[6], "v") == 0) // vent
     {
-        printf("vent abr");
+        int c = 0;
+        fgets(ligne, sizeof(ligne), fichier_a_trier);
+        fscanf(fichier_a_trier, "%d %s %s %f %f", &colonne1, colonne2, colonne4, &colonne5, &colonne6);
+        pArbre abr_4 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[6]);
+        pArbre pabr_4 = abr_4;
+        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
+        {
+            nb_ligne++;
+            fscanf(fichier_a_trier, "%d %s %s %f %f", &colonne1, colonne2, colonne4, &colonne5, &colonne6);
+            pabr_4 = insertionABR(pabr_4, colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[6]);
+        }
+        parcoursInfixe_croissant(pabr_4, &c, nb_ligne, argv[6], fichier_sortie);
     }
-    else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[7], "ok") == 0) // altitude
+    
+    else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[7], "a") == 0) // altitude
     {
-        printf("altitude abr");
+        int c = 0;
+        fgets(ligne, sizeof(ligne), fichier_a_trier);
+        fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+        pArbre abr_4 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[7]);
+        pArbre pabr_4 = abr_4;
+        while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
+        {
+            nb_ligne++;
+            fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+            pabr_4 = insertionABR(pabr_4, colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[7]);
+        }
+        parcoursInfixe_decroissant(pabr_4, &c, nb_ligne, argv[7], fichier_sortie);
     }
     //---------------------------------------------------------------------------------------------------------------------
+    /*
     // cas où le tri est un tab
     if (strcmp(argv[2], "tab") == 0 && strcmp(argv[3], "1") == 0)
     {
