@@ -25,35 +25,35 @@ test_options() {
 }
 #filtrage pour l'option -t
 filtrage_1() {
-    awk -F';' '{if($1 != 7661 && $1 != 78894){print $1 " " $10 " " $11 " " $2}}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_num_t.csv
+    awk -F';' '{if($1 != 7661 && $1 != 78894){print $1 " " $10 " " $11 " " $2}}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_num_t.csv
 }
 filtrage_2() {
-    awk -F';' '{if($1 != 7314 && $1 != 7015){print $1 " " $10 " " $11 " " $2}}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_date_t.csv
+    awk -F';' '{if($1 != 7314 && $1 != 7015){print $1 " " $10 " " $11 " " $2}}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_date_t.csv
 }
 filtrage_3() {
-    awk -F';' '{print $1 " " $10 " " $11 " " $2}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_id_t.csv
+    awk -F';' '{print $1 " " $10 " " $11 " " $2}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_id_t.csv
 }
 #filtrage pour l'option -p
 filtrage_1_bis() {
-    awk -F';' '{print $1 " " $10 " " $7 " " $2}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_num_p.csv
+    awk -F';' '{print $1 " " $10 " " $7 " " $2}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_num_p.csv
 }
 filtrage_2_bis() {
-    awk -F';' '{print $1 " " $10 " " $7 " " $2 }' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_date_p.csv
+    awk -F';' '{print $1 " " $10 " " $7 " " $2 }' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_date_p.csv
 }
 filtrage_3_bis() {
-    awk -F';' '{print $1 " " $10 " " $7 " " $2}' meteo.csv | tail -n+2 >donnee_filtree_temperature_et_id_p.csv
+    awk -F';' '{print $1 " " $10 " " $7 " " $2}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_id_p.csv
 }
 #filtrage pour l'option -w
 filtrage_w() {
-    awk -F';' '{print $1 " " $10 " " $4 " " $2 " " $5}' meteo.csv | tail -n+2 >donnee_filtree_id_vent_moyenne.csv
+    awk -F';' '{print $1 " " $10 " " $4 " " $2 " " $5}' $nom_fichier | tail -n+2 >donnee_filtree_id_vent_moyenne.csv
 }
 #filtrage pour l'option -m
 filtrage_m() {
-    awk -F';' '{print $1 " " $10 " " $6 " " $2}' meteo.csv | tail -n+2 >donnee_filtree_humidite.csv
+    awk -F';' '{print $1 " " $10 " " $6 " " $2}' $nom_fichier | tail -n+2 >donnee_filtree_humidite.csv
 }
 #filtrage pour l'option -h
 filtrage_h() {
-    awk -F';' '{print $1 " " $10 " " $14 " " $2}' meteo.csv | tail -n+2 >donnee_filtree_altitude.csv
+    awk -F';' '{print $1 " " $10 " " $14 " " $2}' $nom_fichier | tail -n+2 >donnee_filtree_altitude.csv
 }
 #execution des arguments et options
 execution_mode_t() {
@@ -116,6 +116,14 @@ gestion_trie() {
         vent="non"
     elif [ "$altitude" == "a" ]; then
         altitude="non"
+    fi
+}
+affichage_graphique() {
+    if [ "$option_t" != "non" ]; then
+        gnuplot dossier_gnuplot/option_t1.dem
+    fi
+    if [ "$option_p" != "non" ]; then
+        gnuplot dossier_gnuplot/option_p1.dem
     fi
 }
 # Traitement des options de la ligne de commande avec getopt
@@ -270,8 +278,9 @@ for f in $fichier_csv_a_trier; do
     j=$(($j + 1))
     fichier_sortie=donnee_trie_$j.csv
     ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie
+    affichage_graphique
     gestion_trie
     rm $f
+    rm donnee_trie*
 done
-rm donnee_trie_temp.csv
 #partie gnuplot
