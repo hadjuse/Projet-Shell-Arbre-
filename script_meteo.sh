@@ -145,44 +145,39 @@ affichage_graphique() {
     if [ "$option_t" != "non" ]; then
         case "$option_t" in
         1)
-            option_t="non"
             gnuplot dossier_gnuplot/option_t1.dem
             ;;
         2)
-            option_t="non"
             gnuplot dossier_gnuplot/option_t2.dem
             ;;
         3)
-            option_t="non"
+
             gnuplot dossier_gnuplot/option_t3.dem
             ;;
         esac
     elif [ "$option_p" != "non" ]; then
         case "$option_p" in
         1)
-            option_p="non"
+
             gnuplot dossier_gnuplot/option_p1.dem
             ;;
         2)
-            option_p="non"
+
             gnuplot dossier_gnuplot/option_p2.dem
             ;;
         3)
-            option_p="non"
+
             gnuplot dossier_gnuplot/option_p3.dem
             ;;
         esac
     elif [ "$humidite" != "non" ]; then
-        option_m="non"
-        sed 's/,/;/g' donnee_trie_temp.csv > donnnee_trie_m.csv
+        sed 's/,/;/g' donnee_trie_temp.csv >donnee_trie_m.csv
         gnuplot dossier_gnuplot/option_m.dem
     elif [ "$vent" != "non" ]; then
-        option_w="non"
-        sed 's/,/;/g' donnee_trie_temp.csv > donnnee_trie_w.csv
+        sed 's/,/;/g' donnee_trie_temp.csv >donnee_trie_w.csv
         gnuplot dossier_gnuplot/option_w.dem
     elif [ "$altitude" != "non" ]; then
-        option_h="non"
-        sed 's/,/;/g' donnee_trie_temp.csv > donnnee_trie_h.csv
+        sed 's/,/;/g' donnee_trie_temp.csv >donnee_trie_h.csv
         gnuplot dossier_gnuplot/option_h.dem
     fi
 }
@@ -339,8 +334,8 @@ for f in $fichier_csv_a_trier; do
     gestion_nom_fichier_trie
     ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie
     affichage_graphique
+    gestion_trie
     rm $f
-    #rm donnee_trie*
-    rm donnee_trie_temp*
+    rm donnee_trie*
 done
 #partie gnuplot

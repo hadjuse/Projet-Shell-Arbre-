@@ -19,5 +19,5 @@ set xtics rotate by 45 right
 plot "donnee_trie_t2.csv" using (sprintf("%s-%s",substr(stringcolumn(3),1,10),substr(stringcolumn(3),12,14))):2 with lines
 
 #
-pause -1 "Attendre 7 seconde pour voir l'autre image"
+pause 7 "Attendre 7 seconde pour voir l'autre image"
 #reset
