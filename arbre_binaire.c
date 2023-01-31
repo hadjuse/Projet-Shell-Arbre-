@@ -184,26 +184,26 @@ void parcoursInfixe_decroissant(pArbre a, int *c, int nb_ligne, char *mode, FILE
         if (strcmp(mode, "1") == 0) // t1/p1
         {
 
-            fprintf(fichier, "%d %f %f %f %s\n", a->cols1, a->somme / a->nb_noeuds, a->temperature_max, a->temperature_min, a->cols4);
+            fprintf(fichier,"%d;%f;%f;%f;%s\n", a->cols1, a->somme / a->nb_noeuds, a->temperature_max, a->temperature_min, a->cols4);
         }
         else if (strcmp(mode, "2") == 0) // t2/p2
         {
-            fprintf(fichier, "%d %f %s\n", a->cols1, a->somme / a->nb_noeuds, a->cols4);
+            fprintf(fichier, "%d;%f;%s\n", a->cols1, a->somme / a->nb_noeuds, a->cols4);
         }
         else if (strcmp(mode, "v") == 0)
         {
-            fprintf(fichier, "%d %f %f %s %s\n", a->cols1, a->cols5 / nb_ligne, a->cols6 / nb_ligne, a->cols4, a->cols2);
+            fprintf(fichier,"%d %f %f %s %s\n", a->cols1, a->cols5 / nb_ligne, a->cols6 / nb_ligne, a->cols4, a->cols2);
         }
         else if (strcmp(mode, "a") == 0) // humidite
         {
             if (*c > 1)
-                fprintf(fichier, "%d %s %d\n", a->cols1, a->cols2, (int)a->cols3);
+                fprintf(fichier,"%d;%s;%d\n", a->cols1, a->cols2, (int)a->cols3);
             *c = *c + 1;
         }
         else if (strcmp(mode, "h") == 0) // humidite
         {
             if (*c > 1)
-                fprintf(fichier, "%d %s %d\n", a->cols1, a->cols2, (int)a->cols3);
+                fprintf(fichier,"%d;%s;%d\n", a->cols1, a->cols2, (int)a->cols3);
             *c = *c + 1;
         }
         parcoursInfixe_decroissant(a->fg, c, nb_ligne, mode, fichier);
@@ -217,12 +217,12 @@ void parcoursInfixe_t3_decroissant(pArbre a, int *c, int nb_ligne, char *mode, F
         if (strcmp(mode, "1") == 0)
         {
 
-            fprintf(fichier, "%d %f %s\n", a->cols1, a->somme, a->cols4);
+            fprintf(fichier,"%d;%f;%s\n", a->cols1, a->somme, a->cols4);
             *c = *c + 1;
         }
         else if (strcmp(mode, "2") == 0)
         {
-            fprintf(fichier, "%d %s %f %s\n", a->cols1, a->cols2, a->somme, a->cols4);
+            fprintf(fichier,"%d;%s;%f;%s\n", a->cols1, a->cols2, a->somme, a->cols4);
             *c = *c + 1;
         }
         parcoursInfixe_t3_decroissant(a->fg, c, nb_ligne, mode, fichier); 
@@ -237,21 +237,21 @@ void parcoursInfixe_croissant(pArbre a, int *c, int nb_ligne, char *mode, FILE *
         if (strcmp(mode, "1") == 0) // t1
         {
 
-            fprintf(fichier, "%d %f %f %f %s\n", a->cols1, a->somme / a->nb_noeuds, a->temperature_max, a->temperature_min, a->cols4);
+            fprintf(fichier,"%d;%f;%f;%f;%s\n", a->cols1, a->somme / a->nb_noeuds, a->temperature_max, a->temperature_min, a->cols4);
             *c = *c + 1;
         }
         else if (strcmp(mode, "2") == 0) // t2
         {
-            fprintf(fichier, "%d %f %s\n", a->cols1, a->somme / a->nb_noeuds, a->cols4);
+            fprintf(fichier,"%d;%f;%s\n", a->cols1, a->somme / a->nb_noeuds, a->cols4);
             *c = *c + 1;
         }
         else if (strcmp(mode, "v") == 0)
         {
-            fprintf(fichier, "%d %f %f %s %s\n", a->cols1, a->cols5 / nb_ligne, a->cols6 / nb_ligne, a->cols4, a->cols2);
+            fprintf(fichier,"%d;%f;%f;%s %s\n", a->cols1, a->cols5 / nb_ligne, a->cols6 / nb_ligne, a->cols4, a->cols2);
         }
         else if (strcmp(mode, "a") == 0) // humidite
         {
-            fprintf(fichier, "%d %s %d\n", a->cols1, a->cols2, (int) a->cols3);
+            fprintf(fichier,"%d;%s;%d\n", a->cols1, a->cols2, (int) a->cols3);
         }
         parcoursInfixe_croissant(a->fd, c, nb_ligne, mode, fichier);
     }
@@ -264,12 +264,12 @@ void parcoursInfixe_t3(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier
         if (strcmp(mode, "1") == 0)
         {
 
-            fprintf(fichier, "%d %d %s\n", a->cols1, (int) a->somme, a->cols4);
+            fprintf(fichier,"%d;%d;%s\n", a->cols1, (int) a->somme, a->cols4);
             *c = *c + 1;
         }
         else if (strcmp(mode, "2") == 0)
         {
-            fprintf(fichier, "%d %s %d %s\n", a->cols1, a->cols2,(int) a->somme, a->cols4);
+            fprintf(fichier,"%d;%s;%d;%s\n", a->cols1, a->cols2,(int) a->somme, a->cols4);
             *c = *c + 1;
         }
         parcoursInfixe_t3(a->fd, c, nb_ligne, mode, fichier);
