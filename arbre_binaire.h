@@ -13,9 +13,6 @@ typedef struct arbre
     float cols6;            // temperature min /pression min
     float temperature_min;
     float temperature_max;
-    float temperature_moyen;
-    float pression_moyen;
-    float vitesse_moyen;
 
     int nombre;
     struct arbre *fg;
