@@ -14,7 +14,6 @@ set autoscale noextend
 set xrange [*:*]
 set xtics rotate by 90 right
 
-
 ## Last datafile plotted: "donnee_trie_1.csv"
 plot "donnee_trie_p1.csv" using 0:3:4:xticlabels(1) with filledcurve fc rgb Shadecolor title "Pressions min et max",'' using 0:2 smooth mcspline lw 2 title "Pressions moyennes"
 #

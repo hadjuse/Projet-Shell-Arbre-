@@ -104,6 +104,7 @@ int parcours_i(pListe p1);
 
 int recherche(pArbre a, int e);
 pArbre insertionABR(pArbre a, int e, int cols1, char *cols2, float cols3, char *cols4, float cols5, float colonne6, float somme, char *mode);
+pArbre insertionABR_t3(pArbre a, int e, int cols1, char *cols2, float cols3, char *cols4, float cols5, float colonne6, float somme, char *mode);
 pArbre insertionABRIter2(pArbre a, int e);
 pArbre suppMax(pArbre a, int *e);
 pArbre suppressionABR(pArbre a, int e);

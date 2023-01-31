@@ -96,7 +96,37 @@ pArbre insertionABR(pArbre a, int e, int cols1, char *cols2, float cols3, char *
     }
     
     return a;
-} /*
+} 
+pArbre insertionABR_t3(pArbre a, int e, int cols1, char *cols2, float cols3, char *cols4, float cols5, float colonne6, float somme, char *mode)
+{
+    if (strcmp(mode, "1") == 0)
+    {
+        if (a == NULL)
+            return creerArbre_t3(e, cols1, cols2, cols3, cols4, cols5, colonne6, somme, mode);
+        else if (e < a->nombre)
+            a->fg = insertionABR_t3(filsGauche(a), e, cols1, cols2, cols3, cols4, cols5, colonne6, somme, mode);
+        else if (e > a->nombre)
+            a->fd = insertionABR_t3(filsDroit(a), e, cols1, cols2, cols3, cols4, cols5, colonne6, somme, mode);
+        else
+        {
+            return a;
+        }
+    }
+    else if (strcmp(mode, "2") == 0)
+    {
+        if (a == NULL)
+            return creerArbre_t3(e, cols1, cols2, cols3, cols4, cols5, colonne6, somme, mode);
+        else if (strcmp(cols4, a->cols4) > 0)
+            a->fd = insertionABR_t3(filsDroit(a), e, cols1, cols2, cols3, cols4, cols5, colonne6, somme, mode);
+        else
+        {
+            return a;
+        }
+    }
+    return a;
+} 
+
+/*
  pArbre suppMax(pArbre a, int *pe)
  {
      pArbre tmp;

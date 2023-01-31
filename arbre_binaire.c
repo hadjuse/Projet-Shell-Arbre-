@@ -264,12 +264,12 @@ void parcoursInfixe_t3(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier
         if (strcmp(mode, "1") == 0)
         {
 
-            fprintf(fichier, "%d %f %s\n", a->cols1, a->somme, a->cols4);
+            fprintf(fichier, "%d %d %s\n", a->cols1, (int) a->somme, a->cols4);
             *c = *c + 1;
         }
         else if (strcmp(mode, "2") == 0)
         {
-            fprintf(fichier, "%d %s %f %s\n", a->cols1, a->cols2, a->somme, a->cols4);
+            fprintf(fichier, "%d %s %d %s\n", a->cols1, a->cols2,(int) a->somme, a->cols4);
             *c = *c + 1;
         }
         parcoursInfixe_t3(a->fd, c, nb_ligne, mode, fichier);
