@@ -85,12 +85,11 @@ void creerfile(File *f);
 
 // partie liste chainee
 typedef Chainon *pListe;
-pListe creerChainon();
+pListe creerChainon(int a, int cols1, char *cols2, float cols3, char *cols4, float cols5, float cols6, float somme, char *mode);
+pListe creerChainon_t3(int a, int cols1, char *cols2, float cols3, char *cols4, float cols5, float cols6, float somme, char *mode);
 int element_liste_chainee(pListe p1);
 void traiter_liste_chainee(pListe p1);
-pListe insertFin(pListe p1, int n);
-pListe insertDebut(pListe p1, int n);
-pListe insertMilieu(pListe p1, int e);
+pListe insertDebut(pListe liste, int a, int cols1, char *cols2, float cols3, char *cols4, float cols5, float cols6, float somme, char *mode);
 pListe suppDebut(pListe p1);
 pListe triselection(pListe p1, int n);
 int taille_liste_chainee(pListe p1);

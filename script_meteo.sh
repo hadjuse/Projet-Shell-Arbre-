@@ -28,7 +28,7 @@ filtrage_1() {
     awk -F';' '{print $1 " " $10 " " $11 " " $2}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_num_t.csv
 }
 filtrage_2() {
-    awk -F';' '{if($1 != 7314 && $1 != 7015){print $1 " " $10 " " $11 " " $2}}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_date_t.csv
+    awk -F';' '{print $1 " " $10 " " $11 " " $2}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_date_t.csv
 }
 filtrage_3() {
     awk -F';' '{print $1 " " $10 " " $11 " " $2}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_id_t.csv
@@ -280,7 +280,6 @@ for fic in $fichier_csv; do
         rm $fic
         ;;
     S)
-        echo "azegr"
         awk -F" " '{
   split($2, coords, ",")
   if (coords[1] + 0>= 45 && coords[1] + 0 <=50  && coords[2]+0 >= -60 && coords[2] + 0 <= -53) {
