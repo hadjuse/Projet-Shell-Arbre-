@@ -25,7 +25,7 @@ test_options() {
 }
 #filtrage pour l'option -t
 filtrage_1() {
-    awk -F';' '{if($1 != 7661 && $1 != 78894){print $1 " " $10 " " $11 " " $2}}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_num_t.csv
+    awk -F';' '{print $1 " " $10 " " $11 " " $2}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_num_t.csv
 }
 filtrage_2() {
     awk -F';' '{if($1 != 7314 && $1 != 7015){print $1 " " $10 " " $11 " " $2}}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_date_t.csv
@@ -133,14 +133,14 @@ gestion_nom_fichier_trie() {
         3) fichier_sortie=donnee_trie_p3.csv ;;
         esac
     elif [ "$humidite" != "non" ]; then
-        fichier_sortie=donnee_trie_m.csv
+        fichier_sortie=donnee_trie_temp.csv
     elif [ "$vent" == "v" ]; then
-        fichier_sortie=donnee_trie_w.csv
+        fichier_sortie=donnee_trie_temp.csv
     elif [ "$altitude" == "a" ]; then
-        fichier_sortie=donnee_trie_h.csv
+        fichier_sortie=donnee_trie_temp.csv
     fi
 }
-#cette fonction les graphiques selon les cas
+#cette fonction affiche les graphiques selon les cas
 affichage_graphique() {
     if [ "$option_t" != "non" ]; then
         case "$option_t" in
@@ -174,12 +174,15 @@ affichage_graphique() {
         esac
     elif [ "$humidite" != "non" ]; then
         option_m="non"
+        sed 's/,/;/g' donnee_trie_temp.csv > donnnee_trie_m.csv
         gnuplot dossier_gnuplot/option_m.dem
     elif [ "$vent" != "non" ]; then
         option_w="non"
+        sed 's/,/;/g' donnee_trie_temp.csv > donnnee_trie_w.csv
         gnuplot dossier_gnuplot/option_w.dem
     elif [ "$altitude" != "non" ]; then
         option_h="non"
+        sed 's/,/;/g' donnee_trie_temp.csv > donnnee_trie_h.csv
         gnuplot dossier_gnuplot/option_h.dem
     fi
 }
