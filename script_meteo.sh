@@ -118,12 +118,69 @@ gestion_trie() {
         altitude="non"
     fi
 }
+#cette fonction gere le nom des fichiers triés avant
+gestion_nom_fichier_trie() {
+    if [ "$option_t" != "non" ]; then
+        case "$option_t" in
+        1) fichier_sortie=donnee_trie_t1.csv ;;
+        2) fichier_sortie=donnee_trie_t2.csv ;;
+        3) fichier_sortie=donnee_trie_t3.csv ;;
+        esac
+    elif [ "$option_p" != "non" ]; then
+        case "$option_p" in
+        1) fichier_sortie=donnee_trie_p1.csv ;;
+        2) fichier_sortie=donnee_trie_p2.csv ;;
+        3) fichier_sortie=donnee_trie_p3.csv ;;
+        esac
+    elif [ "$humidite" != "non" ]; then
+        fichier_sortie=donnee_trie_m.csv
+    elif [ "$vent" == "v" ]; then
+        fichier_sortie=donnee_trie_w.csv
+    elif [ "$altitude" == "a" ]; then
+        fichier_sortie=donnee_trie_h.csv
+    fi
+}
+#cette fonction les graphiques selon les cas
 affichage_graphique() {
     if [ "$option_t" != "non" ]; then
-        gnuplot dossier_gnuplot/option_t1.dem
-    fi
-    if [ "$option_p" != "non" ]; then
-        gnuplot dossier_gnuplot/option_p1.dem
+        case "$option_t" in
+        1)
+            option_t="non"
+            gnuplot dossier_gnuplot/option_t1.dem
+            ;;
+        2)
+            option_t="non"
+            gnuplot dossier_gnuplot/option_t2.dem
+            ;;
+        3)
+            option_t="non"
+            gnuplot dossier_gnuplot/option_t3.dem
+            ;;
+        esac
+    elif [ "$option_p" != "non" ]; then
+        case "$option_p" in
+        1)
+            option_p="non"
+            gnuplot dossier_gnuplot/option_p1.dem
+            ;;
+        2)
+            option_p="non"
+            gnuplot dossier_gnuplot/option_p2.dem
+            ;;
+        3)
+            option_p="non"
+            gnuplot dossier_gnuplot/option_p3.dem
+            ;;
+        esac
+    elif [ "$humidite" != "non" ]; then
+        option_m="non"
+        gnuplot dossier_gnuplot/option_m.dem
+    elif [ "$vent" != "non" ]; then
+        option_w="non"
+        gnuplot dossier_gnuplot/option_w.dem
+    elif [ "$altitude" != "non" ]; then
+        option_h="non"
+        gnuplot dossier_gnuplot/option_h.dem
     fi
 }
 # Traitement des options de la ligne de commande avec getopt
@@ -276,10 +333,9 @@ fichier_csv_a_trier=$(ls | grep ^donnee_filtree)
 j=0
 for f in $fichier_csv_a_trier; do
     j=$(($j + 1))
-    fichier_sortie=donnee_trie_$j.csv
+    gestion_nom_fichier_trie
     ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie
     affichage_graphique
-    gestion_trie
     rm $f
     rm donnee_trie*
 done

@@ -1,4 +1,4 @@
-reset
+#reset
 #
 set grid nopolar
 set grid xtics mxtics ytics mytics noztics nomztics nortics nomrtics \
@@ -15,9 +15,6 @@ set autoscale noextend
 set xrange [*:*]
 set xtics rotate by 90 right
 
-
-plot "donnee_trie_1.csv" using 0:3:4:xticlabels(1) with filledcurve fc rgb Shadecolor title "Temperatures min et max",'' using 0:2 smooth mcspline lw 2 title "Temperatures moyennes"
-#
-pause -1 "Hit return to continue"
-
-reset
+plot "donnee_trie_t1.csv" using 0:3:4:xticlabels(1) with filledcurve fc rgb Shadecolor title "Temperatures min et max",'' using 0:2 smooth mcspline lw 2 title "Temperatures moyennes"
+pause 7 "Attendre 7 seconde pour voir l'autre image"
+#reset
