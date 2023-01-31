@@ -1,0 +1,23 @@
+#reset
+#
+set grid nopolar
+set grid xtics mxtics ytics mytics noztics nomztics nortics nomrtics \
+nox2tics nomx2tics noy2tics nomy2tics nocbtics nomcbtics
+set style data lines
+set title "Temperatures moyennes par date/heure"
+set xlabel "Date/heure"
+set ylabel "Temperatures moyennes"
+set timefmt '%Y-%m-%d-%H'
+set xdata time
+set format x '%Y/%m/%d %H'
+set datafile separator ";"
+set autoscale noextend
+set xrange [*:*]
+set yrange [*:*]
+
+set xtics rotate by 45 right
+plot "donnee_trie_t2.csv" using (sprintf("%s-%s",substr(stringcolumn(3),1,10),substr(stringcolumn(3),12,14))):2 with lines
+
+#
+pause 7 "Attendre 7 seconde pour voir l'autre image"
+#reset
