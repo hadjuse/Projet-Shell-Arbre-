@@ -9,7 +9,7 @@ set xlabel "ID de la station"
 set ylabel "Pressions" 
 set colorbox vertical origin screen 0.9, 0.2 size screen 0.05, 0.6 front noinvert bdefault
 Shadecolor = "#80E0A080"
-set datafile separator " "
+set datafile separator ";"
 set autoscale noextend
 set xrange [*:*]
 set xtics rotate by 90 right

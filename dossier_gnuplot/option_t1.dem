@@ -9,7 +9,7 @@ set xlabel "ID de la station"
 set ylabel "Temperatures" 
 set colorbox vertical origin screen 0.9, 0.2 size screen 0.05, 0.6 front noinvert bdefault
 Shadecolor = "#80E0A080"
-set datafile separator " "
+set datafile separator ";"
 set autoscale noextend
 #set multiplot layout 2,2 rowfirst with title "Les temperatures minimales, maximales et moyennes en fonction de l'identifiant de la station"
 set xrange [*:*]
