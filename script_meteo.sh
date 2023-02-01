@@ -133,11 +133,11 @@ gestion_nom_fichier_trie() {
         3) fichier_sortie=donnee_trie_p3.csv ;;
         esac
     elif [ "$humidite" != "non" ]; then
-        fichier_sortie=donnee_trie_temp.csv
+        fichier_sortie=donnee_trie_m.csv
     elif [ "$vent" == "v" ]; then
-        fichier_sortie=donnee_trie_temp.csv
+        fichier_sortie=donnee_trie_w.csv
     elif [ "$altitude" == "a" ]; then
-        fichier_sortie=donnee_trie_temp.csv
+        fichier_sortie=donnee_trie_h.csv
     fi
 }
 #cette fonction affiche les graphiques selon les cas
@@ -171,13 +171,13 @@ affichage_graphique() {
             ;;
         esac
     elif [ "$humidite" != "non" ]; then
-        sed 's/,/;/g' donnee_trie_temp.csv >donnee_trie_m.csv
+        sed 's/,/;/g' donnee_trie_m.csv >donnee_trie_m.csv
         gnuplot dossier_gnuplot/option_m.dem
     elif [ "$vent" != "non" ]; then
-        sed 's/,/;/g' donnee_trie_temp.csv >donnee_trie_w.csv
+        sed 's/,/;/g' donnee_trie_w.csv >donnee_trie_w.csv
         gnuplot dossier_gnuplot/option_w.dem
     elif [ "$altitude" != "non" ]; then
-        sed 's/,/;/g' donnee_trie_temp.csv >donnee_trie_h.csv
+        sed 's/,/;/g' donnee_trie_h.csv >donnee_trie_h.csv
         gnuplot dossier_gnuplot/option_h.dem
     fi
 }
@@ -334,7 +334,7 @@ for f in $fichier_csv_a_trier; do
     ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie
     affichage_graphique
     gestion_trie
-    #rm $f
+    rm $f
     #rm donnee_trie*
 done
 #partie gnuplot
