@@ -733,9 +733,20 @@ pArbre insertionAVL_t3(pArbre a, int e, int *h, int cols1, char *cols2, float co
         }
         else if (strcmp(cols4, a->cols4) > 0)
             a->fd = insertionAVL_t3(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
-        else
+        else if (strcmp(cols4, a->cols4) ==0)
         {
-            *h = 0;
+            *h = 1;
+            if (a->fd != NULL)
+            {
+                pArbre doublon = creerArbre_t3(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+                doublon->fd=a->fd;
+                a->fd=doublon;
+            }
+            else
+            {
+                pArbre doublon = creerArbre_t3(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+                a->fd=doublon;
+            }
             return a;
         }
         if (*h != 0)
