@@ -334,7 +334,7 @@ for f in $fichier_csv_a_trier; do
     ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie
     affichage_graphique
     gestion_trie
-    #rm $f
-    #rm donnee_trie*
+    rm $f
+    rm donnee_trie*
 done
 #partie gnuplot

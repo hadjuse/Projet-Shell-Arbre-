@@ -64,9 +64,17 @@ pArbre insertionABR(pArbre a, int e, int cols1, char *cols2, float cols3, char *
         else
         {
             a->nb_noeuds++;
-            if (e > a->temperature_max)
-                a->temperature_max = e;//humidite max
-            return a;
+            if (a->fd != NULL)
+            {
+                pArbre doublon = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+                doublon->fd = a->fd;
+                a->fd = doublon;
+            }
+            else
+            {
+                pArbre doublon = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+                a->fd = doublon;
+            }
         }
     }
     else if (strcmp(mode, "v") == 0)

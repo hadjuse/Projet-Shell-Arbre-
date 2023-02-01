@@ -33,9 +33,11 @@ int main(int argc, char **argv)
     FILE *fichier_a_trier = NULL;
     FILE *fichier_sortie = NULL;
     FILE *fichier_sortie_temp = NULL; // EXCLUSIVEMENT pour l'option -t3 où il va falloir trié 2 fois
+    FILE *fichier_sortie_temp_h =NULL;
     fichier_a_trier = fopen(argv[1], "r");
     fichier_sortie_temp = fopen("donnee_trie_temp.csv", "w");
-    fichier_sortie = fopen(argv[8], "w+");
+    fichier_sortie_temp_h=fopen("donnee_trie_temp_h.csv","w");
+    fichier_sortie = fopen(argv[8], "w");
     if (fichier_a_trier == NULL)
     {
         printf("Ouverture du fichier impossible\n");
@@ -189,26 +191,25 @@ int main(int argc, char **argv)
             fscanf(fichier_a_trier, "%d %s %f", &colonne1, colonne2, &colonne3);
             pAvl_10 = insertionAVL(pAvl_10, colonne1, &pAvl_10->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "1");
         }
-        parcoursInfixe_croissant(pAvl_10, &c, nb_ligne, argv[5], fichier_sortie_temp);
-        fclose(fichier_sortie_temp);
-        fichier_sortie_temp=NULL;
-        fichier_sortie_temp=fopen("donnee_trie_temp.csv", "r");
+        parcoursInfixe_croissant_h(pAvl_10, &c, nb_ligne, argv[5], fichier_sortie_temp_h);
+        fclose(fichier_sortie_temp_h);
         // trie par humidite
         c = 0;
-        fgets(ligne, sizeof(ligne), fichier_sortie_temp);
-        fscanf(fichier_sortie_temp, "%d %s %f", &colonne1, colonne2, &colonne3);
-        printf("%s", ligne);
+        FILE *f=fopen("donnee_trie_temp_h.csv","r");
+        fgets(ligne, sizeof(ligne), f);
+        fscanf(f, "%d %s %f", &colonne1, colonne2, &colonne3);
         pArbre avl_8 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[5]);
         pArbre pAvl_8 = avl_8;
-        while (fgets(ligne, sizeof(ligne), fichier_sortie_temp) != NULL)
+        while (fgets(ligne, sizeof(ligne), fichier_sortie_temp_h) != NULL)
         {
             nb_ligne++;
-            fscanf(fichier_sortie_temp, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+            fscanf(f, "%d %s %f", &colonne1, colonne2, &colonne3);
             pAvl_8 = insertionAVL(pAvl_8, colonne3, &pAvl_8->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[5]);
-            printf("Je suis dans l'arbre%f\n",pAvl_8->cols3);
+            //printf("Je suis dans l'arbre%f\n",pAvl_8->cols3);
         }
         parcoursInfixe_decroissant(pAvl_8, &c, nb_ligne, argv[5], fichier_sortie);
-        fclose(fichier_sortie_temp);
+        fclose(f);
+        fclose(fichier_sortie);
     }
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[6], "v") == 0) // vent
     {
@@ -379,16 +380,33 @@ int main(int argc, char **argv)
     {
         int c = 0;
         fgets(ligne, sizeof(ligne), fichier_a_trier);
-        fscanf(fichier_a_trier, "%d %s %f %s %f", &colonne1, colonne2, &colonne3, colonne4, &colonne5);
-        pArbre abr_4 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[5]);
-        pArbre pabr_4 = abr_4;
+        fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+        pArbre abr_10 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "1");
+        pArbre pbr_10 = abr_10;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
-            fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
-            pabr_4 = insertionABR(pabr_4, colonne3, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[5]);
+            fscanf(fichier_a_trier, "%d %s %f", &colonne1, colonne2, &colonne3);
+            pbr_10 = insertionABR(pbr_10, colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "1");
         }
-        parcoursInfixe_decroissant(pabr_4, &c, nb_ligne, argv[5], fichier_sortie);
+        parcoursInfixe_croissant_h(pbr_10, &c, nb_ligne, argv[5], fichier_sortie_temp_h);
+        fclose(fichier_sortie_temp_h);
+        // trie par humidite
+        c = 0;
+        FILE *f=fopen("donnee_trie_temp_h.csv","r");
+        fgets(ligne, sizeof(ligne), f);
+        fscanf(f, "%d %s %f", &colonne1, colonne2, &colonne3);
+        pArbre abr_8 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "h");
+        pArbre pabr_8 = abr_8;
+        while (fgets(ligne, sizeof(ligne), fichier_sortie_temp_h) != NULL)
+        {
+            nb_ligne++;
+            fscanf(f, "%d %s %f", &colonne1, colonne2, &colonne3);
+            pabr_8 = insertionABR(pbr_10, colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "h");
+        }
+        parcoursInfixe_decroissant(pabr_8, &c, nb_ligne, argv[5], fichier_sortie);
+        fclose(f);
+        fclose(fichier_sortie);
     }
     
     else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[6], "v") == 0) // vent
@@ -464,6 +482,6 @@ int main(int argc, char **argv)
     //---------------------------------------------------------------------------------------------------------------------
     fclose(fichier_a_trier);
     //fclose(fichier_sortie_temp);
-    fclose(fichier_sortie);
+    //fclose(fichier_sortie);
     return 0;
 }
