@@ -57,15 +57,15 @@ pArbre insertionABR(pArbre a, int e, int cols1, char *cols2, float cols3, char *
     {
         if (a == NULL)
             return creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
-        else if (e < a->nombre)
+        else if (e < a->cols3)
             a->fg = insertionABR(filsGauche(a), e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
-        else if (e > a->nombre)
+        else if (e > a->cols3)
             a->fd = insertionABR(filsDroit(a), e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
         else
         {
             a->nb_noeuds++;
-            if (cols3 > a->cols3)
-                a->temperature_max = cols3;
+            if (e > a->temperature_max)
+                a->temperature_max = e;//humidite max
             return a;
         }
     }

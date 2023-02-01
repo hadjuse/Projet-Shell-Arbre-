@@ -181,15 +181,30 @@ int main(int argc, char **argv)
         int c = 0;
         fgets(ligne, sizeof(ligne), fichier_a_trier);
         fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
-        pArbre avl_10 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[5]);
+        pArbre avl_10 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "1");
         pArbre pAvl_10 = avl_10;
         while (fgets(ligne, sizeof(ligne), fichier_a_trier) != NULL)
         {
             nb_ligne++;
             fscanf(fichier_a_trier, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
-            pAvl_10 = insertionAVL(pAvl_10, colonne3, &pAvl_10->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, argv[5]);
+            pAvl_10 = insertionAVL(pAvl_10, colonne1, &pAvl_10->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "1");
         }
-        parcoursInfixe_decroissant(pAvl_10, &c, nb_ligne, argv[5], fichier_sortie);
+        parcoursInfixe_decroissant(pAvl_10, &c, nb_ligne, argv[5], fichier_sortie_temp);
+        FILE *temp2 = fopen("donnee_trie_temp.csv", "r");
+        // trie par humidite
+        c = 0;
+        fgets(ligne, sizeof(ligne), temp2);
+        fscanf(temp2, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+        pArbre avl_8 = creerArbre(colonne1, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "h");
+        pArbre pAvl_8 = avl_8;
+        while (fgets(ligne, sizeof(ligne), temp2) != NULL)
+        {
+            nb_ligne++;
+            fscanf(temp2, "%d %s %f %s", &colonne1, colonne2, &colonne3, colonne4);
+            pAvl_8 = insertionAVL(pAvl_8, colonne3, &pAvl_8->hauteur, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "h");
+        }
+        parcoursInfixe_decroissant(pAvl_8, &c, nb_ligne, argv[5], fichier_sortie);
+        fclose(temp2);
     }
     else if (strcmp(argv[2], "avl") == 0 && strcmp(argv[6], "v") == 0) // vent
     {
@@ -339,6 +354,7 @@ int main(int argc, char **argv)
             pabr_3 = insertionABR_t3(pabr_3, colonne3, colonne1, colonne2, colonne3, colonne4, colonne5, colonne6, colonne3, "2");
         }
         parcoursInfixe_t3(pabr_3, &c, nb_ligne, "2", fichier_sortie_temp);
+        fclose(fichier_sortie_temp);
         //----------------------------
         FILE *temp2 = fopen("donnee_trie_temp.csv", "r");
         // trie par identifiant
