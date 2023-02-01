@@ -1,25 +1,18 @@
-
-#reset
-#
-#set border 4095 front lt black linewidth 1.000 dashtype solid
-#set view map scale 1
-unset surface
-set style data lines
+reset
 set xyplane relative 0
-set title "Altitude"
+set title "Altitude des Stations"
 set xlabel "Longitude"
 set ylabel "Latitude"
+set zlabel "Altitude"
 set xtics
 set ytics 
 set datafile separator ";"
-set pm3d
-set pm3d interpolate 3,3 flush begin nohidden3d
+set pm3d flush begin nohidden3d
 set palette rgbformulae 30, 31, 32
-set dgrid3d 50,50
+set dgrid3d 1000,1000
 set autoscale noextend
+set zrange [0:800]
 set colorbox vertical origin screen 0.9, 0.2 size screen 0.05, 0.6 front  noinvert bdefault
-splot "donnee_trie_h.csv" using 0:3:2 with pm3d
-unset pm3d
-unset dgrid3d
-pause 7 "Attendre 7 seconde pour voir l'autre image"
-#reset
+splot "donnee_trie_h.csv" using 3:2:4 with pm3d
+pause -1 "Attendre 7 seconde pour voir l'autre image"
+reset
