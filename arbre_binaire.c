@@ -202,7 +202,8 @@ void parcoursInfixe_decroissant(pArbre a, int *c, int nb_ligne, char *mode, FILE
         }
         else if (strcmp(mode, "h") == 0) // humidite
         {
-                fprintf(fichier, "%d;%s;%d\n", a->cols1, a->cols2, (int)a->temperature_max);
+            fprintf(fichier, "%d;%s;%d\n", a->cols1, a->cols2, (int)a->temperature_max);
+            printf("%d;%s;%d\n", a->cols1, a->cols2, (int)a->temperature_max);
         }
         parcoursInfixe_decroissant(a->fg, c, nb_ligne, mode, fichier);
     }
@@ -243,9 +244,9 @@ void parcoursInfixe_croissant(pArbre a, int *c, int nb_ligne, char *mode, FILE *
             fprintf(fichier, "%d;%f;%s\n", a->cols1, a->somme / a->nb_noeuds, a->cols4);
             *c = *c + 1;
         }
-        else if (strcmp(mode, "v") == 0) //vent
+        else if (strcmp(mode, "v") == 0) // vent
         {
-            fprintf(fichier, "%d;%f;%f;%s;%s\n", a->cols1, a->cols5 / nb_ligne, a->cols6 / nb_ligne, a->cols4, a->cols2);
+            fprintf(fichier, "%d;%f;%f;%s\n", a->cols1, a->cols5 / nb_ligne, a->cols6 / nb_ligne, a->cols2);
         }
         else if (strcmp(mode, "a") == 0) // altitude
         {
@@ -253,7 +254,7 @@ void parcoursInfixe_croissant(pArbre a, int *c, int nb_ligne, char *mode, FILE *
         }
         else if (strcmp(mode, "h") == 0) // humidite
         {
-                fprintf(fichier, "%d;%s;%d\n", a->cols1, a->cols2, (int)a->temperature_max);
+            fprintf(fichier, "%d;%s;%d\n", a->cols1, a->cols2, (int)a->temperature_max);
         }
         parcoursInfixe_croissant(a->fd, c, nb_ligne, mode, fichier);
     }
@@ -569,12 +570,12 @@ pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3
             *h = 1;
             return creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
         }
-        else if (e < a->nombre)
+        else if (e < a->temperature_max)
         {
             a->fg = insertionAVL(a->fg, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
             *h = -*h;
         }
-        else if (cols3 > a->nombre)
+        else if (e > a->temperature_max)
         {
             a->fd = insertionAVL(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
         }
@@ -591,10 +592,8 @@ pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3
             else
             {
                 pArbre doublon = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
-                doublon->fg = a->fg;
                 a->fd = doublon;
             }
-            return a;
         }
         if (*h != 0)
         {
