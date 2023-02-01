@@ -1,7 +1,4 @@
-#reset
-#
-unset surface
-set style data lines
+reset
 set xyplane relative 0
 set title "Humidite"
 set xlabel "Longitude"
@@ -9,14 +6,12 @@ set ylabel "Latitude"
 set xtics
 set ytics 
 set datafile separator ";"
-set pm3d
 set pm3d map interpolate 3,3 flush begin nohidden3d
 set palette rgbformulae 20, 21, 22
 set dgrid3d 50,50
 set autoscale noextend
 set colorbox vertical origin screen 0.9, 0.2 size screen 0.05, 0.6 front  noinvert bdefault
-splot "donnee_trie_m.csv" using 0:3:2 with pm3d
-unset pm3d
-unset dgrid3d
-pause 7 "Attendre 7 seconde pour voir l'autre image"
-#reset
+splot "donnee_trie_m.csv" using 3:2:4 with pm3d
+
+pause -1 "Attendre 7 seconde pour voir l'autre image"
+reset
