@@ -1,0 +1,38 @@
+reset
+set key bmargin center horizontal Left reverse enhanced autotitle nobox
+set isosamples 31, 31
+set title "Vent en fonction de la Longitude et la Latitude"
+set xlabel "Longitude"
+set ylabel "Latitude"
+set datafile separator ";"
+set autoscale noextend 
+set xrange [*:*]
+set yrange [*:*]
+r(x,y)=sqrt(x*x+y*y)
+v1(x,y)=  q1/(r((x-x0),y))
+v2(x,y)=  q2/(r((x+x0),y))
+vtot(x,y)=v1(x,y)+v2(x,y)
+e1x(x,y)= q1*(x-x0)/r(x-x0,y)**3
+e1y(x,y)= q1*(y)/r(x-x0,y)**3
+e2x(x,y)= q2*(x+x0)/r(x+x0,y)**3
+e2y(x,y)= q2*(y)/r(x+x0,y)**3
+etotx(x,y)=e1x(x,y)+e2x(x,y)
+etoty(x,y)=e1y(x,y)+e2y(x,y)
+enorm(x,y)=sqrt(etotx(x,y)*etotx(x,y)+etoty(x,y)*etoty(x,y))
+dx1(x,y)=coef*etotx(x,y)/enorm(x,y)
+dy1(x,y)=coef*etoty(x,y)/enorm(x,y)
+dx2(x,y)=coef*etotx(x,y)
+dy2(x,y)=coef*etoty(x,y)
+q1 = 1
+x0 = 1.834
+q2 = -1
+coef = 2
+xmin = -62.852167
+xmax = 140.001
+ymin = -66.663167
+ymax = 50.136
+set colorbox vertical origin screen 0.9, 0.2 size screen 0.05, 0.6 front noinvert bdefault
+set style arrow 3 head filled size screen 0.03,15,135
+plot "donnee_trie_w.csv" using 5:4:(coef*dx1($3,$2)):(coef*dy1($3,$2)) with vectors arrowstyle 3
+pause -1 "Hit return to continue"
+reset
