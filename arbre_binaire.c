@@ -266,7 +266,7 @@ void parcoursInfixe_croissant_temp(pArbre a, int *c, int nb_ligne, char *mode, F
             fprintf(fichier, "%d %s %d\n", a->cols1, a->cols2, (int)a->temperature_max);
         else if (strcmp(mode, "1") == 0)
         {
-            fprintf(fichier, "%d %d %s\n", a->cols1, (int)a->somme, a->cols4);
+            fprintf(fichier, "%d %f %s\n", a->cols1, a->somme, a->cols4);
             *c = *c + 1;
         }
         else if (strcmp(mode, "2") == 0)
@@ -285,12 +285,12 @@ void parcoursInfixe_t3(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier
         if (strcmp(mode, "1") == 0)
         {
 
-            fprintf(fichier, "%d;%d;%s\n", a->cols1, (int)a->somme, a->cols4);
+            fprintf(fichier, "%d;%f;%s\n", a->cols1, a->somme, a->cols4);
             *c = *c + 1;
         }
         else if (strcmp(mode, "2") == 0)
         {
-            fprintf(fichier, "%d;%s;%d;%s\n", a->cols1, a->cols2, (int)a->somme, a->cols4);
+            fprintf(fichier, "%d;%s;%f;%s\n", a->cols1, a->cols2, a->somme, a->cols4);
             *c = *c + 1;
         }
         parcoursInfixe_t3(a->fd, c, nb_ligne, mode, fichier);
@@ -713,12 +713,12 @@ pArbre insertionAVL_t3(pArbre a, int e, int *h, int cols1, char *cols2, float co
             *h = 1;
             return creerArbre_t3(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
         }
-        else if (e < a->nombre)
+        else if (e < a->cols1)
         {
             a->fg = insertionAVL_t3(a->fg, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
             *h = -*h;
         }
-        else if (e > a->nombre)
+        else if (e > a->cols1)
         {
             a->fd = insertionAVL_t3(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
         }
@@ -726,7 +726,6 @@ pArbre insertionAVL_t3(pArbre a, int e, int *h, int cols1, char *cols2, float co
         {
             *h = 1;
             a->nb_noeuds++;
-
             if (a->fd != NULL)
             {
                 pArbre doublon = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
