@@ -3,7 +3,6 @@
 #include <string.h>
 
 #include "arbre_binaire.h"
-// faire une insertion avl p1 à part
 pArbre creerArbre(int a, int cols1, char *cols2, float cols3, char *cols4, float cols5, float cols6, float somme, char *mode)
 {
     pArbre new = malloc(sizeof(Arbre));
@@ -175,7 +174,7 @@ void parcoursPostFixe(pArbre a)
     {
         parcoursPostFixe(a->fg);
         parcoursPostFixe(a->fd);
-        traiter(a);
+        free(a);
     }
 }
 void parcoursInfixe_decroissant(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier)
@@ -215,12 +214,12 @@ void parcoursInfixe_t3_decroissant(pArbre a, int *c, int nb_ligne, char *mode, F
         if (strcmp(mode, "1") == 0)
         {
 
-            fprintf(fichier, "%d;%f;%s\n", a->cols1, a->somme, a->cols4);
+            fprintf(fichier, "%d %f %s\n", a->cols1, a->somme, a->cols4);
             *c = *c + 1;
         }
         else if (strcmp(mode, "2") == 0)
         {
-            fprintf(fichier, "%d;%s;%f;%s\n", a->cols1, a->cols2, a->somme, a->cols4);
+            fprintf(fichier, "%d %s %f %s\n", a->cols1, a->cols2, a->somme, a->cols4);
             *c = *c + 1;
         }
         parcoursInfixe_t3_decroissant(a->fg, c, nb_ligne, mode, fichier);
@@ -258,14 +257,24 @@ void parcoursInfixe_croissant(pArbre a, int *c, int nb_ligne, char *mode, FILE *
         parcoursInfixe_croissant(a->fd, c, nb_ligne, mode, fichier);
     }
 }
-void parcoursInfixe_croissant_h(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier)
+void parcoursInfixe_croissant_temp(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier)
 {
     if (estVide(a) != 1)
     {
-        parcoursInfixe_croissant_h(a->fg, c, nb_ligne, mode, fichier);
+        parcoursInfixe_croissant_temp(a->fg, c, nb_ligne, mode, fichier);
         if (strcmp(mode, "h") == 0) // humidite
             fprintf(fichier, "%d %s %d\n", a->cols1, a->cols2, (int)a->temperature_max);
-        parcoursInfixe_croissant_h(a->fd, c, nb_ligne, mode, fichier);
+        else if (strcmp(mode, "1") == 0)
+        {
+            fprintf(fichier, "%d %d %s\n", a->cols1, (int)a->somme, a->cols4);
+            *c = *c + 1;
+        }
+        else if (strcmp(mode, "2") == 0)
+        {
+            fprintf(fichier, "%d %s %d %s\n", a->cols1, a->cols2, (int)a->somme, a->cols4);
+            *c = *c + 1;
+        }
+        parcoursInfixe_croissant_temp(a->fd, c, nb_ligne, mode, fichier);
     }
 }
 void parcoursInfixe_t3(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier)
@@ -715,8 +724,20 @@ pArbre insertionAVL_t3(pArbre a, int e, int *h, int cols1, char *cols2, float co
         }
         else
         {
-            *h = 0;
-            return a;
+            *h = 1;
+            a->nb_noeuds++;
+
+            if (a->fd != NULL)
+            {
+                pArbre doublon = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+                doublon->fd = a->fd;
+                a->fd = doublon;
+            }
+            else
+            {
+                pArbre doublon = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+                a->fd = doublon;
+            }
         }
         if (*h != 0)
         {
@@ -731,6 +752,7 @@ pArbre insertionAVL_t3(pArbre a, int e, int *h, int cols1, char *cols2, float co
                 *h = 1;
             }
         }
+        return a;
     }
     else if (strcmp(mode, "2") == 0) // mode vaut t2/p2 les dates sont déja dans l'ordre je supprime la comparaison negative afin d'économiser des lignes
     {
@@ -743,8 +765,20 @@ pArbre insertionAVL_t3(pArbre a, int e, int *h, int cols1, char *cols2, float co
             a->fd = insertionAVL_t3(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
         else
         {
-            *h = 0;
-            return a;
+            *h = 1;
+            a->nb_noeuds++;
+
+            if (a->fd != NULL)
+            {
+                pArbre doublon = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+                doublon->fd = a->fd;
+                a->fd = doublon;
+            }
+            else
+            {
+                pArbre doublon = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+                a->fd = doublon;
+            }
         }
         if (*h != 0)
         {
@@ -763,6 +797,28 @@ pArbre insertionAVL_t3(pArbre a, int e, int *h, int cols1, char *cols2, float co
 
     return a;
 }
+// cet fonction utilise le parcours en profondeur qui consiste à parcourir les sommets de l'abre et de supprimer recusivement sauf la racine
+void supprimer(pArbre a)
+{
+    if (a == NULL)
+        return;
+
+    if (a->fg != NULL)
+    {
+        supprimer(a->fg);
+        free(a->fg);
+        a->fg = NULL;
+    }
+
+    if (a->fd != NULL)
+    {
+        supprimer(a->fd);
+        free(a->fd);
+        a->fd = NULL;
+    }
+}
+
+/*
 pArbre suppMinAVL(pArbre a, int *h, int *pe)
 {
     pArbre tmp;
@@ -841,7 +897,7 @@ pArbre suppressionAVL(pArbre a, int e, int *h)
         }
     }
     return a;
-}
+}*/
 
 int min(int a, int b)
 {

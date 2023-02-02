@@ -60,10 +60,12 @@ void traiter(pArbre a);
 void parcoursPrefixe(pArbre a);
 void parcoursPostFixe(pArbre a);
 void parcoursInfixe_croissant(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier);
+void parcoursInfixe_croissant_temp(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier);
 void parcoursInfixe_t3(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier);
 void parcoursInfixe_decroissant(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier);
 void parcoursInfixe_t3_decroissant(pArbre a, int *c, int nb_ligne, char *mode, FILE *fichier);
 void parcoursLargeurs(pArbre a);
+void supprimer(pArbre a);
 // ---------------------------------------------------------------------------
 
 pArbre modifierRacine(pArbre a, int e);

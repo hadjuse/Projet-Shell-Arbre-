@@ -331,10 +331,11 @@ j=0
 for f in $fichier_csv_a_trier; do
     j=$(($j + 1))
     gestion_nom_fichier_trie
-    ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie
+    nb_ligne=$(wc -l $f)
+    ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie $nb_ligne
     affichage_graphique
     gestion_trie
-    rm $f
-    rm donnee_trie*
+    #drm $f
+    #rm donnee_trie*
 done
 #partie gnuplot
