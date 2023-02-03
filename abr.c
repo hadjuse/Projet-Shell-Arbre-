@@ -53,6 +53,34 @@ pArbre insertionABR(pArbre a, int e, int cols1, char *cols2, float cols3, char *
             return a;
         }
     }
+    else if (strcmp(mode, "3") == 0)
+    {
+        if (a == NULL)
+            return creerArbre_t3(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+        else if (strcmp(cols4, a->cols4) < 0)
+            a->fg = insertionABR(filsGauche(a), e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+        else if (strcmp(cols4, a->cols4) > 0)
+            a->fd = insertionABR(filsDroit(a), e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+        else
+        {
+            if (cols1 == a->cols1)
+            {
+                a->nb_noeuds++;
+            if (a->fd != NULL)
+            {
+                pArbre doublon = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+                doublon->fd = a->fd;
+                a->fd = doublon;
+            }
+            else
+            {
+                pArbre doublon = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+                a->fd = doublon;
+            }
+            }
+            return a;
+        }
+    }
     else if (strcmp(mode, "h") == 0)
     {
         if (a == NULL)

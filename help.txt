@@ -1,0 +1,29 @@
+Bienvenue dans le Projet Cy-meteo de Rabearimanana Hadj et Elyes Dachraoui!
+
+voici les étapes à suivre pour exécuter:
+
+1) tapez d'abord: ./script_meteo.sh -argument-f meteo.csv --mode
+
+    argument_option de base pour afficher les graphiques: -t1: Les temperatures min,max et moyennes par Id de Stations
+              -t2: Les temperatures moyennes en fonction de la date/heure
+              -t3: Les températures par date/heure par station 
+              -p1: Les pressions min,max et moyennes par Id de Stations
+              -p2: Les pressions moyennes en fonction de la date/heure
+              -p3: Les pressions par date/heure par station
+              -w:  L'orientation moyenne et vitesse moyenne du vent en fonction de la longitude et la latitude
+              -h: L'altitude pour chaque station par ordre décroissant en fonction de la longitude et la latitude
+              -m: L'humidité maximale pour chaque station par ordre décroissant en fonction de la longitude et la latitude
+    mode:
+        --avl (par défaut)
+        --abr
+        --tab (non fait)
+    argument_option geographique:
+                                -F: France métropolitaine+Corse
+                                -G: Guyane française
+                                -S: Saint-Pierre et Miquelon
+                                -A: Antilles
+                                -O: Océans Indien
+                                -Q: Antarctique
+    argument_option date <min> <max>: format YYYY-
+2)
+    --help pour avoir de l'aide

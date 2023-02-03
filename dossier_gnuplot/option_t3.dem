@@ -5,9 +5,9 @@ set title "Températures par date/heure et Stations"
 set xlabel "Dates"
 set ylabel "Températures"
 set datafile separator ";"
-set timefmt '%Y-%m-%d-%H'
+set timefmt '%Y%m'
 set xdata time
-set format x '%Y/%m/%d %H'
+set format x '%Y/%m'
 set xrange [*:*]
 set yrange [*:*]
 set palette rgbformulae 30, 31, 32
@@ -16,5 +16,5 @@ set autoscale noextend
 set xtics rotate by 45 right
 plot "donnee_trie_t3.csv" using 3:4:1 with lines lt palette
  
-pause -1 "Hit return to continue"
+pause 7 "Attendre 7 seconde pour voir l'autre image"
 reset

@@ -34,5 +34,5 @@ ymax = 50.136
 set colorbox vertical origin screen 0.9, 0.2 size screen 0.05, 0.6 front noinvert bdefault
 set style arrow 3 head filled size screen 0.03,15,135
 plot "donnee_trie_w.csv" using 5:4:(coef*dx1($3,$2)):(coef*dy1($3,$2)) with vectors arrowstyle 3
-pause -1 "Hit return to continue"
+pause 7 "Attendre 7 seconde pour voir l'autre image"
 reset

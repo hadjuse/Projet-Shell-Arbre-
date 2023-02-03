@@ -16,5 +16,5 @@ set autoscale noextend
 set xtics rotate by 45 right
 plot "donnee_trie_p3.csv" using 3:4:1 with lines lt palette
  
-pause -1 "Hit return to continue"
+pause 7 "Attendre 7 seconde pour voir l'autre image"
 reset

@@ -13,5 +13,5 @@ set autoscale noextend
 set colorbox vertical origin screen 0.9, 0.2 size screen 0.05, 0.6 front  noinvert bdefault
 splot "donnee_trie_m.csv" using 3:2:4 with pm3d
 
-pause -1 "Attendre 7 seconde pour voir l'autre image"
+pause 7 "Attendre 7 seconde pour voir l'autre image"
 reset

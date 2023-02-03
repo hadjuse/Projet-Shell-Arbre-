@@ -272,7 +272,23 @@ void parcoursInfixe_croissant_temp(pArbre a, int *c, int nb_ligne, char *mode, F
             fprintf(fichier, "%d %s %d\n", a->cols1, a->cols2, (int)a->temperature_max);
         else if (strcmp(mode, "3") == 0)
         {
-            fprintf(fichier, "%s;%f\n",a->cols4, a->cols3);
+            int longueur_chaine = strlen(a->cols4);
+            char date[longueur_chaine + 2];
+            int k = 0;
+            for (int i = 0; i < longueur_chaine; i++)
+            {
+                if (i == 2 || i == 8)
+                {
+                    k++;
+                    date[i] = ';';
+                }
+                else
+                {
+                    date[i] = a->cols4[i-k];
+                }
+            }
+            //printf("%s", date);
+            fprintf(fichier, "%s;%f\n", date, a->cols3);
             *c = *c + 1;
         }
         parcoursInfixe_croissant_temp(a->fd, c, nb_ligne, mode, fichier);
