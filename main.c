@@ -24,8 +24,7 @@ int main(int argc, char **argv)
     float colonne6;            // temp_max / vitesse moyenne et autre variable possible
     int nb_ligne = 0;
     //  Etape d'ouverture et de lecture du fichier mis en argument
-    printf("%d", argc);
-    if (argc != 11)
+    if (argc != 9)
     {
         fprintf(stderr, "Format : programme <nom du fichier> <mode de tri>");
         exit(EXIT_FAILURE);
@@ -346,7 +345,6 @@ int main(int argc, char **argv)
         }
         parcoursInfixe_decroissant(pabr_8, &c, nb_ligne, argv[5], fichier_sortie);
         fclose(f);
-        fclose(fichier_sortie);
     }
 
     else if (strcmp(argv[2], "abr") == 0 && strcmp(argv[6], "v") == 0) // vent

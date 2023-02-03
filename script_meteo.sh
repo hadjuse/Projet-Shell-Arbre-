@@ -336,7 +336,7 @@ for f in $fichier_csv_a_trier; do
     j=$(($j + 1))
     gestion_nom_fichier_trie
     nb_ligne=$(wc -l $f)
-    ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie $nb_ligne
+    ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie
     affichage_graphique
     gestion_trie
     rm $f
