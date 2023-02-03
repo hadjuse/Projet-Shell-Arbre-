@@ -1,0 +1,20 @@
+reset 
+#
+set style data lines
+set title "Températures par date/heure et Stations"
+set xlabel "Dates"
+set ylabel "Températures"
+set datafile separator ";"
+set timefmt '%Y-%m-%d-%H'
+set xdata time
+set format x '%Y/%m/%d %H'
+set xrange [*:*]
+set yrange [*:*]
+set palette rgbformulae 30, 31, 32
+set colorbox vertical origin screen 0.9, 0.2 size screen 0.05, 0.6 front noinvert bdefault
+set autoscale noextend
+set xtics rotate by 45 right
+plot "donnee_trie_t3.csv" using 3:4:1 with lines lt palette
+ 
+pause -1 "Hit return to continue"
+reset
