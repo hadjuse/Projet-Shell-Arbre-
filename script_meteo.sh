@@ -25,7 +25,7 @@ test_options() {
 }
 #filtrage pour l'option -t
 filtrage_1() {
-    awk -F';' '{print $1 " " $10 " " $11 " " $2}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_num_t.csv
+    awk -F';' '{if ($1 != 7661){print $1 " " $10 " " $11 " " $2}}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_num_t.csv
 }
 filtrage_2() {
     awk -F';' '{print $1 " " $10 " " $11 " " $2}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_date_t.csv
