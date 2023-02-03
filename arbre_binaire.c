@@ -86,6 +86,12 @@ pArbre creerArbre_t3(int a, int cols1, char *cols2, float cols3, char *cols4, fl
         new->somme = somme; // temperature/pression
         new->nb_noeuds = 1;
     }
+    else if (strcmp(mode, "3") == 0)
+    {
+        strcpy(new->cols4, cols4); // date
+        new->cols3 = cols3;
+        new->nb_noeuds = 1;
+    }
     return new;
 }
 int estVide(pArbre a) // J'ai modifié tout ton bloc ici
@@ -264,14 +270,9 @@ void parcoursInfixe_croissant_temp(pArbre a, int *c, int nb_ligne, char *mode, F
         parcoursInfixe_croissant_temp(a->fg, c, nb_ligne, mode, fichier);
         if (strcmp(mode, "h") == 0) // humidite
             fprintf(fichier, "%d %s %d\n", a->cols1, a->cols2, (int)a->temperature_max);
-        else if (strcmp(mode, "1") == 0)
+        else if (strcmp(mode, "3") == 0)
         {
-            fprintf(fichier, "%d %f %s\n", a->cols1, a->somme, a->cols4);
-            *c = *c + 1;
-        }
-        else if (strcmp(mode, "2") == 0)
-        {
-            fprintf(fichier, "%d %s %d %s\n", a->cols1, a->cols2, (int)a->somme, a->cols4);
+            fprintf(fichier, "%s;%f\n",a->cols4, a->cols3);
             *c = *c + 1;
         }
         parcoursInfixe_croissant_temp(a->fd, c, nb_ligne, mode, fichier);
@@ -581,6 +582,53 @@ pArbre insertionAVL(pArbre a, int e, int *h, int cols1, char *cols2, float cols3
             }
         }
     }
+    else if (strcmp(mode, "3") == 0)
+    {
+        if (a == NULL)
+        {
+            *h = 1;
+            return creerArbre_t3(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+        }
+        else if (strcmp(cols4, a->cols4) < 0)
+        {
+            a->fg = insertionAVL(a->fg, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+            *h = -*h;
+        }
+        else if (strcmp(cols4, a->cols4) > 0)
+            a->fd = insertionAVL(a->fd, e, h, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+        else
+        {
+            *h = 1;
+            a->nb_noeuds++;
+            if (a->fd != NULL)
+            {
+                pArbre doublon = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+                doublon->fd = a->fd;
+                a->fd = doublon;
+            }
+            else
+            {
+                pArbre doublon = creerArbre(e, cols1, cols2, cols3, cols4, cols5, cols6, somme, mode);
+                a->fd = doublon;
+            }
+            return a;
+        }
+        if (*h != 0)
+        {
+
+            a->equilibre = a->equilibre + *h;
+            a = equilibrerAVL(a);
+            if (a->equilibre == 0)
+            {
+                *h = 0;
+            }
+            else
+            {
+                *h = 1;
+            }
+        }
+    }
+
     else if (strcmp(mode, "h") == 0)
     {
         if (a == NULL)

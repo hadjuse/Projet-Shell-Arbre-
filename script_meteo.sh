@@ -31,7 +31,9 @@ filtrage_2() {
     awk -F';' '{print $1 " " $10 " " $11 " " $2}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_date_t.csv
 }
 filtrage_3() {
-    awk -F';' '{print $1 " " $10 " " $11 " " $2}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_id_t.csv
+    awk -F';' '{print $11 " " $1$2}' $nom_fichier | tail -500000 | sed 's/-//g' | sed 's/T/ /g' | sed 's/:/ /g' | sed 's/+/ /g' > donnee_filtree_temperature_et_id_tt.csv
+    awk -F' ' '{print $1 " " $3$2 }' donnee_filtree_temperature_et_id_tt.csv >donnee_filtree_temperature_et_id_t.csv
+    rm donnee_filtree_temperature_et_id_tt.csv
 }
 #filtrage pour l'option -p
 filtrage_1_bis() {
@@ -151,7 +153,7 @@ affichage_graphique() {
             gnuplot dossier_gnuplot/option_t2.dem
             ;;
         3)
-
+            sed 's/,/;/g' donnee_trie_temp_pt3.csv >donnee_trie_t3.csv
             gnuplot dossier_gnuplot/option_t3.dem
             ;;
         esac
@@ -334,8 +336,8 @@ for f in $fichier_csv_a_trier; do
     nb_ligne=$(wc -l $f)
     ./abr $f $mode_tri $option_t $option_p $humidite $vent $altitude $fichier_sortie $nb_ligne
     affichage_graphique
-    gestion_trie
-    #drm $f
+    #gestion_trie
+    #rm $f
     #rm donnee_trie*
 done
 #partie gnuplot
