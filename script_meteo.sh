@@ -31,7 +31,7 @@ filtrage_2() {
     awk -F';' '{print $1 " " $10 " " $11 " " $2}' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_date_t.csv
 }
 filtrage_3() {
-    awk -F';' '{print $11 " " $1 " " $2}' $nom_fichier | tail -1000000 | sed 's/-//g' | sed 's/T/ /g' | sed 's/:/ /g' | sed 's/+/ /g' > donnee_filtree_temperature_et_id_tt.csv
+    awk -F';' '{print $11 " " $1 " " $2}' $nom_fichier | tail -700000 | sed 's/-//g' | sed 's/T/ /g' | sed 's/:/ /g' | sed 's/+/ /g' > donnee_filtree_temperature_et_id_tt.csv
     awk -F' ' '{print $4$2$3 " " $1}' donnee_filtree_temperature_et_id_tt.csv >donnee_filtree_temperature_et_id_t.csv
     rm donnee_filtree_temperature_et_id_tt.csv
 }
@@ -43,7 +43,7 @@ filtrage_2_bis() {
     awk -F';' '{print $1 " " $10 " " $7 " " $2 }' $nom_fichier | tail -n+2 >donnee_filtree_temperature_et_date_p.csv
 }
 filtrage_3_bis() {
-    awk -F';' '{print $7 " " $1 " " $2}' $nom_fichier | tail -1000000 | sed 's/-//g' | sed 's/T/ /g' | sed 's/:/ /g' | sed 's/+/ /g' > donnee_filtree_temperature_et_id_tp.csv
+    awk -F';' '{print $7 " " $1 " " $2}' $nom_fichier | tail -700000 | sed 's/-//g' | sed 's/T/ /g' | sed 's/:/ /g' | sed 's/+/ /g' > donnee_filtree_temperature_et_id_tp.csv
     awk -F' ' '{print $4$2$3 " " $1}' donnee_filtree_temperature_et_id_tp.csv >donnee_filtree_temperature_et_id_p.csv
     rm donnee_filtree_temperature_et_id_tp.csv
 }
