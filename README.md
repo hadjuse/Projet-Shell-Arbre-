@@ -8,7 +8,7 @@ Assurez d'avoir mis chmod +rwx * dans le dossier courant et d'avoir la base de d
 Pour exécuter le script, il faut d'abord écrire ./script_meteo.sh puis les arguments et option qui vont avec.
 Exemple: ./script.sh -t1 -p3 -m --abr
 tapez ./script --help  -f nom_du_fichier pour obtenir de l'aide sur l'exécution du script
-# Utilisaction indépendante du Shell
+# Utilisation indépendante du Shell
 
 Si vous voulez recommencer tout le processus mais en utilisant le le tri en c (Attention, il faut avoir des données déjà filtrées de base qui soient présents dans le dossier).
 il faut taper: 
